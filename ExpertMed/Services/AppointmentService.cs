@@ -70,7 +70,7 @@ namespace ExpertMed.Services
 
 
         //Obtener horas disponibles por medico
-        public List<string> GetAvailableHours(int userId, DateTime date)
+        public List<string> GetAvailableHours(int userId, DateTime date, int? doctorUserId = null)
         {
             List<string> availableHours = new List<string>();
 
@@ -84,8 +84,17 @@ namespace ExpertMed.Services
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
 
+                        // Parámetro de usuario (asistente o médico)
                         cmd.Parameters.Add(new SqlParameter("@UserId", SqlDbType.Int)).Value = userId;
+
+                        // Parámetro de fecha
                         cmd.Parameters.Add(new SqlParameter("@Date", SqlDbType.Date)).Value = date;
+
+                        // Si es asistente, pasamos el doctorUserId
+                        if (doctorUserId.HasValue)
+                        {
+                            cmd.Parameters.Add(new SqlParameter("@DoctorUserId", SqlDbType.Int)).Value = doctorUserId.Value;
+                        }
 
                         SqlDataReader reader = cmd.ExecuteReader();
 
@@ -103,6 +112,53 @@ namespace ExpertMed.Services
 
             return availableHours;
         }
+
+        // CREAR UNA NUEVA CITA
+        public async Task CreateAppointmentAsync(Appointment appointmentDto, int? doctorUserId = null)
+        {
+            using (var connection = new SqlConnection(_dbContext.Database.GetConnectionString()))
+            {
+                await connection.OpenAsync();
+
+                using (var command = new SqlCommand("sp_CreateAppointment", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    // Asignar parámetros al procedimiento almacenado
+                    command.Parameters.AddWithValue("@appointment_createdate", DateTime.Now);
+                    command.Parameters.AddWithValue("@appointment_modifydate", DateTime.Now);
+                    command.Parameters.AddWithValue("@appointment_createuser", appointmentDto.AppointmentCreateuser);
+                    command.Parameters.AddWithValue("@appointment_modifyuser", appointmentDto.AppointmentModifyuser);
+                    command.Parameters.AddWithValue("@appointment_date", appointmentDto.AppointmentDate);
+                    command.Parameters.AddWithValue("@appointment_hour", appointmentDto.AppointmentHour);
+                    command.Parameters.AddWithValue("@appointment_patientid", appointmentDto.AppointmentPatientid);
+                    command.Parameters.AddWithValue("@appointment_status", appointmentDto.AppointmentStatus);
+
+                    // Validar si @doctor_userid es nulo antes de agregarlo
+                    if (doctorUserId.HasValue)
+                    {
+                        command.Parameters.AddWithValue("@doctor_userid", doctorUserId.Value);  // Cambié a doctorUserId.Value
+                    }
+                    else
+                    {
+                        command.Parameters.AddWithValue("@doctor_userid", DBNull.Value);
+                    }
+
+                    try
+                    {
+                        // Ejecutar el procedimiento almacenado
+                        await command.ExecuteNonQueryAsync();
+                    }
+                    catch (SqlException ex)
+                    {
+                        // Manejo de errores específicos
+                        throw new ApplicationException("Error al crear la cita: " + ex.Message, ex);
+                    }
+                }
+            }
+        }
+
+
 
     }
 }

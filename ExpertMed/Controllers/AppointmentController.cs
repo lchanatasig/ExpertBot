@@ -67,12 +67,13 @@ namespace ExpertMed.Controllers
         }
 
 
-        [HttpGet("available-hours")]
-        public IActionResult GetAvailableHours([FromQuery] int userId, [FromQuery] DateTime date)
+        [HttpGet]
+        public IActionResult GetAvailableHours([FromQuery] int userId, [FromQuery] DateTime date, [FromQuery] int? doctorUserId = null)
         {
             try
             {
-                List<string> availableHours = _appointmentService.GetAvailableHours(userId, date);
+                // Si doctorUserId es nulo, lo que indica que no es asistente, llamamos al servicio de la manera normal
+                List<string> availableHours = _appointmentService.GetAvailableHours(userId, date, doctorUserId);
 
                 if (availableHours.Count == 0)
                 {
@@ -90,6 +91,36 @@ namespace ExpertMed.Controllers
         }
 
 
+
+        [HttpPost("CreateAppointment")]
+        public async Task<IActionResult> CreateAppointment([FromBody] Appointment request)
+        {
+            try
+            {
+                var usuarioId = HttpContext.Session.GetInt32("UsuarioId");
+
+                // L�gica para crear la cita
+                var appointment = new Appointment
+                {
+                    AppointmentCreatedate = DateTime.Now,
+                    AppointmentModifydate = DateTime.Now,
+                    AppointmentCreateuser = usuarioId,
+                    AppointmentModifyuser = usuarioId,
+                    AppointmentDate = request.AppointmentDate,
+                    AppointmentHour = request.AppointmentHour,
+                    AppointmentPatientid = request.AppointmentPatientid,
+                    AppointmentStatus = 1
+                };
+
+                await _appointmentService.CreateAppointmentAsync(appointment);
+
+                return Ok(new { success = true, message = "Appointment created successfully" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { success = false, message = ex.Message });
+            }
+        }
 
     }
 }

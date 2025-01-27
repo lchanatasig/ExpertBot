@@ -287,7 +287,9 @@ namespace ExpertMed.Controllers
 
         [HttpGet]
         public async Task<IActionResult> UpdatePatient(int id)
-        {
+        {           // Obtén el ID del usuario y el perfil desde la sesión
+            var usuarioId = HttpContext.Session.GetInt32("UsuarioId");
+            var perfilId = HttpContext.Session.GetInt32("PerfilId");
             // Obtener los detalles del usuario (incluyendo médicos si es asistente)
             var patient = await _patientService.GetPatientDetailsAsync(id);
             // Si el usuario no existe, devolver una respuesta de "No encontrado"
@@ -319,6 +321,8 @@ namespace ExpertMed.Controllers
 
                 var provinces = await _selectService.GetAllProvinceAsync();
 
+                var doctors = await _patientService.GetDoctorsByAssistantAsync(usuarioId ?? 0);
+
 
                 // Crear un objeto de vista modelo para pasar los datos a la vista
                 var viewModel = new NewPatientViewModel
@@ -331,7 +335,8 @@ namespace ExpertMed.Controllers
                     ProfessionalTrainingTypes = professionalTrainingTypes,
                     SureHealthTypes = sureHealthTypes,
                     Countries = countries,
-                    Provinces = provinces
+                    Provinces = provinces,
+                                        Users = doctors // Agregamos los médicos al ViewModel
 
                 };
 
