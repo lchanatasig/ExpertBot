@@ -1,0 +1,627 @@
+﻿@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "AppointmentList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var successMessage = TempData["SuccessMessage"] as string;
+    var errorMessage = TempData["ErrorMessage"] as string;
+    var usuarioId = ViewContext.HttpContext.Session.GetInt32("UsuarioId");
+    var perfilId = ViewContext.HttpContext.Session.GetInt32("PerfilId");
+}
+
+@section styles {
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
+}
+
+<div class="row">
+    <div class="col-lg-12">
+
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["Error"]
+            </div>
+        }
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Appointment List</h5>
+                <div class="btn-group mt-3" role="group">
+                    <button type="button" class="btn btn-soft-success @(ViewBag.CurrentStatus == 0 ? "active" : "")"
+                            onclick="filterAppointments(0)">
+                        Paid
+                    </button>
+                    <button type="button" class="btn btn-soft-warning @(ViewBag.CurrentStatus == 1 ? "active" : "")"
+                            onclick="filterAppointments(1)">
+                        Active
+                    </button>
+                    <button type="button" class="btn btn-soft-danger @(ViewBag.CurrentStatus == 2 ? "active" : "")"
+                            onclick="filterAppointments(2)">
+                        Canceled
+                    </button>
+                    <button type="button" class="btn btn-soft-info @(ViewBag.CurrentStatus == 3 ? "active" : "")"
+                            onclick="filterAppointments(3)">
+                        Follow-up
+                    </button>
+                </div>
+
+                <div class="card-body col-xxl-12">
+                    <table id="appointmentTable" class="table nowrap dt-responsive align-middle table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th hidden>ID</th>
+                                @if (perfilId == 1 || perfilId == 3)
+                                {
+                                    <th>Doctor Name</th>
+                                }
+                                <th>Date of Appointment</th>
+                                <th>Patient Name</th>
+                                <th>Status of Appointment</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var appointment in Model)
+                            {
+                                <tr>
+                                    <td hidden>@appointment.AppointmentId</td>
+                                    @if (perfilId == 1 || perfilId == 3)
+                                    {
+                                        <td>@appointment.DoctorName</td> <!-- Nombre completo del doctor -->
+                                    }
+
+                                    <td>@appointment.AppointmentDate.ToString("dd/MM/yyyy") @appointment.AppointmentHour.ToString()</td>
+                                    <td>@appointment.PatientName</td> <!-- Nombre completo del paciente -->
+                                    <td>
+                                        @{
+                                            var (statusClass, statusText) = appointment.AppointmentStatus switch
+                                            {
+                                                0 => ("bg-success", "Paid"),
+                                                1 => ("bg-warning", "Active"),
+                                                2 => ("bg-danger", "Canceled"),
+                                                3 => ("bg-info", "Follow-up"),
+                                                _ => ("bg-secondary", "Unknown")
+                                            };
+                                        }
+                                        <span class="badge @statusClass">@statusText</span>
+                                    </td>
+                                    <td>
+                                        @if (appointment.AppointmentStatus == 0 || appointment.AppointmentStatus == 2)
+                                        {
+                                            <!-- Si la cita está pagada o cancelada, deshabilitar el botón -->
+                                            <span class="btn btn-sm btn-soft-secondary" style="pointer-events: none;">
+                                                <i class="ri-edit-line"></i> Review
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <!-- Si la cita está activa o en seguimiento, mostrar el botón -->
+                                            <a href="#" class="btn btn-sm btn-soft-info"
+                                               data-bs-toggle="modal" data-bs-target="#optionModal"
+                                               onclick="openOptionModal(@appointment.AppointmentId,@appointment.AppointmentConsultationid)">
+                                                <i class="ri-edit-line"></i> Review
+                                            </a>
+                                        }
+                                    </td>
+
+                                </tr>
+                            }
+                        </tbody>
+
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+<!--Modal opciones cita-->
+<div class="modal flip" id="optionModal" tabindex="-1" aria-labelledby="exampleModalgridLabel" aria-modal="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Hidden input to store AppointmentId -->
+            <input type="hidden" id="appointmentIdInput" name="AppointmentId" />
+            <input type="hidden" id="appointmentConsultationId" name="AppointmenConsultationtId" />
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="optionModal">What do you want to do on this appointment?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row g-3">
+                    <!-- Buttons Group -->
+                    <div class="col-4">
+                        <button type="button" class="btn btn-soft-info btn-label btn-sm w-100 waves-effect waves-light"
+                                onclick="openRescheduleModal()">
+
+                            <i class="ri-user-smile-line label-icon align-middle fs-16 me-2"></i> Reschedule appointment
+
+                        </button>
+                    </div>
+
+                    <div class="col-4">
+                        <button type="button" class="btn btn-soft-danger btn-label btn-sm w-100 waves-effect waves-light"
+                                onclick="cancelAppointment()">
+                            <i class="ri-error-warning-fill label-icon align-middle fs-16 me-2"></i> Cancel appointment
+                        </button>
+                    </div>
+
+                    <div class="col-4">
+                        <button type="button" class="btn btn-soft-success btn-label btn-sm w-100 waves-effect waves-light"
+                                onclick="payAppointment()">
+                            <i class="ri-secure-payment-line label-icon align-middle fs-16 me-2"></i> Pay appointment
+                        </button>
+                    </div>
+
+                    <div class="col-4">
+                        <button type="button" class="btn btn-soft-dark  btn-label btn-sm w-100  waves-effect waves-light"
+                                onclick="startConsultation()">
+                            <i class="las la-file-medical-alt label-icon align-middle fs-16 me-2"></i> Start consultation
+                        </button>
+                    </div>
+
+                </div><!--end row-->
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Modal agendar cita disponibles -->
+<div class="modal flip" id="appointmentModalgrid" tabindex="-1" aria-labelledby="appointmentModalgridLabel">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="appointmentModalgridLabel"> What do you want to do on this appointment?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form class="row g-3 needs-validation" novalidate name="formData">
+
+                    <div class="col-xxl-6">
+                        <label for="patientId" class="form-label">Patient Id</label>
+                        <input type="hidden" class="form-control" id="patientId" required>
+                        <input type="hidden" class="form-control" id="appointment" required>
+                    </div>
+
+                    <!-- Input de usuarioId y fecha -->
+                    <div class="col-xxl-6">
+                        <label for="selectedDate" class="form-label">Select a date</label>
+                        <input type="date" class="form-control" id="selectedDate" required>
+                    </div>
+
+                    <div class="col-xxl-6">
+                        <label for="ui" class="form-label">Your appointment time is:</label>
+                        <input type="time" class="form-control" id="appointmentTime" required>
+                    </div>
+
+                    <div class="col-xxl-6">
+                        <button type="button" class="btn btn-soft-info" id="viewHoursButton">
+                            <i class="ri-eye-fill"></i> View Hours Available
+                        </button>
+                    </div>
+
+                    <!-- Modal de las horas disponibles -->
+                    <div class="modal flip" id="hoursModalgrid" tabindex="-1" aria-labelledby="hoursModalgridLabel">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="hoursModalgrid">Hours Available</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="d-flex flex-wrap gap-2 justify-content-center" id="availableHoursContainer">
+                                        <!-- Aquí se mostrarán las horas disponibles -->
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+                                        
+@section scripts {
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+                integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+            <!--datatable js-->
+            <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+            <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+            <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+            <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+            <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
+            <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+
+            <script src="~/assets/js/pages/datatables.init.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#appointmentTable').DataTable({
+                responsive: true,
+                pageLength: 10,
+                order: [[1, 'desc']]
+            });
+        });
+
+        function filterAppointments(status) {
+                    window.location.href = '@Url.Action("AppointmentList", "Appointment")?' + new URLSearchParams({
+                appointmentStatus: status,
+                userProfile: '@ViewBag.UserProfile',
+                userId: '@ViewBag.UserId',
+               
+            }).toString();
+        }
+    </script>
+
+    <script>
+                        function openOptionModal(appointmentId, appointmentConsultationId) {
+                        // Asignar los valores a los campos ocultos correspondientes
+                        document.getElementById('appointmentIdInput').value = appointmentId;
+                        document.getElementById('appointmentConsultationIdInput').value = appointmentConsultationId;
+
+                        // Opcional: mensajes de depuración
+                        console.log('Appointment ID set in modal:', appointmentId);
+                        console.log('Appointment consultation ID set in modal:', appointmentConsultationId);
+
+                        // Mostrar el modal de opciones
+                        const optionModal = new bootstrap.Modal(document.getElementById('optionModal'));
+                        optionModal.show();
+                    }
+
+
+
+                         function openRescheduleModal() {
+                         // Obtener el ID de la cita desde el campo oculto
+                         const appointmentId = document.getElementById("appointmentIdInput").value;
+
+                         if (!appointmentId) {
+                             alert("No appointment ID found.");
+                             return;
+                         }
+
+                         // Realizar una solicitud HTTP al backend
+                         fetch(`/Appointment/AppointmentGetById?id=${appointmentId}`)
+                             .then(response => {
+                                 if (!response.ok) {
+                                     throw new Error("Failed to fetch appointment details.");
+                                 }
+                                 return response.json();
+                             })
+                             .then(data => {
+                                 // Verifica si los datos existen
+                                 if (!data) {
+                                     alert("Appointment not found.");
+                                     return;
+                                 }
+
+                                 // Llenar los campos del modal con los datos de la cita
+                                 document.getElementById("appointment").value = appointmentId || "";
+                                 document.getElementById("patientId").value = data.patient || "";
+                                 document.getElementById("selectedDate").value = data.date || "";
+                                 document.getElementById("appointmentTime").value = data.time || "";
+
+
+                                 // Mostrar el modal de reagendar
+                                 const rescheduleModal = new bootstrap.Modal(document.getElementById("appointmentModalgrid"));
+                                 rescheduleModal.show();
+                             })
+                             .catch(error => {
+                                 console.error("Error:", error);
+                                 alert("An error occurred while fetching appointment details.");
+                             });
+                         }
+
+
+
+                     $(document).ready(function () {
+                     // Al hacer clic en el botón para ver las horas disponibles
+                     $('#viewHoursButton').click(function () {
+                         var userId = @usuarioId;  // Este valor debe ser dinámico, por ejemplo, extraído de la sesión o del usuario autenticado
+                         var selectedDate = $('#selectedDate').val();
+
+                         console.log('User ID:', userId);
+                         console.log('Selected Date:', selectedDate);
+
+                         if (!selectedDate) {
+                             alert('Please select a date.');
+                             return;
+                         }
+
+                         // Realizar la solicitud AJAX al backend
+                         $.ajax({
+                             url: '@Url.Action("GetAvailableHours", "Appointment")',
+                             type: 'GET',
+                             data: {
+                                 userId: userId,
+                                 date: selectedDate
+                             },
+                             success: function (response) {
+                                 $('#availableHoursContainer').empty();  // Limpiar el contenedor de horas disponibles
+
+                                 if (response.length > 0) {
+                                     // Mostrar las horas en el contenedor
+                                     response.forEach(function (hour) {
+                                         $('#availableHoursContainer').append(
+                                             '<button type="button" class="btn btn-outline-primary btn-sm" data-hour="' + hour + '">' + hour + '</button>'
+                                         );
+                                     });
+                                 } else {
+                                     // Si no hay horas disponibles
+                                     $('#availableHoursContainer').append(
+                                         '<p>No available hours for this date.</p>'
+                                     );
+                                 }
+
+                                 $('#hoursModalgrid').modal('show');  // Mostrar el modal con las horas disponibles
+                             },
+                             error: function (xhr, status, error) {
+                                 alert('An error occurred while fetching available hours: ' + error);
+                             }
+                         });
+                     });
+
+                     // Al hacer clic en una de las horas disponibles
+                     $('#availableHoursContainer').on('click', 'button', function () {
+                         // Obtener la hora seleccionada desde el atributo 'data-hour' del botón
+                         var selectedHour = $(this).data('hour');
+
+                         // Establecer la hora seleccionada en el campo de entrada
+                         $('#appointmentTime').val(selectedHour);
+
+                         console.log('Selected Hour:', selectedHour);
+                         console.log('Selected Date:', $('#selectedDate').val());
+                         console.log('Patient ID:', $('#patientId').val());
+                         console.log('Appointment ID:', $('#appointment').val());
+
+                         // Mostrar SweetAlert para confirmación
+                         var selectedDate = $('#selectedDate').val(); // Obtener la fecha seleccionada
+                         var patientId = $('#patientId').val();  // Obtener el ID del paciente
+                         var appointmentId = $('#appointment').val();  // Obtener el ID del paciente
+
+                         Swal.fire({
+                             title: 'Confirm Appointment',
+                             text: 'You have selected ' + selectedHour + ' on ' + selectedDate + '. Do you want to confirm this appointment?',
+                             icon: 'question',
+                             showCancelButton: true,
+                             confirmButtonText: 'Yes, confirm it!',
+                             cancelButtonText: 'No, choose again',
+                             reverseButtons: true
+                         }).then((result) => {
+                             if (result.isConfirmed) {
+                                 // Si el usuario confirma, enviamos la cita al backend
+                                 var userId = @usuarioId; // Obtener el ID del usuario
+                                 var appointmentDate = selectedDate; // Mantener la fecha
+                                 // Mantener la hora seleccionada
+
+                                 // Realizamos la solicitud AJAX para crear la cita
+                                 $.ajax({
+                                         url: '@Url.Action("ModifyAppointment", "Appointment")',  // Cambia la URL al método correspondiente en tu controlador
+                                     type: 'POST',
+                                     contentType: 'application/json', // Asegúrate de especificar el tipo de contenido
+                                     data: JSON.stringify({
+                                             AppointmentId: appointmentId,  // ID del paciente
+                                         AppointmentPatientid: patientId,  // ID del paciente
+                                         AppointmentDate: selectedDate,  // Solo la fecha
+                                         AppointmentHour: selectedHour  // Solo la hora
+                                     }),
+                                     success: function (response) {
+                                         if (response.success) {
+                                             // Mostrar mensaje de éxito
+                                             Swal.fire('Appointment confirmed!', response.message, 'success').then(() => {
+                                                 window.location.href = '@Url.Action("AppointmentList", "Appointment")'; // Redirigir a la lista de citas
+                                             });
+                                         } else {
+                                             // Si algo salió mal
+                                             Swal.fire('Error', response.message || 'There was an issue scheduling your appointment.', 'error');
+                                         }
+                                     },
+                                     error: function (xhr, status, error) {
+                                         // Manejo de errores si la solicitud falla
+                                         Swal.fire('Error', 'There was an issue scheduling your appointment. Please try again.', 'error');
+                                     }
+                                 });
+
+                                 // Imprimir datos de la solicitud para depuración
+                                 console.log('Sending data to backend:', JSON.stringify({
+                                         AppointmentId: appointmentId,  // ID del paciente
+                                     AppointmentPatientid: patientId,
+                                     AppointmentDate: appointmentDate,
+                                     AppointmentHour: selectedHour,
+                                 }));
+
+                             } else if (result.dismiss === Swal.DismissReason.cancel) {
+                                 // Si el usuario cancela, cerramos el modal
+                                 $('#hoursModalgrid').modal('hide');
+                             }
+                         });
+                     });
+                    });
+
+
+                    //Filtrar boton iniciar cosulta
+                    document.addEventListener('DOMContentLoaded', function () {
+                    // Obtener el valor del campo oculto
+                    const appointmentConsultationId = document.getElementById('appointmentConsultationId').value;
+
+                    // Obtener el botón
+                    const startConsultationButton = document.querySelector('.btn-soft-dark');
+
+                    // Verificar si el campo tiene un valor
+                    if (!appointmentConsultationId) {
+                        // Ocultar el botón si no hay valor
+                        startConsultationButton.style.display = 'block';
+                    } else {
+                        // Mostrar el botón si hay valor
+                        startConsultationButton.style.display = 'none';
+                    }
+                });
+
+
+
+           // Método para desactivar una cita
+                   function cancelAppointment() {
+                       const appointmentId = document.getElementById("appointmentIdInput").value;
+                       const userId = @usuarioId; // Suponiendo que también tienes un campo de usuario
+
+                       if (!appointmentId || !userId) {
+                           alert("No appointment ID or User ID found.");
+                           return;
+                       }
+
+                       // Usar SweetAlert para confirmar la cancelación
+                       Swal.fire({
+                           title: 'Are you sure?',
+                           text: "You are about to cancel this appointment!",
+                           icon: 'warning',
+                           showCancelButton: true,
+                           confirmButtonText: 'Yes, cancel it!',
+                           cancelButtonText: 'No, keep it',
+                           reverseButtons: true
+                       }).then((result) => {
+                           if (result.isConfirmed) {
+                               const appointmentData = {
+                                   AppointmentId: appointmentId,
+                                   AppointmentModifyuser: userId
+                               };
+
+                               fetch('@Url.Action("DesactivateAppointment", "Appointment")', {
+                                   method: 'POST',
+                                   headers: {
+                                       'Content-Type': 'application/json'
+                                   },
+                                   body: JSON.stringify(appointmentData)
+                               })
+                               .then(response => {
+                                   if (!response.ok) {
+                                       return response.json().then(data => {
+                                           throw new Error(data.message || "Failed to deactivate the appointment.");
+                                       });
+                                   }
+                                   return response.json();
+                               })
+                               .then(data => {
+                                   // Si la cita fue desactivada con éxito
+                                   Swal.fire(
+                                       'Canceled!',
+                                       data.message || 'Your appointment has been canceled.',
+                                       'success'
+                                   );
+
+                                   // Cerrar el modal después de 3 segundos
+                                   setTimeout(() => {
+                                       Swal.close();  // Cierra el modal de SweetAlert
+                                       window.location.href = '@Url.Action("AppointmentList", "Appointment")';
+                                   }, 3000); // Cerrar después de 3 segundos
+                               })
+                               .catch(error => {
+                                   console.error("Error:", error);
+                                   Swal.fire(
+                                       'Error!',
+                                       error.message || 'An error occurred while canceling the appointment.',
+                                       'error'
+                                   );
+
+                                   // Cerrar el modal después de 3 segundos
+                                   setTimeout(() => {
+                                       Swal.close();  // Cierra el modal de SweetAlert
+                                   }, 3000); // Cerrar después de 3 segundos
+                               });
+                           } else {
+                               Swal.fire(
+                                   'Cancelled',
+                                   'Your appointment is safe!',
+                                   'info'
+                               );
+
+                               // Cerrar el modal después de 3 segundos
+                               setTimeout(() => {
+                                   Swal.close();  // Cierra el modal de SweetAlert
+                               }, 3000); // Cerrar después de 3 segundos
+                           }
+                       });
+                   }
+
+
+            document.getElementById('optionModal').addEventListener('hidden.bs.modal', function () {
+                // Eliminar cualquier backdrop residual
+                document.querySelectorAll('.modal-backdrop').forEach(function (backdrop) {
+                    backdrop.remove();
+                });
+                // Habilitar el desplazamiento de la página
+                document.body.classList.remove('modal-open');
+                document.body.style.paddingRight = '';
+            });
+
+
+          function startConsultation() {
+            // Obtener el ID de la cita desde el campo oculto
+            const appointmentId = document.getElementById("appointmentIdInput").value;
+            console.log("Appointment ID:", appointmentId);
+
+            if (!appointmentId) {
+                alert("No appointment ID found.");
+                return;
+            }
+
+            // Obtener los datos del paciente asociados a la cita, específicamente el PatientId
+            const urlGetPatient = '@Url.Action("AppointmentGetById", "Appointment")';
+            const apiUrl = `${urlGetPatient}?id=${appointmentId}`;
+            console.log("API URL to fetch patient data:", apiUrl);
+
+            fetch(apiUrl)
+                .then(response => {
+                    console.log("Response status:", response.status);
+                    if (!response.ok) {
+                        throw new Error("Failed to fetch patient details.");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("Appointment data received:", data);
+
+                    if (!data.patient) {
+                        alert("Patient not found for this appointment.");
+                        return;
+                    }
+
+                    // Redirigir a la URL de NewConsultation con el PatientId
+                    const urlNewConsultation = '@Url.Action("NewConsultation", "Consultation")';
+                            const consultationUrl = `${urlNewConsultation}?patientId=${data.patient}`;
+                    console.log("Redirecting to:", consultationUrl);
+
+                    // Redirigir al controlador
+                    window.location.href = consultationUrl;
+                })
+                .catch(error => {
+                    console.error("Error during consultation start:", error);
+                    alert("An error occurred while starting the consultation.");
+                });
+        }
+
+
+    </script>
+
+}

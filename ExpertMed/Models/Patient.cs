@@ -64,7 +64,6 @@ public partial class Patient
     public string PatientFirstsurname { get; set; } = null!;
 
     public string? DoctorName { get; set; }
-
     public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
 
     public virtual ICollection<Consultation> Consultations { get; set; } = new List<Consultation>();

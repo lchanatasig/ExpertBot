@@ -332,6 +332,9 @@
                             <button type="submit" id="btnCrearUsuario" class="btn btn-primary">
                                 <i class="ri-user-add-line"></i> Create
                             </button>
+                            <a type="button" class="btn btn-soft-info" data-bs-toggle="modal" data-bs-target="#appointmentModalgrid">
+                                <i class="ri-calendar-todo-fill"></i> Schedule an appointment
+                            </a>
                             <a type="button" href="@Url.Action("UserList", "Users")" class="btn btn-soft-secondary">
                                 <i class=" ri-arrow-go-back-line"></i> Cancel
                             </a>
@@ -343,6 +346,68 @@
         </div>
 
     </form>
+</div>
+<div class="modal flip" id="appointmentModalgrid" tabindex="-1" aria-labelledby="appointmentModalgridLabel">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="appointmentModalgridLabel">Agendar Cita</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form class="row g-3 needs-validation" novalidate name="formData">
+
+                    <div class="col-xxl-6" hidden>
+                        <label for="patientId" class="form-label">Patient Id</label>
+                        <input type="text" class="form-control" value="@Model.Patient.PatientId" id="patientId" required>
+                    </div>
+
+
+                    <!-- Input de usuarioId y fecha -->
+                    <div class="col-xxl-6">
+                        <label for="selectedDate" class="form-label">Select a date</label>
+                        <input type="date" class="form-control" id="selectedDate" required>
+                    </div>
+
+                    <div class="col-xxl-6">
+                        <label for="ui" class="form-label">Your appointment time is:</label>
+                        <input type="time" class="form-control" id="appointmentTime" required>
+                    </div>
+
+                </form>
+
+                <div class="col-xxl-6">
+                    <button type="button" class="btn btn-soft-info" id="viewHoursButton">
+                        <i class="ri-eye-fill"></i> View Hours Available
+                    </button>
+                </div>
+
+                <!-- Modal de las horas disponibles -->
+                <div class="modal flip" id="hoursModalgrid" tabindex="-1" aria-labelledby="hoursModalgridLabel">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="hoursModalgrid">Hours Available</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="d-flex flex-wrap gap-2 justify-content-center" id="availableHoursContainer">
+                                    <!-- Aquí se mostrarán las horas disponibles -->
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
 </div>
 
 <script>
@@ -362,4 +427,127 @@
         // Set the age value
         document.getElementById('agePatient').value = age;
     });
+</script>
+<script>
+    $(document).ready(function () {
+        // Al hacer clic en el botón para ver las horas disponibles
+        $('#viewHoursButton').click(function () {
+            var userId = @usuarioId;  // Este valor debe ser dinámico, por ejemplo, extraído de la sesión o del usuario autenticado
+            var selectedDate = $('#selectedDate').val();
+
+            console.log('User ID:', userId);
+            console.log('Selected Date:', selectedDate);
+
+            if (!selectedDate) {
+                alert('Please select a date.');
+                return;
+            }
+
+            // Realizar la solicitud AJAX al backend
+            $.ajax({
+                url: '@Url.Action("GetAvailableHours", "Appointment")',
+                type: 'GET',
+                data: {
+                    userId: userId,
+                    date: selectedDate
+                },
+                success: function (response) {
+                    $('#availableHoursContainer').empty();  // Limpiar el contenedor de horas disponibles
+
+                    if (response.length > 0) {
+                        // Mostrar las horas en el contenedor
+                        response.forEach(function (hour) {
+                            $('#availableHoursContainer').append(
+                                '<button type="button" class="btn btn-outline-primary btn-sm" data-hour="' + hour + '">' + hour + '</button>'
+                            );
+                        });
+                    } else {
+                        // Si no hay horas disponibles
+                        $('#availableHoursContainer').append(
+                            '<p>No available hours for this date.</p>'
+                        );
+                    }
+
+                    $('#hoursModalgrid').modal('show');  // Mostrar el modal con las horas disponibles
+                },
+                error: function (xhr, status, error) {
+                    alert('An error occurred while fetching available hours: ' + error);
+                }
+            });
+        });
+
+        // Al hacer clic en una de las horas disponibles
+        $('#availableHoursContainer').on('click', 'button', function () {
+            // Obtener la hora seleccionada desde el atributo 'data-hour' del botón
+            var selectedHour = $(this).data('hour');
+
+            // Establecer la hora seleccionada en el campo de entrada
+            $('#appointmentTime').val(selectedHour);
+
+            console.log('Selected Hour:', selectedHour);
+            console.log('Selected Date:', $('#selectedDate').val());
+            console.log('Patient ID:', $('#patientId').val());
+
+            // Mostrar SweetAlert para confirmación
+            var selectedDate = $('#selectedDate').val(); // Obtener la fecha seleccionada
+            var patientId = $('#patientId').val();  // Obtener el ID del paciente
+
+            Swal.fire({
+                title: 'Confirm Appointment',
+                text: 'You have selected ' + selectedHour + ' on ' + selectedDate + '. Do you want to confirm this appointment?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, confirm it!',
+                cancelButtonText: 'No, choose again',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Si el usuario confirma, enviamos la cita al backend
+                    var userId = @usuarioId; // Obtener el ID del usuario
+                    var appointmentDate = selectedDate; // Mantener la fecha
+                    // Mantener la hora seleccionada
+
+                    // Realizamos la solicitud AJAX para crear la cita
+                    $.ajax({
+                        url: '@Url.Action("CreateAppointment", "Appointment")',  // Cambia la URL al método correspondiente en tu controlador
+                        type: 'POST',
+                        contentType: 'application/json', // Asegúrate de especificar el tipo de contenido
+                        data: JSON.stringify({
+                            AppointmentPatientid: patientId,  // ID del paciente
+                            AppointmentDate: selectedDate,  // Solo la fecha
+                            AppointmentHour: selectedHour  // Solo la hora
+                        }),
+                        success: function (response) {
+                            if (response.success) {
+                                // Mostrar mensaje de éxito
+                                Swal.fire('Appointment confirmed!', response.message, 'success').then(() => {
+                                    window.location.href = '@Url.Action("AppointmentList", "Appointment")'; // Redirigir a la lista de citas
+                                });
+                            } else {
+                                // Si algo salió mal
+                                Swal.fire('Error', response.message || 'There was an issue scheduling your appointment.', 'error');
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            // Manejo de errores si la solicitud falla
+                            Swal.fire('Error', 'There was an issue scheduling your appointment. Please try again.', 'error');
+                        }
+                    });
+
+                    // Imprimir datos de la solicitud para depuración
+                    console.log('Sending data to backend:', JSON.stringify({
+                        AppointmentPatientid: patientId,
+                        AppointmentDate: appointmentDate,
+                        AppointmentHour: selectedHour
+                    }));
+
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    // Si el usuario cancela, cerramos el modal
+                    $('#hoursModalgrid').modal('hide');
+                }
+            });
+        });
+    });
+
+
 </script>

@@ -19,6 +19,8 @@ public partial class DbExpertmedContext : DbContext
 
     public virtual DbSet<Appointment> Appointments { get; set; }
 
+    public virtual DbSet<AssistantDoctorAppointment> AssistantDoctorAppointments { get; set; }
+
     public virtual DbSet<AssistantDoctorRelationship> AssistantDoctorRelationships { get; set; }
 
     public virtual DbSet<Catalog> Catalogs { get; set; }
@@ -69,7 +71,7 @@ public partial class DbExpertmedContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=localhost;Database=DB_EXPERTMED;User Id=sa;Password=Sur2o22--;TrustServerCertificate=True;Connect Timeout=120");
+        => optionsBuilder.UseSqlServer("server=localhost; database=DB_EXPERTMED; integrated security=true; Encrypt=True; TrustServerCertificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -143,6 +145,37 @@ public partial class DbExpertmedContext : DbContext
             entity.HasOne(d => d.AppointmentPatient).WithMany(p => p.Appointments)
                 .HasForeignKey(d => d.AppointmentPatientid)
                 .HasConstraintName("FK_appointment_patientid");
+        });
+
+        modelBuilder.Entity<AssistantDoctorAppointment>(entity =>
+        {
+            entity.HasKey(e => new { e.AssistantUserid, e.DoctorUserid, e.AppointmentId }).HasName("PK__assistan__55C1F616CDC3FB41");
+
+            entity.ToTable("assistant_doctor_appointment");
+
+            entity.Property(e => e.AssistantUserid).HasColumnName("assistant_userid");
+            entity.Property(e => e.DoctorUserid).HasColumnName("doctor_userid");
+            entity.Property(e => e.AppointmentId).HasColumnName("appointment_id");
+            entity.Property(e => e.CreatedBy).HasColumnName("created_by");
+            entity.Property(e => e.CreationDate)
+                .HasColumnType("datetime")
+                .HasColumnName("creation_date");
+            entity.Property(e => e.RelationshipStatus).HasColumnName("relationship_status");
+
+            entity.HasOne(d => d.Appointment).WithMany(p => p.AssistantDoctorAppointments)
+                .HasForeignKey(d => d.AppointmentId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__assistant__appoi__7E02B4CC");
+
+            entity.HasOne(d => d.AssistantUser).WithMany(p => p.AssistantDoctorAppointmentAssistantUsers)
+                .HasForeignKey(d => d.AssistantUserid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__assistant__assis__7C1A6C5A");
+
+            entity.HasOne(d => d.DoctorUser).WithMany(p => p.AssistantDoctorAppointmentDoctorUsers)
+                .HasForeignKey(d => d.DoctorUserid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__assistant__docto__7D0E9093");
         });
 
         modelBuilder.Entity<AssistantDoctorRelationship>(entity =>

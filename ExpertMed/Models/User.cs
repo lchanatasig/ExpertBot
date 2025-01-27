@@ -63,6 +63,10 @@ public partial class User
 
     public virtual ICollection<Appointment> AppointmentAppointmentModifyuserNavigations { get; set; } = new List<Appointment>();
 
+    public virtual ICollection<AssistantDoctorAppointment> AssistantDoctorAppointmentAssistantUsers { get; set; } = new List<AssistantDoctorAppointment>();
+
+    public virtual ICollection<AssistantDoctorAppointment> AssistantDoctorAppointmentDoctorUsers { get; set; } = new List<AssistantDoctorAppointment>();
+
     public virtual ICollection<AssistantDoctorRelationship> AssistantDoctorRelationshipAssistantUsers { get; set; } = new List<AssistantDoctorRelationship>();
 
     public virtual ICollection<AssistantDoctorRelationship> AssistantDoctorRelationshipDoctorUsers { get; set; } = new List<AssistantDoctorRelationship>();

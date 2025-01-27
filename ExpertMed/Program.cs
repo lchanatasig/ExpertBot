@@ -25,6 +25,7 @@ namespace ExpertMed
             builder.Services.AddScoped<UserService>();
             builder.Services.AddScoped<SelectsService>();
             builder.Services.AddScoped<PatientService>();
+            builder.Services.AddScoped<AppointmentService>();
 
             // Configuración de controladores y vistas
             builder.Services.AddControllersWithViews();
