@@ -15,6 +15,10 @@
         public List<Country> Countries { get; set; }
         public List<Catalog> Parents { get; set; }
         public List<Province> Provinces { get; set; }
+        public List<Diagnosis> Diagnoses { get; set; }
+        public List<Medication> Medications { get; set; }
+        public List<Image> Images { get; set; }
+        public List<Laboratory> Laboratories { get; set; }
 
         public Patient Patient { get; set; }  // For user details
 

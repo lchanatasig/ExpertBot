@@ -502,78 +502,78 @@
 
 
             // Al hacer clic en una de las horas disponibles
-        // Al hacer clic en una de las horas disponibles
-           $('#availableHoursContainer').on('click', 'button', function () {
-               // Obtener la hora seleccionada desde el atributo 'data-hour' del botón
-               var selectedHour = $(this).data('hour');
+            $('#availableHoursContainer').on('click', 'button', function () {
+                // Obtener la hora seleccionada desde el atributo 'data-hour' del botón
+                var selectedHour = $(this).data('hour');
 
-               // Establecer la hora seleccionada en el campo de entrada
-               $('#appointmentTime').val(selectedHour);
+                // Establecer la hora seleccionada en el campo de entrada
+                $('#appointmentTime').val(selectedHour);
 
-               console.log('Selected Hour:', selectedHour);
-               console.log('Selected Date:', $('#selectedDate').val());
-               console.log('Patient ID:', $('#patientId').val());
+                console.log('Selected Hour:', selectedHour);
+                console.log('Selected Date:', $('#selectedDate').val());
+                console.log('Patient ID:', $('#patientId').val());
+                console.log('Medico ID:', $('#doctorUserId').val());
 
-               // Mostrar SweetAlert para confirmación
-               var selectedDate = $('#selectedDate').val(); // Obtener la fecha seleccionada
-               var patientId = $('#patientId').val();  // Obtener el ID del paciente
+                // Mostrar SweetAlert para confirmación
+                var selectedDate = $('#selectedDate').val(); // Obtener la fecha seleccionada
+                var patientId = $('#patientId').val();  // Obtener el ID del paciente
+                var doctorUserId = $('#doctorUserId').val(); // Obtener el ID del médico seleccionado
 
-               Swal.fire({
-                   title: 'Confirm Appointment',
-                   text: 'You have selected ' + selectedHour + ' on ' + selectedDate + '. Do you want to confirm this appointment?',
-                   icon: 'question',
-                   showCancelButton: true,
-                   confirmButtonText: 'Yes, confirm it!',
-                   cancelButtonText: 'No, choose again',
-                   reverseButtons: true
-               }).then((result) => {
-                   if (result.isConfirmed) {
-                       // Si el usuario confirma, enviamos la cita al backend
-                       var userId = @usuarioId; // Obtener el ID del usuario
-                       var appointmentDate = selectedDate; // Mantener la fecha
-                       // Mantener la hora seleccionada
+                Swal.fire({
+                    title: 'Confirm Appointment',
+                    text: 'You have selected ' + selectedHour + ' on ' + selectedDate + '. Do you want to confirm this appointment?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, confirm it!',
+                    cancelButtonText: 'No, choose again',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Si el usuario confirma, enviamos la cita al backend
 
-                       // Realizamos la solicitud AJAX para crear la cita
                        $.ajax({
-                           url: '@Url.Action("CreateAppointment", "Appointment")',  // Cambia la URL al método correspondiente en tu controlador
-                           type: 'POST',
-                           contentType: 'application/json', // Asegúrate de especificar el tipo de contenido
-                           data: JSON.stringify({
-                               AppointmentPatientid: patientId,  // ID del paciente
-                               AppointmentDate: selectedDate,  // Solo la fecha
-                               AppointmentHour: selectedHour  // Solo la hora
-                           }),
-                           success: function (response) {
-                               if (response.success) {
-                                   // Mostrar mensaje de éxito
-                                   Swal.fire('Appointment confirmed!', response.message, 'success').then(() => {
-                                       window.location.href = '@Url.Action("AppointmentList", "Appointment")'; // Redirigir a la lista de citas
-                                   });
-                               } else {
-                                   // Si algo salió mal
-                                   Swal.fire('Error', response.message || 'There was an issue scheduling your appointment.', 'error');
-                               }
-                           },
-                           error: function (xhr, status, error) {
-                               // Manejo de errores si la solicitud falla
-                               Swal.fire('Error', 'There was an issue scheduling your appointment. Please try again.', 'error');
-                           }
-                       });
+            url: '@Url.Action("CreateAppointment", "Appointment")?doctorUserId=' + parseInt(doctorUserId),  // Convertir doctorUserId a número
+            type: 'POST',
+            contentType: 'application/json', // Asegúrate de especificar el tipo de contenido
+            data: JSON.stringify({
+               // Asegúrate de que patientId es un número entero
+                AppointmentDate: selectedDate,  // Asegúrate de que sea en formato adecuado, por ejemplo: "2025-01-31"
+                AppointmentHour: selectedHour,
+                  AppointmentPatientid: patientId, // Asegúrate de que selectedHour esté en formato adecuado, por ejemplo: "16:00"
+            }),
+            success: function (response) {
+                if (response.success) {
+                    // Mostrar mensaje de éxito
+                    Swal.fire('Appointment confirmed!', response.message, 'success').then(() => {
+                        window.location.href = '@Url.Action("AppointmentList", "Appointment")'; // Redirigir a la lista de citas
+                    });
+                } else {
+                    // Si algo salió mal
+                    Swal.fire('Error', response.message || 'There was an issue scheduling your appointment.', 'error');
+                }
+            },
+            error: function (xhr, status, error) {
+                // Manejo de errores si la solicitud falla
+                Swal.fire('Error', 'There was an issue scheduling your appointment. Please try again.', 'error');
+            }
+        });
 
-                       // Imprimir datos de la solicitud para depuración
-                       console.log('Sending data to backend:', JSON.stringify({
-                           AppointmentPatientid: patientId,
-                           AppointmentDate: appointmentDate,
-                           AppointmentHour: selectedHour
-                       }));
 
-                   } else if (result.dismiss === Swal.DismissReason.cancel) {
-                       // Si el usuario cancela, cerramos el modal
-                       $('#hoursModalgrid').modal('hide');
-                   }
-               });
-           });
-           });
+                        // Imprimir datos de la solicitud para depuración
+                        console.log('Sending data to backend:', JSON.stringify({
+                            AppointmentPatientid: patientId,
+                            AppointmentDate: selectedDate,
+                            AppointmentHour: selectedHour,
+                            DoctorUserId: doctorUserId  // Agregar el ID del médico aquí
+                        }));
+
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        // Si el usuario cancela, cerramos el modal
+                        $('#hoursModalgrid').modal('hide');
+                    }
+                });
+            });
+        });
     </script>
 
 }

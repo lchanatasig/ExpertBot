@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Numerics;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace ExpertMed.Models
 {
@@ -18,7 +21,10 @@ namespace ExpertMed.Models
 
         public DateTime AppointmentDate { get; set; }
 
+
+        [JsonConverter(typeof(JsonTimeOnlyConverter))]
         public TimeOnly AppointmentHour { get; set; }
+
 
         public int? AppointmentPatientid { get; set; }
 
@@ -27,8 +33,10 @@ namespace ExpertMed.Models
         public int? AppointmentStatus { get; set; }
 
         // Propiedades añadidas para los nombres completos
-        public string PatientName { get; set; }  // Nombre completo del paciente
-        public string DoctorName { get; set; }   // Nombre completo del doctor
+        public string? PatientName { get; set; }  // Nombre completo del paciente
+        public string? DoctorName { get; set; }   // Nombre completo del doctor
+        public string? DoctorName2 { get; set; }   // Nombre completo del doctor
+        public int DoctorUserId { get; set; }   // Nombre completo del doctor
 
 
         // Relacionados con el paciente, doctor y usuario
@@ -43,5 +51,19 @@ namespace ExpertMed.Models
         public virtual ICollection<AssistantDoctorAppointment> AssistantDoctorAppointments { get; set; } = new List<AssistantDoctorAppointment>();
     }
 
+    public class JsonTimeOnlyConverter : JsonConverter<TimeOnly>
+    {
+        private const string TimeFormat = "HH:mm";
+
+        public override TimeOnly Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            return TimeOnly.ParseExact(reader.GetString(), TimeFormat);
+        }
+
+        public override void Write(Utf8JsonWriter writer, TimeOnly value, JsonSerializerOptions options)
+        {
+            writer.WriteStringValue(value.ToString(TimeFormat));
+        }
+    }
 
 }

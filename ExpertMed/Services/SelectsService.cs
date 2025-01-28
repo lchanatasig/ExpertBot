@@ -128,6 +128,74 @@ namespace ExpertMed.Services
             }
         }
 
+        public async Task<List<Diagnosis>> GetAllDiagnosisAsync()
+        {
+            try
+            {
+                // Ejecuta el procedimiento almacenado sp_ListAllSpecialities
+                var diagnoses = await _dbContext.Diagnoses
+                    .FromSqlRaw("EXEC sp_ListAllDiagnosis")
+                    .ToListAsync();
+
+                return diagnoses;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al obtener los diagnosticos.");
+                throw; // O manejar el error de forma más específica si es necesario
+            }
+        }
+        public async Task<List<Medication>> GetAllMedicationsAsync()
+        {
+            try
+            {
+                // Ejecuta el procedimiento almacenado sp_ListAllSpecialities
+                var medications = await _dbContext.Medications
+                    .FromSqlRaw("EXEC sp_ListAllMedications")
+                    .ToListAsync();
+
+                return medications;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al obtener los medicamentos.");
+                throw; // O manejar el error de forma más específica si es necesario
+            }
+        } 
+        public async Task<List<Image>> GetAllImagesAsync()
+        {
+            try
+            {
+                // Ejecuta el procedimiento almacenado sp_ListAllSpecialities
+                var images = await _dbContext.Images
+                    .FromSqlRaw("EXEC sp_ListAllImages")
+                    .ToListAsync();
+
+                return images;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al obtener los imagenes.");
+                throw; // O manejar el error de forma más específica si es necesario
+            }
+        }
+        public async Task<List<Laboratory>> GetAllLaboratoriesAsync()
+        {
+            try
+            {
+                // Ejecuta el procedimiento almacenado sp_ListAllSpecialities
+                var laboratories = await _dbContext.Laboratories
+                    .FromSqlRaw("EXEC sp_ListAllLaboratories")
+                    .ToListAsync();
+
+                return laboratories;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al obtener los imagenes.");
+                throw; // O manejar el error de forma más específica si es necesario
+            }
+        }
 
 
         //Metodo para obtener los tipos de genero de la tabla catalogo

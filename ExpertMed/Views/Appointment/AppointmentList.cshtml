@@ -69,7 +69,7 @@
                                     <td hidden>@appointment.AppointmentId</td>
                                     @if (perfilId == 1 || perfilId == 3)
                                     {
-                                        <td>@appointment.DoctorName</td> <!-- Nombre completo del doctor -->
+                                        <td>@(!string.IsNullOrEmpty(appointment.DoctorName) ? appointment.DoctorName : appointment.DoctorName2)</td>
                                     }
 
                                     <td>@appointment.AppointmentDate.ToString("dd/MM/yyyy") @appointment.AppointmentHour.ToString()</td>
@@ -127,6 +127,7 @@
         <div class="modal-content">
             <!-- Hidden input to store AppointmentId -->
             <input type="hidden" id="appointmentIdInput" name="AppointmentId" />
+            <input type="hidden" id="perfiltIdInput" value="@perfilId" name="AppointmentId" />
             <input type="hidden" id="appointmentConsultationId" name="AppointmenConsultationtId" />
 
             <div class="modal-header">
@@ -187,28 +188,31 @@
             <div class="modal-body">
                 <form class="row g-3 needs-validation" novalidate name="formData">
 
-                    <div class="col-xxl-6">
-                        <label for="patientId" class="form-label">Patient Id</label>
-                        <input type="hidden" class="form-control" id="patientId" required>
-                        <input type="hidden" class="form-control" id="appointment" required>
+                    <div class="col-xxl-6" hidden>
+                        <label for="patientId" hidden class="form-label">Patient Id</label>
+                        <input type="hidden" class="form-control" id="patientId" required> <!-- Campo oculto para el ID del paciente -->
+                        <input type="hidden" class="form-control" id="appointment" required> <!-- Campo oculto para el ID de la cita -->
+                        <input type="hidden" class="form-control" id="doctorUserId"> <!-- Campo de texto para el ID del doctor -->
                     </div>
 
+                   
                     <!-- Input de usuarioId y fecha -->
                     <div class="col-xxl-6">
-                        <label for="selectedDate" class="form-label">Select a date</label>
-                        <input type="date" class="form-control" id="selectedDate" required>
+                        <label for="selectedDate" class="form-label">Select a date</label> <!-- Etiqueta para seleccionar la fecha -->
+                        <input type="date" class="form-control" id="selectedDate" required> <!-- Campo de selección de fecha -->
                     </div>
 
                     <div class="col-xxl-6">
-                        <label for="ui" class="form-label">Your appointment time is:</label>
-                        <input type="time" class="form-control" id="appointmentTime" required>
+                        <label for="appointmentTime" class="form-label">Your appointment time is:</label> <!-- Etiqueta para la hora de la cita -->
+                        <input type="time" class="form-control" id="appointmentTime" required> <!-- Campo de selección de la hora de la cita -->
                     </div>
 
                     <div class="col-xxl-6">
                         <button type="button" class="btn btn-soft-info" id="viewHoursButton">
-                            <i class="ri-eye-fill"></i> View Hours Available
+                            <i class="ri-eye-fill"></i> View Hours Available <!-- Botón para ver las horas disponibles -->
                         </button>
                     </div>
+
 
                     <!-- Modal de las horas disponibles -->
                     <div class="modal flip" id="hoursModalgrid" tabindex="-1" aria-labelledby="hoursModalgridLabel">
@@ -239,23 +243,23 @@
     </div>
 </div>
 
-                                        
+
 @section scripts {
-            <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-                integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
-            <!--datatable js-->
-            <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-            <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
-            <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
-            <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
-            <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
-            <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <!--datatable js-->
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
 
-            <script src="~/assets/js/pages/datatables.init.js"></script>
+    <script src="~/assets/js/pages/datatables.init.js"></script>
 
     <script>
         $(document).ready(function() {
@@ -271,7 +275,7 @@
                 appointmentStatus: status,
                 userProfile: '@ViewBag.UserProfile',
                 userId: '@ViewBag.UserId',
-               
+
             }).toString();
         }
     </script>
@@ -292,173 +296,186 @@
                     }
 
 
+                            function openRescheduleModal() {
+            // Obtener el ID de la cita desde el campo oculto
+            const appointmentId = document.getElementById("appointmentIdInput").value;
 
-                         function openRescheduleModal() {
-                         // Obtener el ID de la cita desde el campo oculto
-                         const appointmentId = document.getElementById("appointmentIdInput").value;
+            // Obtener el perfil desde el campo oculto
+            const perfilId = document.getElementById("perfiltIdInput").value;
 
-                         if (!appointmentId) {
-                             alert("No appointment ID found.");
-                             return;
-                         }
+            if (!appointmentId) {
+                alert("No appointment ID found.");
+                return;
+            }
 
-                         // Realizar una solicitud HTTP al backend
-                         fetch(`/Appointment/AppointmentGetById?id=${appointmentId}`)
-                             .then(response => {
-                                 if (!response.ok) {
-                                     throw new Error("Failed to fetch appointment details.");
-                                 }
-                                 return response.json();
-                             })
-                             .then(data => {
-                                 // Verifica si los datos existen
-                                 if (!data) {
-                                     alert("Appointment not found.");
-                                     return;
-                                 }
+            // Realizar una solicitud HTTP al backend
+            fetch(`/Appointment/AppointmentGetById?id=${appointmentId}&userProfile=${perfilId}`)  // Pasamos el perfilId
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Failed to fetch appointment details.");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Verifica si los datos existen
+                    if (!data) {
+                        alert("Appointment not found.");
+                        return;
+                    }
 
-                                 // Llenar los campos del modal con los datos de la cita
-                                 document.getElementById("appointment").value = appointmentId || "";
-                                 document.getElementById("patientId").value = data.patient || "";
-                                 document.getElementById("selectedDate").value = data.date || "";
-                                 document.getElementById("appointmentTime").value = data.time || "";
+                    // Llenar los campos del modal con los datos de la cita
+                    document.getElementById("appointment").value = appointmentId || "";
+                    document.getElementById("patientId").value = data.patient || "";
+                    document.getElementById("selectedDate").value = data.date || "";
+                    document.getElementById("appointmentTime").value = data.time || "";
+
+                    // Si el perfil es Asistente (3), llenar el campo de DoctorUserId
+                    if (data.doctorUserId) {
+                        document.getElementById("doctorUserId").value = data.doctorUserId || "";
+                    }
+
+                    // Mostrar el modal de reagendar
+                    const rescheduleModal = new bootstrap.Modal(document.getElementById("appointmentModalgrid"));
+                    rescheduleModal.show();
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("An error occurred while fetching appointment details.");
+                });
+        }
 
 
-                                 // Mostrar el modal de reagendar
-                                 const rescheduleModal = new bootstrap.Modal(document.getElementById("appointmentModalgrid"));
-                                 rescheduleModal.show();
-                             })
-                             .catch(error => {
-                                 console.error("Error:", error);
-                                 alert("An error occurred while fetching appointment details.");
-                             });
-                         }
+
+               $(document).ready(function () {
+            // Al hacer clic en el botón para ver las horas disponibles
+            $('#viewHoursButton').click(function () {
+                var userId = @usuarioId;  // Este valor debe ser dinámico, por ejemplo, extraído de la sesión o del usuario autenticado
+                var selectedDate = $('#selectedDate').val();
+                var doctorUserId = $('#doctorUserId').val(); // Obtener el ID del médico seleccionado
+
+                console.log('User ID:', userId);
+                console.log('Selected Date:', selectedDate);
+                console.log('Doctor User ID:', doctorUserId); // Imprimir el ID del médico
+
+                if (!selectedDate) {
+                    alert('Please select a date.');
+                    return;
+                }
+
+                // Realizar la solicitud AJAX al backend
+                $.ajax({
+                    url: '@Url.Action("GetAvailableHours", "Appointment")',
+                    type: 'GET',
+                    data: {
+                        userId: userId,
+                        date: selectedDate,
+                        doctorUserId: doctorUserId // Pasar el ID del médico si es necesario
+                    },
+                    success: function (response) {
+                        $('#availableHoursContainer').empty();  // Limpiar el contenedor de horas disponibles
+
+                        if (response.length > 0) {
+                            // Mostrar las horas en el contenedor
+                            response.forEach(function (hour) {
+                                $('#availableHoursContainer').append(
+                                    '<button type="button" class="btn btn-outline-primary btn-sm" data-hour="' + hour + '">' + hour + '</button>'
+                                );
+                            });
+                        } else {
+                            // Si no hay horas disponibles
+                            $('#availableHoursContainer').append(
+                                '<p>No available hours for this date.</p>'
+                            );
+                        }
+
+                        $('#hoursModalgrid').modal('show');  // Mostrar el modal con las horas disponibles
+                    },
+                    error: function (xhr, status, error) {
+                        alert('An error occurred while fetching available hours: ' + error);
+                    }
+                });
+            });
 
 
+            // Al hacer clic en una de las horas disponibles
+            $('#availableHoursContainer').on('click', 'button', function () {
+                // Obtener la hora seleccionada desde el atributo 'data-hour' del botón
+                var selectedHour = $(this).data('hour');
 
-                     $(document).ready(function () {
-                     // Al hacer clic en el botón para ver las horas disponibles
-                     $('#viewHoursButton').click(function () {
-                         var userId = @usuarioId;  // Este valor debe ser dinámico, por ejemplo, extraído de la sesión o del usuario autenticado
-                         var selectedDate = $('#selectedDate').val();
+                // Establecer la hora seleccionada en el campo de entrada
+                $('#appointmentTime').val(selectedHour);
 
-                         console.log('User ID:', userId);
-                         console.log('Selected Date:', selectedDate);
+                console.log('Selected Hour:', selectedHour);
+                console.log('Selected Date:', $('#selectedDate').val());
+                console.log('Patient ID:', $('#patientId').val());
+                console.log('Medico ID:', $('#doctorUserId').val());
+                console.log('Appointment ID:', $('#appointment').val());
 
-                         if (!selectedDate) {
-                             alert('Please select a date.');
-                             return;
-                         }
 
-                         // Realizar la solicitud AJAX al backend
-                         $.ajax({
-                             url: '@Url.Action("GetAvailableHours", "Appointment")',
-                             type: 'GET',
-                             data: {
-                                 userId: userId,
-                                 date: selectedDate
-                             },
-                             success: function (response) {
-                                 $('#availableHoursContainer').empty();  // Limpiar el contenedor de horas disponibles
+                // Mostrar SweetAlert para confirmación
+                var selectedDate = $('#selectedDate').val(); // Obtener la fecha seleccionada
+                var patientId = $('#patientId').val();  // Obtener el ID del paciente
+                var doctorUserId = $('#doctorUserId').val(); // Obtener el ID del médico seleccionado
+                var appointmentId = $('#appointment').val();  // Obtener el ID del paciente
+                Swal.fire({
+                    title: 'Confirm Appointment',
+                    text: 'You have selected ' + selectedHour + ' on ' + selectedDate + '. Do you want to confirm this appointment?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, confirm it!',
+                    cancelButtonText: 'No, choose again',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Si el usuario confirma, enviamos la cita al backend
 
-                                 if (response.length > 0) {
-                                     // Mostrar las horas en el contenedor
-                                     response.forEach(function (hour) {
-                                         $('#availableHoursContainer').append(
-                                             '<button type="button" class="btn btn-outline-primary btn-sm" data-hour="' + hour + '">' + hour + '</button>'
-                                         );
-                                     });
-                                 } else {
-                                     // Si no hay horas disponibles
-                                     $('#availableHoursContainer').append(
-                                         '<p>No available hours for this date.</p>'
-                                     );
-                                 }
+                       $.ajax({
+            url: '@Url.Action("ModifyAppointment", "Appointment")?doctorUserId=' + parseInt(doctorUserId),  // Convertir doctorUserId a número
+            type: 'POST',
+            contentType: 'application/json', // Asegúrate de especificar el tipo de contenido
+            data: JSON.stringify({
+               // Asegúrate de que patientId es un número entero
+                                                AppointmentId: appointmentId,  // ID del paciente
 
-                                 $('#hoursModalgrid').modal('show');  // Mostrar el modal con las horas disponibles
-                             },
-                             error: function (xhr, status, error) {
-                                 alert('An error occurred while fetching available hours: ' + error);
-                             }
-                         });
-                     });
-
-                     // Al hacer clic en una de las horas disponibles
-                     $('#availableHoursContainer').on('click', 'button', function () {
-                         // Obtener la hora seleccionada desde el atributo 'data-hour' del botón
-                         var selectedHour = $(this).data('hour');
-
-                         // Establecer la hora seleccionada en el campo de entrada
-                         $('#appointmentTime').val(selectedHour);
-
-                         console.log('Selected Hour:', selectedHour);
-                         console.log('Selected Date:', $('#selectedDate').val());
-                         console.log('Patient ID:', $('#patientId').val());
-                         console.log('Appointment ID:', $('#appointment').val());
-
-                         // Mostrar SweetAlert para confirmación
-                         var selectedDate = $('#selectedDate').val(); // Obtener la fecha seleccionada
-                         var patientId = $('#patientId').val();  // Obtener el ID del paciente
-                         var appointmentId = $('#appointment').val();  // Obtener el ID del paciente
-
-                         Swal.fire({
-                             title: 'Confirm Appointment',
-                             text: 'You have selected ' + selectedHour + ' on ' + selectedDate + '. Do you want to confirm this appointment?',
-                             icon: 'question',
-                             showCancelButton: true,
-                             confirmButtonText: 'Yes, confirm it!',
-                             cancelButtonText: 'No, choose again',
-                             reverseButtons: true
-                         }).then((result) => {
-                             if (result.isConfirmed) {
-                                 // Si el usuario confirma, enviamos la cita al backend
-                                 var userId = @usuarioId; // Obtener el ID del usuario
-                                 var appointmentDate = selectedDate; // Mantener la fecha
-                                 // Mantener la hora seleccionada
-
-                                 // Realizamos la solicitud AJAX para crear la cita
-                                 $.ajax({
-                                         url: '@Url.Action("ModifyAppointment", "Appointment")',  // Cambia la URL al método correspondiente en tu controlador
-                                     type: 'POST',
-                                     contentType: 'application/json', // Asegúrate de especificar el tipo de contenido
-                                     data: JSON.stringify({
-                                             AppointmentId: appointmentId,  // ID del paciente
-                                         AppointmentPatientid: patientId,  // ID del paciente
-                                         AppointmentDate: selectedDate,  // Solo la fecha
-                                         AppointmentHour: selectedHour  // Solo la hora
-                                     }),
-                                     success: function (response) {
-                                         if (response.success) {
-                                             // Mostrar mensaje de éxito
-                                             Swal.fire('Appointment confirmed!', response.message, 'success').then(() => {
-                                                 window.location.href = '@Url.Action("AppointmentList", "Appointment")'; // Redirigir a la lista de citas
-                                             });
-                                         } else {
-                                             // Si algo salió mal
-                                             Swal.fire('Error', response.message || 'There was an issue scheduling your appointment.', 'error');
-                                         }
-                                     },
-                                     error: function (xhr, status, error) {
-                                         // Manejo de errores si la solicitud falla
-                                         Swal.fire('Error', 'There was an issue scheduling your appointment. Please try again.', 'error');
-                                     }
-                                 });
-
-                                 // Imprimir datos de la solicitud para depuración
-                                 console.log('Sending data to backend:', JSON.stringify({
-                                         AppointmentId: appointmentId,  // ID del paciente
-                                     AppointmentPatientid: patientId,
-                                     AppointmentDate: appointmentDate,
-                                     AppointmentHour: selectedHour,
-                                 }));
-
-                             } else if (result.dismiss === Swal.DismissReason.cancel) {
-                                 // Si el usuario cancela, cerramos el modal
-                                 $('#hoursModalgrid').modal('hide');
-                             }
-                         });
-                     });
+                AppointmentDate: selectedDate,  // Asegúrate de que sea en formato adecuado, por ejemplo: "2025-01-31"
+                AppointmentHour: selectedHour,
+                  AppointmentPatientid: patientId, // Asegúrate de que selectedHour esté en formato adecuado, por ejemplo: "16:00"
+            }),
+            success: function (response) {
+                if (response.success) {
+                    // Mostrar mensaje de éxito
+                    Swal.fire('Appointment confirmed!', response.message, 'success').then(() => {
+                        window.location.href = '@Url.Action("AppointmentList", "Appointment")'; // Redirigir a la lista de citas
                     });
+                } else {
+                    // Si algo salió mal
+                    Swal.fire('Error', response.message || 'There was an issue scheduling your appointment.', 'error');
+                }
+            },
+            error: function (xhr, status, error) {
+                // Manejo de errores si la solicitud falla
+                Swal.fire('Error', 'There was an issue scheduling your appointment. Please try again.', 'error');
+            }
+        });
+
+
+                        // Imprimir datos de la solicitud para depuración
+                        console.log('Sending data to backend:', JSON.stringify({
+                                                AppointmentId: appointmentId,  // ID del paciente
+
+                            AppointmentPatientid: patientId,
+                            AppointmentDate: selectedDate,
+                            AppointmentHour: selectedHour,
+                            DoctorUserId: doctorUserId  // Agregar el ID del médico aquí
+                        }));
+
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        // Si el usuario cancela, cerramos el modal
+                        $('#hoursModalgrid').modal('hide');
+                    }
+                });
+            });
+        });
 
 
                     //Filtrar boton iniciar cosulta
@@ -565,7 +582,7 @@
                    }
 
 
-            document.getElementById('optionModal').addEventListener('hidden.bs.modal', function () {
+                       document.getElementById('optionModal').addEventListener('hidden.bs.modal', function () {
                 // Eliminar cualquier backdrop residual
                 document.querySelectorAll('.modal-backdrop').forEach(function (backdrop) {
                     backdrop.remove();

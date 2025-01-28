@@ -29,7 +29,7 @@
 </div>
 <div class="row">
     <form asp-action="NewPatient" asp-controller="Patient" method="POST" class="row g-3 needs-validation" novalidate enctype="multipart/form-data">
-        <input type="hidden" class="form-control" id="firstnameInput" name="PatientCode" placeholder="Enter your first name" required>
+        <input type="hidden" class="form-control" id="firstnameInput" name="PatientCode" value="123" placeholder="Enter your first name" required>
         <input type="hidden" name="PatientCreationuser" value="@usuarioId"/>
         <input type="hidden" name="PatientModificationuser" value="@usuarioId"/>
         <div class="col-xxl-12">

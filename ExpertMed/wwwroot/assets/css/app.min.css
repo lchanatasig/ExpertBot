@@ -18398,3 +18398,12 @@ div.profile-wid-bg {
         color: blue;
         box-shadow: 0px 4px 8px rgba(13, 110, 253, 0.5);
     }
+
+div#card-header-color {
+    background-color: #91e7f5d5
+}
+
+div#baccard {
+    border-color: #ff0606; /* Color del borde */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.4); /* Sombra */
+}

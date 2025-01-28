@@ -39,6 +39,11 @@ namespace ExpertMed
                 options.Cookie.IsEssential = true;
             });
 
+            builder.Services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new JsonTimeOnlyConverter());
+            });
+
             var app = builder.Build();
 
             // Habilitar el uso de sesiones
