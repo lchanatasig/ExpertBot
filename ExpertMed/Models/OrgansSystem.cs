@@ -45,5 +45,9 @@ public partial class OrgansSystem
 
     public string? OrganssystemsNervousObs { get; set; }
 
+    public string? OrganssystemsOrgansensesObs { get; set; }
+
+    public bool? OrganssystemsOrgansenses { get; set; }
+
     public virtual Consultation? OrganssystemsConsultation { get; set; }
 }

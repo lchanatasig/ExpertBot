@@ -1,9 +1,15 @@
 ﻿@{
-    ViewData["Title"] = "NewConsultation";
+    ViewBag.Title = "Create Consultation";
+    ViewBag.pTitle = "Create Consultation";
+    ViewBag.pageTitle = "Create Consultation";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     var successMessage = TempData["SuccessMessage"] as string;
     var errorMessage = TempData["ErrorMessage"] as string;
+
+    var usuarioId = ViewContext.HttpContext.Session.GetInt32("UsuarioId");
+    var perfilId = ViewContext.HttpContext.Session.GetInt32("PerfilId");
+
 }
 
 
@@ -28,6 +34,17 @@
         <div class="card-body">
             <!-- #region Formulario (FORM)-->
             <form id="consultationForm" class="form-steps" autocomplete="off">
+                  <!--Campos ocultos para manejo de variables-->
+                  <input type="hidden" class="form-control" id="consultation_usercreate" value="@usuarioId" />
+                  <input type="hidden" asp-for="MedicoId" id="medicoId" value="@ViewBag.UsuarioId" />
+                  <input type="hidden" asp-for="EspecialidadId" id="especialidadId" value="@ViewBag.UsuarioIdEspecialidad" />
+                  <input type="hidden" asp-for="FechaCreacion" id="FechacreacionConsulta" value="" />
+                  <input type="hidden" asp-for="ConsultaPrincipal" id="consultaprincipal_consulta" value="sn" />
+                  <input type="hidden" asp-for="SecuencialConsulta" id="secuencial" value="sn" />
+                  <input type="hidden" asp-for="EstadoConsulta" id="estadoConsultaC" value="1" />
+                  <input type="hidden" asp-for="TipoConsultaId" id="tipoConsultaC" value="1" />
+                  <input type="hidden" asp-for="NotasEvolucion" id="notasevolucion_consulta" value="1" />
+
                 <!-- #region Steps -->
                 <div class="step-arrow-nav mb-4">
                     <ul class="nav nav-pills custom-nav nav-justified" role="tablist">
@@ -151,9 +168,9 @@
                                             data-choices-sorting-false disabled>
                                         @foreach (var documenttype in Model.DocumentTypes)
                                         {
-                                            <option value="@documenttype.CatalogId">
+                                                <option value="@documenttype.CatalogId">
                                                 @documenttype.CatalogName
-                                            </option>
+                                                </option>
                                         }
                                     </select>
                                 </div>
@@ -187,9 +204,9 @@
 
                                         @foreach (var bloodtype in Model.BloodTypes)
                                         {
-                                            <option value="@bloodtype.CatalogId">
+                                                <option value="@bloodtype.CatalogId">
                                                 @bloodtype.CatalogName
-                                            </option>
+                                                </option>
                                         }
                                     </select>
 
@@ -245,9 +262,9 @@
                                             data-choices-sorting-false disabled>
                                         @foreach (var maritalStatus in Model.CivilTypes)
                                         {
-                                            <option value="@maritalStatus.CatalogId">
+                                                <option value="@maritalStatus.CatalogId">
                                                 @maritalStatus.CatalogName
-                                            </option>
+                                                </option>
                                         }
                                     </select>
                                 </div>
@@ -268,9 +285,9 @@
                                         @foreach (var professionaltraining in
                                         Model.ProfessionalTrainingTypes)
                                         {
-                                            <option value="@professionaltraining.CatalogId">
+                                                <option value="@professionaltraining.CatalogId">
                                                 @professionaltraining.CatalogName
-                                            </option>
+                                                </option>
                                         }
                                     </select>
                                 </div>
@@ -296,9 +313,9 @@
                                             data-choices-sorting-false disabled>
                                         @foreach (var nacionality in Model.Countries)
                                         {
-                                            <option value="@nacionality.CountryId">
+                                                <option value="@nacionality.CountryId">
                                                 @nacionality.CountryNationality
-                                            </option>
+                                                </option>
                                         }
                                     </select>
                                 </div>
@@ -317,9 +334,9 @@
 
                                         @foreach (var provinces in Model.Provinces)
                                         {
-                                            <option value="@provinces.ProvinceId">
+                                                <option value="@provinces.ProvinceId">
                                                 @provinces.ProvinceName
-                                            </option>
+                                                </option>
                                         }
                                     </select>
                                 </div>
@@ -427,9 +444,9 @@
 
                                         @foreach (var healtinsurance in Model.SureHealthTypes)
                                         {
-                                            <option value="@healtinsurance.CatalogId">
+                                                <option value="@healtinsurance.CatalogId">
                                                 @healtinsurance.CatalogName
-                                            </option>
+                                                </option>
                                         }
                                     </select>
 
@@ -502,8 +519,8 @@
                                             <i class="ri-calendar-event-fill"></i> <br /> Date of
                                             Birthday <br />
                                             @((Model.DetailsPatient.PatientBirthdate.HasValue) ?
-                                                Model.DetailsPatient.PatientBirthdate.Value.ToString("yyyy-MM-dd")
-                                                : string.Empty) </span>
+                                                    Model.DetailsPatient.PatientBirthdate.Value.ToString("yyyy-MM-dd")
+                                                    : string.Empty) </span>
                                         </td>
                                         <td style="font-size: 0.7rem;">
                                             <i class="ri-calendar-event-fill"></i> <br /> Age
@@ -565,9 +582,9 @@
                                             data-choices data-choices-sorting-false>
                                         @foreach (var parents in Model.Parents)
                                         {
-                                            <option value="@parents.CatalogId">
+                                                <option value="@parents.CatalogId">
                                                 @parents.CatalogName
-                                            </option>
+                                                </option>
                                         }
 
                                     </select>
@@ -615,7 +632,7 @@
                                     <i id="dictationIcon1" class=" ri-mic-fill position-absolute" style="top: 35px; right: 15px; cursor: pointer;"></i>
 
                                 </div>
-                                
+
                             </div>
 
                             <!-- #region Alergias-->
@@ -628,9 +645,9 @@
 
                                         @foreach (var allergies in Model.AllergiesTypes)
                                         {
-                                            <option value="@allergies.CatalogId">
+                                                <option value="@allergies.CatalogId">
                                                 @allergies.CatalogName
-                                            </option>
+                                                </option>
                                         }
 
                                     </select>
@@ -654,9 +671,9 @@
                                             multiple>
                                         @foreach (var surgeries in Model.SurgeriesTypes)
                                         {
-                                            <option value="@surgeries.CatalogId">
+                                                <option value="@surgeries.CatalogId">
                                                 @surgeries.CatalogName
-                                            </option>
+                                                </option>
                                         }
                                     </select>
                                     <!-- Input oculto para enviar los IDs seleccionados -->
@@ -693,9 +710,9 @@
                                         <option value="">Select your family member</option>
                                         @foreach (var familyMember in Model.FamilyMember)
                                         {
-                                            <option value="@familyMember.CatalogId">
+                                                <option value="@familyMember.CatalogId">
                                                 @familyMember.CatalogName
-                                            </option>
+                                                </option>
                                         }
                                     </select>
 
@@ -728,9 +745,9 @@
                                         <option value="">Select your family member</option>
                                         @foreach (var familyMember in Model.FamilyMember)
                                         {
-                                            <option value="@familyMember.CatalogId">
+                                                <option value="@familyMember.CatalogId">
                                                 @familyMember.CatalogName
-                                            </option>
+                                                </option>
                                         }
                                     </select>
                                 </div>
@@ -762,9 +779,9 @@
                                         <option value="">Select your family member</option>
                                         @foreach (var familyMember in Model.FamilyMember)
                                         {
-                                            <option value="@familyMember.CatalogId">
+                                                <option value="@familyMember.CatalogId">
                                                 @familyMember.CatalogName
-                                            </option>
+                                                </option>
                                         }
                                     </select>
                                 </div>
@@ -797,9 +814,9 @@
                                         <option value="">Select your family member</option>
                                         @foreach (var familyMember in Model.FamilyMember)
                                         {
-                                            <option value="@familyMember.CatalogId">
+                                                <option value="@familyMember.CatalogId">
                                                 @familyMember.CatalogName
-                                            </option>
+                                                </option>
                                         }
                                     </select>
                                 </div>
@@ -831,9 +848,9 @@
                                         <option value="">Select your family member</option>
                                         @foreach (var familyMember in Model.FamilyMember)
                                         {
-                                            <option value="@familyMember.CatalogId">
+                                                <option value="@familyMember.CatalogId">
                                                 @familyMember.CatalogName
-                                            </option>
+                                                </option>
                                         }
                                     </select>
                                 </div>
@@ -864,9 +881,9 @@
                                         <option value="">Select your family member</option>
                                         @foreach (var familyMember in Model.FamilyMember)
                                         {
-                                            <option value="@familyMember.CatalogId">
+                                                <option value="@familyMember.CatalogId">
                                                 @familyMember.CatalogName
-                                            </option>
+                                                </option>
                                         }
                                     </select>
                                 </div>
@@ -898,9 +915,9 @@
                                         <option value="">Select your family member</option>
                                         @foreach (var familyMember in Model.FamilyMember)
                                         {
-                                            <option value="@familyMember.CatalogId">
+                                                <option value="@familyMember.CatalogId">
                                                 @familyMember.CatalogName
-                                            </option>
+                                                </option>
                                         }
                                     </select>
                                 </div>
@@ -933,9 +950,9 @@
                                         <option value="">Select your family member</option>
                                         @foreach (var familyMember in Model.FamilyMember)
                                         {
-                                            <option value="@familyMember.CatalogId">
+                                                <option value="@familyMember.CatalogId">
                                                 @familyMember.CatalogName
-                                            </option>
+                                                </option>
                                         }
                                     </select>
                                 </div>
@@ -967,9 +984,9 @@
                                         <option value="">Select your family member</option>
                                         @foreach (var familyMember in Model.FamilyMember)
                                         {
-                                            <option value="@familyMember.CatalogId">
+                                                <option value="@familyMember.CatalogId">
                                                 @familyMember.CatalogName
-                                            </option>
+                                                </option>
                                         }
                                     </select>
                                 </div>
@@ -1001,9 +1018,9 @@
                                         <option value="">Select your family member</option>
                                         @foreach (var familyMember in Model.FamilyMember)
                                         {
-                                            <option value="@familyMember.CatalogId">
+                                                <option value="@familyMember.CatalogId">
                                                 @familyMember.CatalogName
-                                            </option>
+                                                </option>
                                         }
                                     </select>
                                 </div>
@@ -1093,8 +1110,8 @@
                                             <i class="ri-calendar-event-fill"></i> <br /> Date of
                                             Birthday <br />
                                             @((Model.DetailsPatient.PatientBirthdate.HasValue) ?
-                                                Model.DetailsPatient.PatientBirthdate.Value.ToString("yyyy-MM-dd")
-                                                : string.Empty) </span>
+                                                    Model.DetailsPatient.PatientBirthdate.Value.ToString("yyyy-MM-dd")
+                                                    : string.Empty) </span>
                                         </td>
                                         <td style="font-size: 0.7rem;">
                                             <i class="ri-calendar-event-fill"></i> <br /> Age
@@ -1270,7 +1287,7 @@
                                 <label class="form-check-label" for="SwitchCheckLymphaticHeme">Lymphatic Heme</label>
                             </div>
 
-                           
+
 
                             <div class="col-lg-5">
                                 <div class="mb-3">
@@ -1286,7 +1303,7 @@
                                 <label class="form-check-label" for="SwitchCheckHighlystrung">Highly strung</label>
                             </div>
 
-                            
+
                             <div class="col-lg-5">
                                 <div class="mb-3">
                                     <input type="text" class="form-control" id="observationHighlystrung"
@@ -1332,6 +1349,10 @@
                                     <label for="bloodPressureInput" class="form-label"> Blood pressure * </label>
                                     <input type="text" class="form-control" id="bloodPressureInput" name="bloodPressureInput" placeholder="/" required>
                                     <span>Si la presión es de dos cifras, anteceda el 0 antes del número. Ej: 046/123 siempre colocar como el ejemplo</span>
+                                    
+                                     <input type="hidden"  name="PresionArterialDiastolica" id="consultation_bloodpresuredDIS" />
+                                     <input type="hidden"  name="PresionArterialSistolica" id="consultation_bloodpressuredAS" />
+
                                 </div>
                             </div>
 
@@ -1525,8 +1546,8 @@
                                         <i class="ri-calendar-event-fill"></i> <br /> Date of
                                         Birthday <br />
                                         @((Model.DetailsPatient.PatientBirthdate.HasValue) ?
-                                            Model.DetailsPatient.PatientBirthdate.Value.ToString("yyyy-MM-dd")
-                                            : string.Empty) </span>
+                                                Model.DetailsPatient.PatientBirthdate.Value.ToString("yyyy-MM-dd")
+                                                : string.Empty) </span>
                                     </td>
                                     <td style="font-size: 0.7rem;">
                                         <i class="ri-calendar-event-fill"></i> <br /> Age
@@ -1585,9 +1606,9 @@
                                                         <option value="">Search and select a Diagnosis</option>
                                                         @foreach (var diagnosis in Model.Diagnoses)
                                                         {
-                                                            <option value="@diagnosis.DiagnosisId" data-name="@diagnosis.DiagnosisName">
+                                                                <option value="@diagnosis.DiagnosisId" data-name="@diagnosis.DiagnosisName">
                                                                 @diagnosis.DiagnosisName
-                                                            </option>
+                                                                </option>
                                                         }
                                                     </select>
                                                 </div>
@@ -1647,7 +1668,7 @@
                                                 </div>
                                             </div>
 
-                                           
+
                                         </div>
 
                                     </div>
@@ -1683,9 +1704,9 @@
                                                         <option value="">Search and select a Medications</option>
                                                         @foreach (var medications in Model.Medications)
                                                         {
-                                                            <option value="@medications.MedicationsId" data-name="@medications.MedicationsDescription">
+                                                                <option value="@medications.MedicationsId" data-name="@medications.MedicationsDescription">
                                                                 @medications.MedicationsDescription
-                                                            </option>
+                                                                </option>
                                                         }
                                                     </select>
                                                 </div>
@@ -1742,7 +1763,7 @@
 
                                     </div>
 
-                                    
+
 
                                 </div>
 
@@ -1773,9 +1794,9 @@
                                                         <option value="">Search and select a Images</option>
                                                         @foreach (var images in Model.Images)
                                                         {
-                                                            <option value="@images.ImagesId" data-name="@images.ImagesDescription">
+                                                                <option value="@images.ImagesId" data-name="@images.ImagesDescription">
                                                                 @images.ImagesDescription
-                                                            </option>
+                                                                </option>
                                                         }
                                                     </select>
                                                 </div>
@@ -1833,9 +1854,9 @@
                                                         <option value="">Search and select a Laboratories</option>
                                                         @foreach (var images in Model.Laboratories)
                                                         {
-                                                            <option value="@images.LaboratoriesId" data-name="@images.LaboratoriesDescription">
+                                                                <option value="@images.LaboratoriesId" data-name="@images.LaboratoriesDescription">
                                                                 @images.LaboratoriesDescription
-                                                            </option>
+                                                                </option>
                                                         }
                                                     </select>
                                                 </div>
@@ -1956,130 +1977,130 @@
 </div>
 <!-- #endregion Formulario-->
 @section Scripts {
-    <script src="~/assets/js/consultation.js"></script>
+        <script src="~/assets/js/consultation.js"></script>
 
-    <script>
+        <script>
 
-        document.addEventListener("DOMContentLoaded", function () {
-            // Selecciona todos los switches
-            const switches = document.querySelectorAll(".form-check-input");
+            document.addEventListener("DOMContentLoaded", function () {
+                // Selecciona todos los switches
+                const switches = document.querySelectorAll(".form-check-input");
 
-            switches.forEach(switchElement => {
-                // Asocia un evento de cambio a cada switch
-                switchElement.addEventListener("change", function () {
-                    // Obtén los campos asociados al switch actual
-                    const parentDiv = this.closest(".form-check");
+                switches.forEach(switchElement => {
+                    // Asocia un evento de cambio a cada switch
+                    switchElement.addEventListener("change", function () {
+                        // Obtén los campos asociados al switch actual
+                        const parentDiv = this.closest(".form-check");
+                        const nextSibling = parentDiv.nextElementSibling;
+                        const selectField = nextSibling.querySelector("select");
+                        const observationField = nextSibling.nextElementSibling.querySelector("input");
+
+                        // Muestra u oculta los campos según el estado del switch
+                        if (this.checked) {
+                            selectField.closest(".col-lg-5").style.display = "block";
+                            observationField.closest(".col-lg-5").style.display = "block";
+                        } else {
+                            selectField.closest(".col-lg-5").style.display = "none";
+                            observationField.closest(".col-lg-5").style.display = "none";
+                        }
+                    });
+
+                    // Oculta inicialmente los campos asociados
+                    const parentDiv = switchElement.closest(".form-check");
                     const nextSibling = parentDiv.nextElementSibling;
                     const selectField = nextSibling.querySelector("select");
                     const observationField = nextSibling.nextElementSibling.querySelector("input");
 
-                    // Muestra u oculta los campos según el estado del switch
-                    if (this.checked) {
-                        selectField.closest(".col-lg-5").style.display = "block";
-                        observationField.closest(".col-lg-5").style.display = "block";
-                    } else {
-                        selectField.closest(".col-lg-5").style.display = "none";
-                        observationField.closest(".col-lg-5").style.display = "none";
-                    }
+                    selectField.closest(".col-lg-5").style.display = "none";
+                    observationField.closest(".col-lg-5").style.display = "none";
                 });
-
-                // Oculta inicialmente los campos asociados
-                const parentDiv = switchElement.closest(".form-check");
-                const nextSibling = parentDiv.nextElementSibling;
-                const selectField = nextSibling.querySelector("select");
-                const observationField = nextSibling.nextElementSibling.querySelector("input");
-
-                selectField.closest(".col-lg-5").style.display = "none";
-                observationField.closest(".col-lg-5").style.display = "none";
             });
-        });
-    </script>
+        </script>
 
 
-    <script>
+        <script>
 
-                document.addEventListener("DOMContentLoaded", function () {
-            // Selecciona todos los switches
-            const switches = document.querySelectorAll(".form-check-input");
+                    document.addEventListener("DOMContentLoaded", function () {
+                // Selecciona todos los switches
+                const switches = document.querySelectorAll(".form-check-input");
 
-            switches.forEach(switchElement => {
-                // Asocia un evento de cambio a cada switch
-                switchElement.addEventListener("change", function () {
-                    // Obtén el campo de observación asociado al switch
-                    const parentDiv = this.closest(".form-check");
+                switches.forEach(switchElement => {
+                    // Asocia un evento de cambio a cada switch
+                    switchElement.addEventListener("change", function () {
+                        // Obtén el campo de observación asociado al switch
+                        const parentDiv = this.closest(".form-check");
+                        const observationField = parentDiv.nextElementSibling.querySelector("input");
+
+                        // Muestra u oculta el campo de observación según el estado del switch
+                        if (this.checked) {
+                            observationField.closest(".col-lg-5").style.display = "block";
+                        } else {
+                            observationField.closest(".col-lg-5").style.display = "none";
+                        }
+                    });
+
+                    // Oculta inicialmente los campos de observación
+                    const parentDiv = switchElement.closest(".form-check");
                     const observationField = parentDiv.nextElementSibling.querySelector("input");
-
-                    // Muestra u oculta el campo de observación según el estado del switch
-                    if (this.checked) {
-                        observationField.closest(".col-lg-5").style.display = "block";
-                    } else {
-                        observationField.closest(".col-lg-5").style.display = "none";
-                    }
+                    observationField.closest(".col-lg-5").style.display = "none";
                 });
-
-                // Oculta inicialmente los campos de observación
-                const parentDiv = switchElement.closest(".form-check");
-                const observationField = parentDiv.nextElementSibling.querySelector("input");
-                observationField.closest(".col-lg-5").style.display = "none";
             });
-        });
 
-    </script>
+        </script>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            Array.from(document.querySelectorAll(".form-steps")).forEach(function (form) {
-                // Botones "Next"
-                Array.from(form.querySelectorAll(".nexttab")).forEach(function (nextButton) {
-                    nextButton.addEventListener("click", function () {
-                        var currentTab = nextButton.closest(".tab-pane");
-                        var inputs = currentTab.querySelectorAll(".form-control");
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                Array.from(document.querySelectorAll(".form-steps")).forEach(function (form) {
+                    // Botones "Next"
+                    Array.from(form.querySelectorAll(".nexttab")).forEach(function (nextButton) {
+                        nextButton.addEventListener("click", function () {
+                            var currentTab = nextButton.closest(".tab-pane");
+                            var inputs = currentTab.querySelectorAll(".form-control");
 
-                        // Validar campos en el paso actual
-                        var isValid = true;
-                        inputs.forEach(function (input) {
-                            if (!input.checkValidity()) {
-                                input.classList.add("is-invalid");
-                                isValid = false;
+                            // Validar campos en el paso actual
+                            var isValid = true;
+                            inputs.forEach(function (input) {
+                                if (!input.checkValidity()) {
+                                    input.classList.add("is-invalid");
+                                    isValid = false;
+                                } else {
+                                    input.classList.remove("is-invalid");
+                                    input.classList.add("is-valid");
+                                }
+                            });
+
+                            if (isValid) {
+                                var nextTabId = nextButton.getAttribute('data-nexttab');
+                                var nextTab = document.getElementById(nextTabId);
+                                if (nextTab) {
+                                    var tab = new bootstrap.Tab(nextTab);
+                                    tab.show();
+                                    form.classList.remove("was-validated");
+                                } else {
+                                    console.error("No se encontró el siguiente tab:", nextTabId);
+                                }
                             } else {
-                                input.classList.remove("is-invalid");
-                                input.classList.add("is-valid");
+                                form.classList.add("was-validated");
                             }
                         });
-
-                        if (isValid) {
-                            var nextTabId = nextButton.getAttribute('data-nexttab');
-                            var nextTab = document.getElementById(nextTabId);
-                            if (nextTab) {
-                                var tab = new bootstrap.Tab(nextTab);
-                                tab.show();
-                                form.classList.remove("was-validated");
-                            } else {
-                                console.error("No se encontró el siguiente tab:", nextTabId);
-                            }
-                        } else {
-                            form.classList.add("was-validated");
-                        }
                     });
-                });
 
-                // Botones "Previous"
-                Array.from(form.querySelectorAll(".previestab")).forEach(function (prevButton) {
-                    prevButton.addEventListener("click", function () {
-                        var prevTabId = prevButton.getAttribute('data-previous');
-                        var prevTab = document.getElementById(prevTabId);
-                        if (prevTab) {
-                            var tab = new bootstrap.Tab(prevTab);
-                            tab.show();
-                        } else {
-                            console.error("No se encontró el tab anterior:", prevTabId);
-                        }
+                    // Botones "Previous"
+                    Array.from(form.querySelectorAll(".previestab")).forEach(function (prevButton) {
+                        prevButton.addEventListener("click", function () {
+                            var prevTabId = prevButton.getAttribute('data-previous');
+                            var prevTab = document.getElementById(prevTabId);
+                            if (prevTab) {
+                                var tab = new bootstrap.Tab(prevTab);
+                                tab.show();
+                            } else {
+                                console.error("No se encontró el tab anterior:", prevTabId);
+                            }
+                        });
                     });
                 });
             });
-        });
 
 
-    </script>
+        </script>
 
 }

@@ -71,7 +71,7 @@ public partial class DbExpertmedContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("server=localhost; database=DB_EXPERTMED; integrated security=true; Encrypt=True; TrustServerCertificate=True");
+        => optionsBuilder.UseSqlServer("server=localhost; database=DB_EXPERTMED; integrated security=true; TrustServerCertificate=Yes");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -700,6 +700,10 @@ public partial class DbExpertmedContext : DbContext
             entity.Property(e => e.OrganssystemsNervousObs)
                 .HasMaxLength(255)
                 .HasColumnName("organssystems_nervous_obs");
+            entity.Property(e => e.OrganssystemsOrgansenses).HasColumnName("organssystems_organsenses");
+            entity.Property(e => e.OrganssystemsOrgansensesObs)
+                .HasMaxLength(255)
+                .HasColumnName("organssystems_organsenses_Obs");
             entity.Property(e => e.OrganssystemsRespiratory).HasColumnName("organssystems_respiratory");
             entity.Property(e => e.OrganssystemsRespiratoryObs)
                 .HasMaxLength(255)

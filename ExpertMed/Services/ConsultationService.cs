@@ -20,105 +20,103 @@ namespace ExpertMed.Services
 
 
          public async Task CrearConsultaAsync(
-         string usuariocreacionConsulta,
-         string historialConsulta,
-         int pacienteConsultaP,
-         string motivoConsulta,
-         string enfermedadConsulta,
-         string nombreparienteConsulta,
-         string signosalarmaConsulta,
-         string reconofarmacologicas,
-         int tipoparienteConsulta,
-         string telefonoParienteConsulta,
-         string temperaturaConsulta,
-         string frecuenciarespiratoriaConsulta,
-         string presionarterialsistolicaConsulta,
-         string presionarterialdiastolicaConsulta,
-         string pulsoConsulta,
-         string pesoConsulta,
-         string tallaConsulta,
-         string plantratamientoConsulta,
-         string observacionConsulta,
-         string antecedentespersonalesConsulta,
-         int diasincapacidadConsulta,
-         int medicoConsultaD,
-         int especialidadId,
-         int tipoConsultaC,
-         string notasevolucionConsulta,
-         string consultaprincipalConsulta,
-         int estadoConsultaC,
+         int? consultation_usercreate,
+         int consultation_sequential,
+         int consultation_patient,
+         int consultation_speciality,
+         string consultation_historyclinic,
+         string consultation_reason,
+         string consultation_disease,
+         string consultation_familiaryname,
+         string consultation_warningsings,
+         string consultation_nonpharmacologycal,
+         int consultation_familiarytype,
+         string consultation_familiaryphone,
+         string consultation_temperature,
+         string consultation_respirationrate,
+         string consultation_bloodpressuredAS,
+         string consultation_bloodpresuredDIS,
+         string consultation_pulse,
+         string consultation_weight,
+         string consultation_size,
+         string consultation_treatmentplan,
+         string consultation_observation,
+         string consultation_personalbackground,
+         int consultation_disablilitydays,
+         int consultation_type,
+         int consultation_status,
          // Parámetros para órganos y sistemas
-         bool? orgSentidos,
-         string obserOrgSentidos,
-         bool? respiratorio,
-         string obserRespiratorio,
-         bool? cardioVascular,
-         string obserCardioVascular,
-         bool? digestivo,
-         string obserDigestivo,
-         bool? genital,
-         string obserGenital,
-         bool? urinario,
-         string obserUrinario,
-         bool? mEsqueletico,
-         string obserMEsqueletico,
-         bool? endocrino,
-         string obserEndocrino,
-         bool? linfatico,
-         string obserLinfatico,
-         bool? nervioso,
-         string obserNervioso,
+         bool? organssystems_organsenses,
+         string organssystems_organsenses_Obs,
+         bool? organssystems_respiratory,
+         string organssystems_respiratory_obs,
+         bool? organssystems_cardiovascular,
+         string organssystems_cardiovascular_obs,
+         bool? organssystems_digestive,
+         string organssystems_digestive_obs,
+         bool? organssystems_genital,
+         string organssystems_genital_obs,
+         bool? organssystems_urinary,
+         string organssystems_urinary_obs,
+         bool? organssystems_skeletal_m,
+         string organssystems_skeletal_m_obs,
+         bool? organssystems_endrocrine,
+         string organssystems_endocrine,
+         bool? organssystems_lymphatic,
+         string organssystems_lymphatic_obs,
+         bool? organssystems_nervous,
+         string organssystems_nervous_obs,
          // Parámetros para examen físico
-         bool? cabeza,
-         string obserCabeza,
-         bool? cuello,
-         string obserCuello,
-         bool? torax,
-         string obserTorax,
-         bool? abdomen,
-         string obserAbdomen,
-         bool? pelvis,
-         string obserPelvis,
-         bool? extremidades,
-         string obserExtremidades,
+         bool? physicalexamination_head,
+         string physicalexamination_head_obs,
+         bool? physicalexamination_neck,
+         string physicalexamination_neck_obs,
+         bool? physicalexamination_chest,
+         string physicalexamination_chest_obs,
+         bool? physicalexamination_abdomen,
+         string physicalexamination_abdomen_obs,
+         bool? physicalexamination_pelvis,
+         string physicalexamination_pelvis_obs,
+         bool? physicalexamination_limbs,
+         string physicalexamination_limbs_obs,
          // Parámetros para antecedentes familiares
-         bool? cardiopatia,
-         string obserCardiopatia,
-         int? parentescocatalogoCardiopatia,
-         bool? diabetes,
-         string obserDiabetes,
-         int? parentescocatalogoDiabetes,
-         bool? enfCardiovascular,
-         string obserEnfCardiovascular,
-         int? parentescocatalogoEnfCardiovascular,
-         bool? hipertension,
-         string obserHipertension,
-         int? parentescocatalogoHipertension,
-         bool? cancer,
-         string obserCancer,
-         int? parentescocatalogoCancer,
-         bool? tuberculosis,
-         string obserTuberculosis,
-         int? parentescocatalogoTuberculosis,
-         bool? enfMental,
-         string obserEnfMental,
-         int? parentescocatalogoEnfMental,
-         bool? enfInfecciosa,
-         string obserEnfInfecciosa,
-         int? parentescocatalogoEnfInfecciosa,
-         bool? malFormacion,
-         string obserMalFormacion,
-         int? parentescocatalogoMalFormacion,
-         bool? otro,
-         string obserOtro,
-         int? parentescocatalogoOtro,
+         bool? familiary_background_heartdisease,
+         string familiary_background_heartdisease_observation,
+         int? familiary_background_relatshcatalog_heartdisease,
+         bool? familiary_background_diabetes,
+         string familiary_background_diabetes_observation,
+         int? familiary_background_relatshcatalog_diabetes,
+         bool? familiary_background_dxcardiovascular,
+         string familiary_background_dxcardiovascular_observation,
+         int? familiary_background_relatshcatalog_dxcardiovascular,
+         bool? familiary_background_hypertension,
+         string familiary_background_hypertension_observation,
+         int? familiary_background_relatshcatalog_hypertension,
+         bool? familiary_background_cancer,
+         string familiary_background_cancer_observation,
+         int? familiary_background_relatshcatalog_cancer,
+         bool? familiary_background_tuberculosis,
+         string familiary_background_tuberculosis_observation,
+         int? familiary_background_relatsh_tuberculosis,
+         bool? familiary_background_dxmental,
+         string familiary_background_dxmental_observation,
+         int? familiary_background_relatshcatalog_dxmental,
+         bool? familiary_background_dxinfectious,
+         string familiary_background_dxinfectious_observation,
+         int? familiary_background_relatshcatalog_dxinfectious,
+         bool? familiary_background_malformation,
+         string familiary_background_malformation_observation,
+         int? familiary_background_relatshcatalog_malformation,
+         bool? familiary_background_other,
+         string familiary_background_other_observation,
+         int? familiary_background_relatshcatalog_other,
          // Tablas relacionadas
-         List<ConsultaAlergiaDTO> alergias,
-         List<ConsultaCirugiaDTO> cirugias,
-         List<ConsultaMedicamentoDTO> medicamentos,
-         List<ConsultaLaboratorioDTO> laboratorios,
-         List<ConsultaImagenDTO> imagenes,
-         List<ConsultaDiagnosticoDTO> diagnosticos)
+         List<ConsultaAlergiaDTO> allergies_consultation,
+         List<ConsultaCirugiaDTO> surgeries_consultation,
+         List<ConsultaMedicamentoDTO> medications_consultation,
+         List<ConsultaLaboratorioDTO> laboratories_consultation,
+         List<ConsultaImagenDTO> images_consutlation,
+         List<ConsultaDiagnosticoDTO> diagnosis_consultation)
         {
             using (var connection = new SqlConnection(_dbContext.Database.GetConnectionString()))
             {
@@ -127,109 +125,108 @@ namespace ExpertMed.Services
                     command.CommandType = CommandType.StoredProcedure;
 
                     // Parámetros de consulta
-                    AddSqlParameter(command, "@usuariocreacion_consulta", usuariocreacionConsulta);
-                    AddSqlParameter(command, "@historial_consulta", historialConsulta);
-                    AddSqlParameter(command, "@paciente_consulta_p", pacienteConsultaP);
-                    AddSqlParameter(command, "@motivo_consulta", motivoConsulta);
-                    AddSqlParameter(command, "@enfermedad_consulta", enfermedadConsulta);
-                    AddSqlParameter(command, "@nombrepariente_consulta", nombreparienteConsulta);
-                    AddSqlParameter(command, "@signosalarma_consulta", signosalarmaConsulta);
-                    AddSqlParameter(command, "@reconofarmacologicas", reconofarmacologicas);
-                    AddSqlParameter(command, "@tipopariente_consulta", tipoparienteConsulta);
-                    AddSqlParameter(command, "@telefono_pariente_consulta", telefonoParienteConsulta);
-                    AddSqlParameter(command, "@temperatura_consulta", temperaturaConsulta);
-                    AddSqlParameter(command, "@frecuenciarespiratoria_consulta", frecuenciarespiratoriaConsulta);
-                    AddSqlParameter(command, "@presionarterialsistolica_consulta", presionarterialsistolicaConsulta);
-                    AddSqlParameter(command, "@presionarterialdiastolica_consulta", presionarterialdiastolicaConsulta);
-                    AddSqlParameter(command, "@pulso_consulta", pulsoConsulta);
-                    AddSqlParameter(command, "@peso_consulta", pesoConsulta);
-                    AddSqlParameter(command, "@talla_consulta", tallaConsulta);
-                    AddSqlParameter(command, "@plantratamiento_consulta", plantratamientoConsulta);
-                    AddSqlParameter(command, "@observacion_consulta", observacionConsulta);
-                    AddSqlParameter(command, "@antecedentespersonales_consulta", antecedentespersonalesConsulta);
-                    AddSqlParameter(command, "@diasincapacidad_consulta", diasincapacidadConsulta);
-                    AddSqlParameter(command, "@medico_consulta_d", medicoConsultaD);
-                    AddSqlParameter(command, "@especialidad_id", especialidadId);
-                    AddSqlParameter(command, "@tipo_consulta_c", tipoConsultaC);
-                    AddSqlParameter(command, "@notasevolucion_consulta", notasevolucionConsulta);
-                    AddSqlParameter(command, "@consultaprincipal_consulta", consultaprincipalConsulta);
-                    AddSqlParameter(command, "@estado_consulta_c", estadoConsultaC);
+                    AddSqlParameter(command, "@consultation_creationdate", DateTime.Today);
+                    AddSqlParameter(command, "@consultation_usercreate", consultation_usercreate);
+                    AddSqlParameter(command, "@consultation_patient", consultation_patient);
+                    AddSqlParameter(command, "@consultation_speciality", consultation_speciality);
+                    AddSqlParameter(command, "@consultation_historyclinic", consultation_historyclinic);
+                    AddSqlParameter(command, "@consultation_reason", consultation_reason);
+                    AddSqlParameter(command, "@consultation_disease", consultation_disease);
+                    AddSqlParameter(command, "@consultation_familiaryname", consultation_familiaryname);
+                    AddSqlParameter(command, "@consultation_warningsings", consultation_warningsings);
+                    AddSqlParameter(command, "@consultation_nonpharmacologycal", consultation_nonpharmacologycal);
+                    AddSqlParameter(command, "@consultation_familiarytype", consultation_familiarytype);
+                    AddSqlParameter(command, "@consultation_familiaryphone", consultation_familiaryphone);
+                    AddSqlParameter(command, "@consultation_temperature", consultation_temperature);
+                    AddSqlParameter(command, "@consultation_respirationrate", consultation_respirationrate);
+                    AddSqlParameter(command, "@consultation_bloodpressuredAS", consultation_bloodpressuredAS);
+                    AddSqlParameter(command, "@consultation_bloodpresuredDIS", consultation_bloodpresuredDIS);
+                    AddSqlParameter(command, "@consultation_pulse", consultation_pulse);
+                    AddSqlParameter(command, "@consultation_weight", consultation_weight);
+                    AddSqlParameter(command, "@consultation_size", consultation_size);
+                    AddSqlParameter(command, "@consultation_treatmentplan", consultation_treatmentplan);
+                    AddSqlParameter(command, "@consultation_observation", consultation_observation);
+                    AddSqlParameter(command, "@consultation_personalbackground", consultation_personalbackground);
+                    AddSqlParameter(command, "@consultation_disablilitydays", consultation_disablilitydays);
+                    AddSqlParameter(command, "@consultation_type", consultation_speciality);
+
+                    AddSqlParameter(command, "@consultation_status", consultation_status);
 
                     // Parámetros de órganos y sistemas
-                    AddSqlParameter(command, "@org_sentidos", orgSentidos);
-                    AddSqlParameter(command, "@obser_org_sentidos", obserOrgSentidos);
-                    AddSqlParameter(command, "@respiratorio", respiratorio);
-                    AddSqlParameter(command, "@obser_respiratorio", obserRespiratorio);
-                    AddSqlParameter(command, "@cardio_vascular", cardioVascular);
-                    AddSqlParameter(command, "@obser_cardio_vascular", obserCardioVascular);
-                    AddSqlParameter(command, "@digestivo", digestivo);
-                    AddSqlParameter(command, "@obser_digestivo", obserDigestivo);
-                    AddSqlParameter(command, "@genital", genital);
-                    AddSqlParameter(command, "@obser_genital", obserGenital);
-                    AddSqlParameter(command, "@urinario", urinario);
-                    AddSqlParameter(command, "@obser_urinario", obserUrinario);
-                    AddSqlParameter(command, "@m_esqueletico", mEsqueletico);
-                    AddSqlParameter(command, "@obser_m_esqueletico", obserMEsqueletico);
-                    AddSqlParameter(command, "@endocrino", endocrino);
-                    AddSqlParameter(command, "@obser_endocrino", obserEndocrino);
-                    AddSqlParameter(command, "@linfatico", linfatico);
-                    AddSqlParameter(command, "@obser_linfatico", obserLinfatico);
-                    AddSqlParameter(command, "@nervioso", nervioso);
-                    AddSqlParameter(command, "@obser_nervioso", obserNervioso);
+                    AddSqlParameter(command, "@organssystems_organsenses", organssystems_organsenses);
+                    AddSqlParameter(command, "@organssystems_organsenses_Obs", organssystems_organsenses_Obs);
+                    AddSqlParameter(command, "@organssystems_respiratory", organssystems_respiratory);
+                    AddSqlParameter(command, "@organssystems_respiratory_obs", organssystems_respiratory_obs);
+                    AddSqlParameter(command, "@organssystems_cardiovascular", organssystems_cardiovascular_obs);
+                    AddSqlParameter(command, "@organssystems_cardiovascular_obs", organssystems_cardiovascular_obs);
+                    AddSqlParameter(command, "@organssystems_digestive", organssystems_digestive);
+                    AddSqlParameter(command, "@organssystems_digestive_obs", organssystems_digestive_obs);
+                    AddSqlParameter(command, "@organssystems_genital", organssystems_genital);
+                    AddSqlParameter(command, "@organssystems_genital_obs", organssystems_genital_obs);
+                    AddSqlParameter(command, "@organssystems_urinary", organssystems_urinary);
+                    AddSqlParameter(command, "@organssystems_urinary_obs", organssystems_urinary_obs);
+                    AddSqlParameter(command, "@organssystems_skeletal_m", organssystems_skeletal_m);
+                    AddSqlParameter(command, "@organssystems_skeletal_m_obs", organssystems_skeletal_m_obs);
+                    AddSqlParameter(command, "@organssystems_endrocrine", organssystems_endrocrine);
+                    AddSqlParameter(command, "@organssystems_endocrine", organssystems_endocrine);
+                    AddSqlParameter(command, "@organssystems_lymphatic", organssystems_lymphatic);
+                    AddSqlParameter(command, "@organssystems_lymphatic_obs", organssystems_lymphatic_obs);
+                    AddSqlParameter(command, "@organssystems_nervous", organssystems_nervous);
+                    AddSqlParameter(command, "@organssystems_nervous_obs", organssystems_nervous_obs);
 
                     // Parámetros de examen físico
-                    AddSqlParameter(command, "@cabeza", cabeza);
-                    AddSqlParameter(command, "@obser_cabeza", obserCabeza);
-                    AddSqlParameter(command, "@cuello", cuello);
-                    AddSqlParameter(command, "@obser_cuello", obserCuello);
-                    AddSqlParameter(command, "@torax", torax);
-                    AddSqlParameter(command, "@obser_torax", obserTorax);
-                    AddSqlParameter(command, "@abdomen", abdomen);
-                    AddSqlParameter(command, "@obser_abdomen", obserAbdomen);
-                    AddSqlParameter(command, "@pelvis", pelvis);
-                    AddSqlParameter(command, "@obser_pelvis", obserPelvis);
-                    AddSqlParameter(command, "@extremidades", extremidades);
-                    AddSqlParameter(command, "@obser_extremidades", obserExtremidades);
+                    AddSqlParameter(command, "@physicalexamination_head", physicalexamination_head);
+                    AddSqlParameter(command, "@physicalexamination_head_obs", physicalexamination_head_obs);
+                    AddSqlParameter(command, "@physicalexamination_neck", physicalexamination_neck);
+                    AddSqlParameter(command, "@physicalexamination_neck_obs", physicalexamination_neck_obs);
+                    AddSqlParameter(command, "@physicalexamination_chest", physicalexamination_chest);
+                    AddSqlParameter(command, "@physicalexamination_chest_obs", physicalexamination_chest_obs);
+                    AddSqlParameter(command, "@physicalexamination_abdomen", physicalexamination_abdomen);
+                    AddSqlParameter(command, "@physicalexamination_abdomen_obs", physicalexamination_abdomen_obs);
+                    AddSqlParameter(command, "@physicalexamination_pelvis", physicalexamination_pelvis);
+                    AddSqlParameter(command, "@physicalexamination_pelvis_obs", physicalexamination_pelvis_obs);
+                    AddSqlParameter(command, "@physicalexamination_limbs", physicalexamination_limbs);
+                    AddSqlParameter(command, "@physicalexamination_limbs_obs", physicalexamination_limbs_obs);
 
                     // Parámetros de antecedentes familiares
-                    AddSqlParameter(command, "@cardiopatia", cardiopatia);
-                    AddSqlParameter(command, "@obser_cardiopatia", obserCardiopatia);
-                    AddSqlParameter(command, "@parentescocatalogo_cardiopatia", parentescocatalogoCardiopatia);
-                    AddSqlParameter(command, "@diabetes", diabetes);
-                    AddSqlParameter(command, "@obser_diabetes", obserDiabetes);
-                    AddSqlParameter(command, "@parentescocatalogo_diabetes", parentescocatalogoDiabetes);
-                    AddSqlParameter(command, "@enf_cardiovascular", enfCardiovascular);
-                    AddSqlParameter(command, "@obser_enf_cardiovascular", obserEnfCardiovascular);
-                    AddSqlParameter(command, "@parentescocatalogo_enfcardiovascular", parentescocatalogoEnfCardiovascular);
-                    AddSqlParameter(command, "@hipertension", hipertension);
-                    AddSqlParameter(command, "@obser_hipertension", obserHipertension);
-                    AddSqlParameter(command, "@parentescocatalogo_hipertension", parentescocatalogoHipertension);
-                    AddSqlParameter(command, "@cancer", cancer);
-                    AddSqlParameter(command, "@obser_cancer", obserCancer);
-                    AddSqlParameter(command, "@parentescocatalogo_cancer", parentescocatalogoCancer);
-                    AddSqlParameter(command, "@tuberculosis", tuberculosis);
-                    AddSqlParameter(command, "@obser_tuberculosis", obserTuberculosis);
-                    AddSqlParameter(command, "@parentescocatalogo_tuberculosis", parentescocatalogoTuberculosis);
-                    AddSqlParameter(command, "@enf_mental", enfMental);
-                    AddSqlParameter(command, "@obser_enf_mental", obserEnfMental);
-                    AddSqlParameter(command, "@parentescocatalogo_enfmental", parentescocatalogoEnfMental);
-                    AddSqlParameter(command, "@enf_infecciosa", enfInfecciosa);
-                    AddSqlParameter(command, "@obser_enf_infecciosa", obserEnfInfecciosa);
-                    AddSqlParameter(command, "@parentescocatalogo_enfinfecciosa", parentescocatalogoEnfInfecciosa);
-                    AddSqlParameter(command, "@mal_formacion", malFormacion);
-                    AddSqlParameter(command, "@obser_mal_formacion", obserMalFormacion);
-                    AddSqlParameter(command, "@parentescocatalogo_malformacion", parentescocatalogoMalFormacion);
-                    AddSqlParameter(command, "@otro", otro);
-                    AddSqlParameter(command, "@obser_otro", obserOtro);
-                    AddSqlParameter(command, "@parentescocatalogo_otro", parentescocatalogoOtro);
+                    AddSqlParameter(command, "@familiary_background_heartdisease", familiary_background_heartdisease);
+                    AddSqlParameter(command, "@familiary_background_heartdisease_observation", familiary_background_heartdisease_observation);
+                    AddSqlParameter(command, "@familiary_background_relatshcatalog_heartdisease", familiary_background_relatshcatalog_heartdisease);
+                    AddSqlParameter(command, "@familiary_background_diabetes", familiary_background_diabetes);
+                    AddSqlParameter(command, "@familiary_background_diabetes_observation", familiary_background_diabetes_observation);
+                    AddSqlParameter(command, "@familiary_background_relatshcatalog_diabetes", familiary_background_relatshcatalog_diabetes);
+                    AddSqlParameter(command, "@familiary_background_dxcardiovascular", familiary_background_dxcardiovascular);
+                    AddSqlParameter(command, "@familiary_background_dxcardiovascular_observation", familiary_background_dxcardiovascular_observation);
+                    AddSqlParameter(command, "@familiary_background_relatshcatalog_dxcardiovascular", familiary_background_relatshcatalog_dxcardiovascular);
+                    AddSqlParameter(command, "@familiary_background_hypertension", familiary_background_hypertension);
+                    AddSqlParameter(command, "@familiary_background_hypertension_observation", familiary_background_hypertension_observation);
+                    AddSqlParameter(command, "@familiary_background_relatshcatalog_hypertension", familiary_background_relatshcatalog_hypertension);
+                    AddSqlParameter(command, "@familiary_background_cancer", familiary_background_cancer);
+                    AddSqlParameter(command, "@familiary_background_cancer_observation", familiary_background_cancer_observation);
+                    AddSqlParameter(command, "@familiary_background_relatshcatalog_cancer", familiary_background_relatshcatalog_cancer);
+                    AddSqlParameter(command, "@familiary_background_tuberculosis", familiary_background_tuberculosis);
+                    AddSqlParameter(command, "@familiary_background_tuberculosis_observation", familiary_background_tuberculosis_observation);
+                    AddSqlParameter(command, "@familiary_background_relatsh_tuberculosis", familiary_background_relatsh_tuberculosis);
+                    AddSqlParameter(command, "@familiary_background_dxmental", familiary_background_dxmental);
+                    AddSqlParameter(command, "@familiary_background_dxmental_observation", familiary_background_dxmental_observation);
+                    AddSqlParameter(command, "@familiary_background_relatshcatalog_dxmental", familiary_background_relatshcatalog_dxmental);
+                    AddSqlParameter(command, "@familiary_background_dxinfectious", familiary_background_dxinfectious);
+                    AddSqlParameter(command, "@familiary_background_dxinfectious_observation", familiary_background_dxinfectious_observation);
+                    AddSqlParameter(command, "@familiary_background_relatshcatalog_dxinfectious", familiary_background_relatshcatalog_dxinfectious);
+                    AddSqlParameter(command, "@familiary_background_malformation", familiary_background_malformation);
+                    AddSqlParameter(command, "@familiary_background_malformation_observation", familiary_background_malformation_observation);
+                    AddSqlParameter(command, "familiary_background_relatshcatalog_malformation", familiary_background_relatshcatalog_malformation);
+                    AddSqlParameter(command, "@familiary_background_other", familiary_background_other);
+                    AddSqlParameter(command, "@obser_otro", familiary_background_other_observation);
+                    AddSqlParameter(command, "@familiary_background_other_observation", familiary_background_relatshcatalog_other);
 
                     // Tablas relacionadas (se inicializan con CreateDataTable)
-                    AddSqlParameter(command, "@Alergias", CreateDataTable(alergias));
-                    AddSqlParameter(command, "@Cirugias", CreateDataTable(cirugias));
-                    AddSqlParameter(command, "@Medicamentos", CreateDataTable(medicamentos));
-                    AddSqlParameter(command, "@Laboratorio", CreateDataTable(laboratorios));
-                    AddSqlParameter(command, "@Imagenes", CreateDataTable(imagenes));
-                    AddSqlParameter(command, "@Diagnosticos", CreateDataTable(diagnosticos));
+                    AddSqlParameter(command, "@allergies", CreateDataTable(allergies_consultation));
+                    AddSqlParameter(command, "@surgeries", CreateDataTable(surgeries_consultation));
+                    AddSqlParameter(command, "@medications", CreateDataTable(medications_consultation));
+                    AddSqlParameter(command, "@laboratories", CreateDataTable(laboratories_consultation));
+                    AddSqlParameter(command, "@images", CreateDataTable(images_consutlation));
+                    AddSqlParameter(command, "@diagnostics", CreateDataTable(diagnosis_consultation));
 
                     await connection.OpenAsync();
                     await command.ExecuteNonQueryAsync();

@@ -64,8 +64,8 @@ namespace ExpertMed.Models
         public List<ConsultaCirugiaDTO> SurgeriesConsultations { get; set; } // Lista de cirugías asociadas a la consulta
         public List<ConsultaMedicamentoDTO> MedicationsConsultations { get; set; } // Lista de medicamentos asociados
         public List<ConsultaLaboratorioDTO> LaboratoriesConsultations { get; set; } // Lista de laboratorios asociadosss
-        public List<ConsultaImagenDTO> ImagesConsutlations { get; set; } // Lista de imágenes asociadas
-        public List<ConsultaDiagnosticoDTO> DiagnosisConsultations { get; set; } // Lista de diagnósticos asociados
+        public List<ConsultaImagenDTO> ImagesConsultations { get; set; } // Lista de imágenes asociadas
+        public List<ConsultaDiagnosticoDTO> DiagnosisConsultations { get; set; }
         public OrgansSystem OrgansSystem { get; set; } // Órganos y sistemas asociados
         public PhysicalExamination PhysicalExamination { get; set; } // Examen físico asociado
         public FamiliaryBackground FamiliaryBackground { get; set; } // Antecedentes familiares asociados
@@ -90,7 +90,7 @@ namespace ExpertMed.Models
             SurgeriesConsultations = new List<ConsultaCirugiaDTO>();
             MedicationsConsultations = new List<ConsultaMedicamentoDTO>();
             LaboratoriesConsultations = new List<ConsultaLaboratorioDTO>();
-            ImagesConsutlations = new List<ConsultaImagenDTO>();
+            ImagesConsultations = new List<ConsultaImagenDTO>();
             DiagnosisConsultations = new List<ConsultaDiagnosticoDTO>();
             OrgansSystem = new OrgansSystem();
             PhysicalExamination = new PhysicalExamination();
@@ -122,7 +122,6 @@ namespace ExpertMed.Models
     public class ConsultaImagenDTO
     {
       
-
         public int? ImagesImagesid { get; set; }
 
         public string? ImagesAmount { get; set; }
