@@ -1,4 +1,6 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Http
+
+@{
     ViewBag.Title = "Create Consultation";
     ViewBag.pTitle = "Create Consultation";
     ViewBag.pageTitle = "Create Consultation";
@@ -36,15 +38,13 @@
             <form id="consultationForm" class="form-steps" autocomplete="off">
                   <!--Campos ocultos para manejo de variables-->
                   <input type="hidden" class="form-control" id="consultation_usercreate" value="@usuarioId" />
-                  <input type="hidden" asp-for="MedicoId" id="medicoId" value="@ViewBag.UsuarioId" />
-                  <input type="hidden" asp-for="EspecialidadId" id="especialidadId" value="@ViewBag.UsuarioIdEspecialidad" />
-                  <input type="hidden" asp-for="FechaCreacion" id="FechacreacionConsulta" value="" />
-                  <input type="hidden" asp-for="ConsultaPrincipal" id="consultaprincipal_consulta" value="sn" />
-                  <input type="hidden" asp-for="SecuencialConsulta" id="secuencial" value="sn" />
-                  <input type="hidden" asp-for="EstadoConsulta" id="estadoConsultaC" value="1" />
-                  <input type="hidden" asp-for="TipoConsultaId" id="tipoConsultaC" value="1" />
-                  <input type="hidden" asp-for="NotasEvolucion" id="notasevolucion_consulta" value="1" />
-
+                <input type="hidden" id="consultation_sequential" value="0" />
+                <input type="hidden" id="consultation_patient" value="@Model.DetailsPatient.PatientId" />
+                <input type="hidden"  id="consultation_speciality" value="0" />
+                <input type="hidden"  id="consultation_date" value="" />
+                <input type="hidden" id="consultation_type" value="1" />
+                <input type="hidden" id="consultation_status" value="1" />
+          
                 <!-- #region Steps -->
                 <div class="step-arrow-nav mb-4">
                     <ul class="nav nav-pills custom-nav nav-justified" role="tablist">
@@ -458,7 +458,7 @@
                                         History
                                         Clinic
                                     </label>
-                                    <input type="text" class="form-control" id="consultationHistoryClinic"
+                                    <input type="text" class="form-control" id="consultation_historyclinic"
                                            placeholder="Enter History Clinic"
                                            value="@Model.DetailsPatient.PatientDocumentnumber" name="ConsultationHistoryClinic" required
                                            readonly>
@@ -566,7 +566,7 @@
                                         Name of
                                         companion
                                     </label>
-                                    <input type="text" class="form-control" id="consultationFamiliaryName"
+                                    <input type="text" class="form-control" id="consultation_familiaryname"
                                            name="ConsultationFamiliaryName" placeholder="Name(s), Lastname(s)">
 
                                 </div>
@@ -578,7 +578,7 @@
                                         Select your
                                         parent
                                     </label>
-                                    <select class="form-control" id="consultationFamiliaryType" name="ConsultationFamiliaryType"
+                                    <select class="form-control" id="consultation_familiarytype" name="ConsultationFamiliaryType"
                                             data-choices data-choices-sorting-false>
                                         @foreach (var parents in Model.Parents)
                                         {
@@ -597,7 +597,7 @@
                                         Phone of
                                         companion
                                     </label>
-                                    <input type="text" class="form-control" id="consultationFamiliaryPhone"
+                                    <input type="text" class="form-control" id="consultation_familiaryphone"
                                            name="ConsultationFamiliaryPhone" placeholder="0900000000">
 
                                 </div>
@@ -610,7 +610,7 @@
                                         consultation *
                                     </label>
                                     <input type="text" class="form-control"
-                                           id="consultationReason" name="ConsultationReason"
+                                           id="consultation_reason" name="ConsultationReason"
                                            placeholder="Enter your reason for consultation" required>
 
                                 </div>
@@ -626,7 +626,7 @@
                             <div class="col-lg-12">
                                 <div class="mb-3">
 
-                                    <textarea class="form-control" id="consultationPersonalBackground"
+                                    <textarea class="form-control" id="consultation_personalbackground"
                                               rows="3" name="ConsultationPersonalBackground"
                                               placeholder="Enter a brief description, if you want to speak press the microphone"></textarea>
                                     <i id="dictationIcon1" class=" ri-mic-fill position-absolute" style="top: 35px; right: 15px; cursor: pointer;"></i>
@@ -694,7 +694,7 @@
                             <!-- #region  Cardiopatia-->
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" role="switch"
-                                       id="SwitchCheckHeartdiasease">
+                                       id="familiary_background_heartdisease">
                                 <label class="form-check-label" for="SwitchCheckHeartdiasease">
                                     Heart
                                     disease
@@ -704,7 +704,7 @@
                             <div class="col-lg-5">
                                 <div class="mb-3">
 
-                                    <select class="form-control" id="FamilyMembers"
+                                    <select class="form-control" id="familiary_background_relatshcatalog_heartdisease"
                                             name="familyMemberHeartDisease" data-choices
                                             data-choices-sorting-false>
                                         <option value="">Select your family member</option>
@@ -723,7 +723,7 @@
                                 <div class="mb-3">
 
                                     <input type="text" class="form-control"
-                                           id="observationHeartDisease" name="observationHeartDisease"
+                                           id="familiary_background_heartdisease_observation" name="observationHeartDisease"
                                            placeholder="Enter an observation">
 
                                 </div>
@@ -732,14 +732,14 @@
                             <!-- #region Diabtes-->
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" role="switch"
-                                       id="SwitchCheckDiabetes">
+                                       id="familiary_background_diabetes">
                                 <label class="form-check-label"
                                        for="SwitchCheckDiabetes">Diabetes</label>
                             </div>
 
                             <div class="col-lg-5">
                                 <div class="mb-3">
-                                    <select class="form-control" id="FamilyMembers"
+                                    <select class="form-control" id="familiary_background_relatshcatalog_diabetes"
                                             name="familyMemberDiabetes" data-choices
                                             data-choices-sorting-false>
                                         <option value="">Select your family member</option>
@@ -756,7 +756,7 @@
                             <div class="col-lg-5">
                                 <div class="mb-3">
 
-                                    <input type="text" class="form-control" id="observationDiabetes"
+                                    <input type="text" class="form-control" id="familiary_background_diabetes_observation"
                                            name="observationDiabetes"
                                            placeholder="Enter an observation">
 
@@ -766,14 +766,14 @@
                             <!-- #region Enfermedad Cardiovascular-->
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" role="switch"
-                                       id="SwitchCheckCardiovascular">
+                                       id="familiary_background_dxcardiovascular">
                                 <label class="form-check-label"
                                        for="SwitchCheckCardiovascular">Cardiovascular Disease</label>
                             </div>
 
                             <div class="col-lg-5">
                                 <div class="mb-3">
-                                    <select class="form-control" id="FamilyMembers"
+                                    <select class="form-control" id="familiary_background_relatshcatalog_dxcardiovascular"
                                             name="familyMemberCardiovascularDisease" data-choices
                                             data-choices-sorting-false>
                                         <option value="">Select your family member</option>
@@ -791,7 +791,7 @@
                                 <div class="mb-3">
 
                                     <input type="text" class="form-control"
-                                           id="observationCardiovascularDisease"
+                                           id="familiary_background_dxcardiovascular_observation"
                                            name="observationCardiovascularDisease"
                                            placeholder="Enter an observation">
 
@@ -801,7 +801,7 @@
                             <!-- #region Hipertension-->
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" role="switch"
-                                       id="SwitchCheckHypertension">
+                                       id="familiary_background_hypertension">
                                 <label class="form-check-label"
                                        for="SwitchCheckHypertension">Hypertension</label>
                             </div>
@@ -809,7 +809,7 @@
                             <div class="col-lg-5">
                                 <div class="mb-3">
                                     <select class="form-control" id="FamilyMembers"
-                                            name="familyMemberHypertension" data-choices
+                                            name="familiary_background_relatshcatalog_hypertension" data-choices
                                             data-choices-sorting-false>
                                         <option value="">Select your family member</option>
                                         @foreach (var familyMember in Model.FamilyMember)
@@ -826,7 +826,7 @@
                                 <div class="mb-3">
 
                                     <input type="text" class="form-control"
-                                           id="observationHypertension" name="observationHypertension"
+                                           id="familiary_background_hypertension_observation" name="observationHypertension"
                                            placeholder="Enter an observation">
 
                                 </div>
@@ -835,14 +835,14 @@
                             <!-- #region Cancer-->
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" role="switch"
-                                       id="SwitchCheckCancer">
+                                       id="familiary_background_cancer">
                                 <label class="form-check-label"
                                        for="SwitchCheckCancer">Cancer</label>
                             </div>
 
                             <div class="col-lg-5">
                                 <div class="mb-3">
-                                    <select class="form-control" id="FamilyMembers"
+                                    <select class="form-control" id="familiary_background_relatshcatalog_cancer"
                                             name="familyMemberCancer" data-choices
                                             data-choices-sorting-false>
                                         <option value="">Select your family member</option>
@@ -859,7 +859,7 @@
                             <div class="col-lg-5">
                                 <div class="mb-3">
 
-                                    <input type="text" class="form-control" id="observationCancer"
+                                    <input type="text" class="form-control" id="familiary_background_cancer_observation"
                                            name="observationCancer" placeholder="Enter an observation">
 
                                 </div>
@@ -868,14 +868,14 @@
                             <!-- #region Tuberculosis-->
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" role="switch"
-                                       id="SwitchCheckTuberculosis">
+                                       id="familiary_background_tuberculosis">
                                 <label class="form-check-label"
                                        for="SwitchCheckTuberculosis">Tuberculosis</label>
                             </div>
 
                             <div class="col-lg-5">
                                 <div class="mb-3">
-                                    <select class="form-control" id="FamilyMembers"
+                                    <select class="form-control" id="familiary_background_relatshcatalog_tuberculosis"
                                             name="familyMemberTuberculosis" data-choices
                                             data-choices-sorting-false>
                                         <option value="">Select your family member</option>
@@ -893,7 +893,7 @@
                                 <div class="mb-3">
 
                                     <input type="text" class="form-control"
-                                           id="observationTuberculosis" name="observationTuberculosis"
+                                           id="familiary_background_tuberculosis_observation" name="observationTuberculosis"
                                            placeholder="Enter an observation">
 
                                 </div>
@@ -902,14 +902,14 @@
                             <!-- #region Enfermedad Mental-->
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" role="switch"
-                                       id="SwitchCheckMentalIllness">
+                                       id="familiary_background_dxmental">
                                 <label class="form-check-label"
                                        for="SwitchCheckMentalIllness">Mental Illness</label>
                             </div>
 
                             <div class="col-lg-5">
                                 <div class="mb-3">
-                                    <select class="form-control" id="FamilyMembers"
+                                    <select class="form-control" id="familiary_background_relatshcatalog_dxmental"
                                             name="familyMemberMentalIllness" data-choices
                                             data-choices-sorting-false>
                                         <option value="">Select your family member</option>
@@ -927,7 +927,7 @@
                                 <div class="mb-3">
 
                                     <input type="text" class="form-control"
-                                           id="observationMentalIllness"
+                                           id="familiary_background_dxmental_observation"
                                            name="observationMentalIllness"
                                            placeholder="Enter an observation">
 
@@ -937,7 +937,7 @@
                             <!-- #region Enfermedad Infecciosa-->
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" role="switch"
-                                       id="SwitchCheckInfectious">
+                                       id="familiary_background_dxinfectious">
                                 <label class="form-check-label"
                                        for="SwitchCheckInfectious">Infectious Disease</label>
                             </div>
@@ -945,7 +945,7 @@
                             <div class="col-lg-5">
                                 <div class="mb-3">
                                     <select class="form-control" id="FamilyMembers"
-                                            name="familyMemberInfectious" data-choices
+                                            name="familiary_background_relatshcatalog_dxinfectious" data-choices
                                             data-choices-sorting-false>
                                         <option value="">Select your family member</option>
                                         @foreach (var familyMember in Model.FamilyMember)
@@ -962,7 +962,7 @@
                                 <div class="mb-3">
 
                                     <input type="text" class="form-control"
-                                           id="observationInfectious" name="observationInfectious"
+                                           id="familiary_background_dxinfectious_observation" name="observationInfectious"
                                            placeholder="Enter an observation">
 
                                 </div>
@@ -971,14 +971,14 @@
                             <!-- #region Malformacion-->
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" role="switch"
-                                       id="SwitchCheckMalformation">
+                                       id="familiary_background_malformation">
                                 <label class="form-check-label"
                                        for="SwitchCheckMalformation">Malformation</label>
                             </div>
 
                             <div class="col-lg-5">
                                 <div class="mb-3">
-                                    <select class="form-control" id="FamilyMembers"
+                                    <select class="form-control" id="familiary_background_relatshcatalog_malformation"
                                             name="familyMemberMalformation" data-choices
                                             data-choices-sorting-false>
                                         <option value="">Select your family member</option>
@@ -996,7 +996,7 @@
                                 <div class="mb-3">
 
                                     <input type="text" class="form-control"
-                                           id="observationMalformation" name="observationMalformation"
+                                           id="familiary_background_malformation_observation" name="observationMalformation"
                                            placeholder="Enter an observation">
 
                                 </div>
@@ -1005,14 +1005,14 @@
                             <!-- #region Other-->
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" role="switch"
-                                       id="SwitchCheckOther">
+                                       id="familiary_background_other">
                                 <label class="form-check-label" for="SwitchCheckOther">Other</label>
                             </div>
 
 
                             <div class="col-lg-5">
                                 <div class="mb-3">
-                                    <select class="form-control" id="FamilyMembers"
+                                    <select class="form-control" id="familiary_background_relatshcatalog_other"
                                             name="familyMemberOther" data-choices
                                             data-choices-sorting-false>
                                         <option value="">Select your family member</option>
@@ -1029,7 +1029,7 @@
                             <div class="col-lg-5">
                                 <div class="mb-3">
 
-                                    <input type="text" class="form-control" id="observationOther"
+                                    <input type="text" class="form-control" id="familiary_background_relatshcatalog_malformation"
                                            name="observationOther" placeholder="Enter an observation">
 
                                 </div>
@@ -1047,7 +1047,7 @@
                             <div class="col-lg-12">
                                 <div class="mb-3">
 
-                                    <textarea class="form-control" id="currentillness"
+                                    <textarea class="form-control" id="consultation_disease"
                                               rows="3"
                                               placeholder="Enter a brief description, if you want to speak press the microphone"
                                               required></textarea>
@@ -1161,7 +1161,7 @@
                             <!-- #region organos de los sentidos-->
                             <div class="form-check form-switch">
                                 <input class="form-check-input" name="SwitchCheckSenseOrgans"
-                                       type="checkbox" role="switch" id="SwitchCheckSenseOrgans">
+                                       type="checkbox" role="switch" id="organssystems_organsenses">
                                 <label class="form-check-label" for="SwitchCheckSenseOrgans">
                                     Sense Organs
                                 </label>
@@ -1170,7 +1170,7 @@
 
                             <div class="col-lg-5">
                                 <div class="mb-3">
-                                    <input type="text" class="form-control" id="observationSenseOrgans"
+                                    <input type="text" class="form-control" id="organssystems_organsenses_Obs"
                                            name="observationSenseOrgans" placeholder="Enter an observation">
                                 </div>
                             </div>
@@ -1178,14 +1178,14 @@
                             <!-- #region Respiratory-->
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" role="switch"
-                                       id="SwitchCheckRespiratory" name="SwitchCheckRespiratory">
+                                       id="organssystems_respiratory" name="SwitchCheckRespiratory">
                                 <label class="form-check-label" for="SwitchCheckRespiratory">Respiratory</label>
                             </div>
 
 
                             <div class="col-lg-5">
                                 <div class="mb-3">
-                                    <input type="text" class="form-control" id="observationRespiratory"
+                                    <input type="text" class="form-control" id="organssystems_respiratory_obs"
                                            name="observationRespiratory" placeholder="Enter an observation">
                                 </div>
                             </div>
@@ -1193,14 +1193,14 @@
                             <!-- #region Cardiovascular-->
                             <div class="form-check form-switch">
                                 <input class="form-check-input" name="SwitchCheckCardiovascular"
-                                       type="checkbox" role="switch" id="SwitchCheckCardiovascular">
+                                       type="checkbox" role="switch" id="organssystems_cardiovascular">
                                 <label class="form-check-label" for="SwitchCheckCardiovascular">Cardiovascular</label>
                             </div>
 
 
                             <div class="col-lg-5">
                                 <div class="mb-3">
-                                    <input type="text" class="form-control" id="observationCardiovascular"
+                                    <input type="text" class="form-control" id="organssystems_cardiovascular_obs"
                                            name="observationCardiovascular" placeholder="Enter an observation">
                                 </div>
                             </div>
@@ -1208,14 +1208,14 @@
                             <!-- #region Digestive-->
                             <div class="form-check form-switch">
                                 <input class="form-check-input" name="SwitchCheckDigestive"
-                                       type="checkbox" role="switch" id="SwitchCheckDigestive">
+                                       type="checkbox" role="switch" id="organssystems_digestive">
                                 <label class="form-check-label" for="SwitchCheckDigestive">Digestive</label>
                             </div>
 
 
                             <div class="col-lg-5">
                                 <div class="mb-3">
-                                    <input type="text" class="form-control" id="observationDigestive"
+                                    <input type="text" class="form-control" id="organssystems_digestive_obs"
                                            name="observationDigestive" placeholder="Enter an observation">
                                 </div>
                             </div>
@@ -1223,14 +1223,14 @@
                             <!-- #region Genital-->
                             <div class="form-check form-switch">
                                 <input class="form-check-input" name="SwitchCheckGenital"
-                                       type="checkbox" role="switch" id="SwitchCheckGenital">
+                                       type="checkbox" role="switch" id="organssystems_genital">
                                 <label class="form-check-label" for="SwitchCheckGenital">Genital</label>
                             </div>
 
 
                             <div class="col-lg-5">
                                 <div class="mb-3">
-                                    <input type="text" class="form-control" id="observationGenital"
+                                    <input type="text" class="form-control" id="organssystems_genital_obs"
                                            name="observationGenital" placeholder="Enter an observation">
                                 </div>
                             </div>
@@ -1238,14 +1238,14 @@
                             <!-- #region Urinary-->
                             <div class="form-check form-switch">
                                 <input class="form-check-input" name="SwitchCheckUrinary"
-                                       type="checkbox" role="switch" id="SwitchCheckUrinary">
+                                       type="checkbox" role="switch" id="organssystems_urinary">
                                 <label class="form-check-label" for="SwitchCheckUrinary">Urinary</label>
                             </div>
 
 
                             <div class="col-lg-5">
                                 <div class="mb-3">
-                                    <input type="text" class="form-control" id="observationUrinary"
+                                    <input type="text" class="form-control" id="organssystems_urinary_obs"
                                            name="observationUrinary" placeholder="Enter an observation">
                                 </div>
                             </div>
@@ -1253,14 +1253,14 @@
                             <!-- #region Skeletal Muscle-->
                             <div class="form-check form-switch">
                                 <input class="form-check-input" name="SwitchCheckSkeletalMuscle"
-                                       type="checkbox" role="switch" id="SwitchCheckSkeletalMuscle">
+                                       type="checkbox" role="switch" id="organssystems_skeletal_m">
                                 <label class="form-check-label" for="SwitchCheckSkeletalMuscle">Skeletal Muscle</label>
                             </div>
 
 
                             <div class="col-lg-5">
                                 <div class="mb-3">
-                                    <input type="text" class="form-control" id="observationSkeletalMuscle"
+                                    <input type="text" class="form-control" id="organssystems_skeletal_m_obs"
                                            name="observationSkeletalMuscle" placeholder="Enter an observation">
                                 </div>
                             </div>
@@ -1268,14 +1268,14 @@
                             <!-- #region Endocrine-->
                             <div class="form-check form-switch">
                                 <input class="form-check-input" name="SwitchCheckEndocrine"
-                                       type="checkbox" role="switch" id="SwitchCheckEndocrine">
+                                       type="checkbox" role="switch" id="organssystems_endrocrine">
                                 <label class="form-check-label" for="SwitchCheckEndocrine">Endocrine</label>
                             </div>
 
 
                             <div class="col-lg-5">
                                 <div class="mb-3">
-                                    <input type="text" class="form-control" id="observationEndocrine"
+                                    <input type="text" class="form-control" id="organssystems_endocrine"
                                            name="observationEndocrine" placeholder="Enter an observation">
                                 </div>
                             </div>
@@ -1283,7 +1283,7 @@
                             <!-- #region Lymphatic Heme-->
                             <div class="form-check form-switch">
                                 <input class="form-check-input" name="SwitchCheckLymphaticHeme"
-                                       type="checkbox" role="switch" id="SwitchCheckLymphaticHeme">
+                                       type="checkbox" role="switch" id="organssystems_lymphatic">
                                 <label class="form-check-label" for="SwitchCheckLymphaticHeme">Lymphatic Heme</label>
                             </div>
 
@@ -1291,7 +1291,7 @@
 
                             <div class="col-lg-5">
                                 <div class="mb-3">
-                                    <input type="text" class="form-control" id="observationLymphaticHeme"
+                                    <input type="text" class="form-control" id="organssystems_lymphatic_obs"
                                            name="observationLymphaticHeme" placeholder="Enter an observation">
                                 </div>
                             </div>
@@ -1299,14 +1299,14 @@
                             <!-- #region Nervous System-->
                             <div class="form-check form-switch">
                                 <input class="form-check-input" name="SwitchCheckHighlystrung"
-                                       type="checkbox" role="switch" id="SwitchCheckHighlystrung">
+                                       type="checkbox" role="switch" id="organssystems_nervous">
                                 <label class="form-check-label" for="SwitchCheckHighlystrung">Highly strung</label>
                             </div>
 
 
                             <div class="col-lg-5">
                                 <div class="mb-3">
-                                    <input type="text" class="form-control" id="observationHighlystrung"
+                                    <input type="text" class="form-control" id="organssystems_nervous_obs"
                                            name="observationHighlystrung" placeholder="Enter an observation">
                                 </div>
                             </div>
@@ -1333,14 +1333,14 @@
                             <div class="col-lg-4">
                                 <div class="mb-3">
                                     <label for="temperatureInput" class="form-label">Temperature ºC *</label>
-                                    <input type="text" class="form-control" id="temperatureInput" name="temperatureInput" placeholder="37.5" required>
+                                    <input type="text" class="form-control" id="consultation_temperature" name="temperatureInput" placeholder="37.5" required>
                                 </div>
                             </div>
 
                             <div class="col-lg-4">
                                 <div class="mb-3">
                                     <label for="respiratoryRateInput" class="form-label"> Respiratory rate *</label>
-                                    <input type="text" class="form-control" id="respiratoryRateInput" name="respiratoryRateInput" placeholder="12" required>
+                                    <input type="text" class="form-control" id="consultation_respirationrate" name="respiratoryRateInput" placeholder="12" required>
                                 </div>
                             </div>
 
@@ -1359,14 +1359,14 @@
                             <div class="col-lg-4">
                                 <div class="mb-3">
                                     <label for="pulseMinuteInput" class="form-label"> Pulse per minute * </label>
-                                    <input type="text" class="form-control" id="pulseMinuteInput" name="pulseMinuteInput" placeholder="12" required>
+                                    <input type="text" class="form-control" id="consultation_pulse" name="pulseMinuteInput" placeholder="12" required>
                                 </div>
                             </div>
 
                             <div class="col-lg-4">
                                 <div class="mb-3">
                                     <label for="weightInput" class="form-label"> Weight * (Kg)</label>
-                                    <input type="text" class="form-control" id="weightInput" name="weightInput" placeholder="40" required>
+                                    <input type="text" class="form-control" id="consultation_weight" name="weightInput" placeholder="40" required>
                                 </div>
                             </div>
 
@@ -1374,7 +1374,7 @@
                             <div class="col-lg-4">
                                 <div class="mb-3">
                                     <label for="pointofsaleInput" class="form-label"> Size * (cm)</label>
-                                    <input type="text" class="form-control" id="weightInput" name="weightInput" placeholder="160" required>
+                                    <input type="text" class="form-control" id="consultation_size" name="weightInput" placeholder="160" required>
                                 </div>
                             </div>
                             <!-- #endregion Signos Vitales-->
@@ -1390,7 +1390,7 @@
                             <!-- #region  Head-->
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" role="switch"
-                                       id="SwitchCheckHead">
+                                       id="physicalexamination_head">
                                 <label class="form-check-label" for="SwitchCheckHead">Head</label>
                             </div>
 
@@ -1398,7 +1398,7 @@
                             <div class="col-lg-5">
                                 <div class="mb-3">
 
-                                    <input type="text" class="form-control" id="observationHead"
+                                    <input type="text" class="form-control" id="physicalexamination_head_obs"
                                            name="observationHead" placeholder="Enter an observation">
 
                                 </div>
@@ -1416,7 +1416,7 @@
                             <div class="col-lg-5">
                                 <div class="mb-3">
 
-                                    <input type="text" class="form-control" id="observationNeck"
+                                    <input type="text" class="form-control" id="physicalexamination_neck_obs"
                                            name="observationNeck" placeholder="Enter an observation">
 
                                 </div>
@@ -1427,14 +1427,14 @@
 
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" role="switch"
-                                       id="SwitchCheckChest">
+                                       id="physicalexamination_chest">
                                 <label class="form-check-label" for="SwitchCheckNeck">Chest</label>
                             </div>
 
                             <div class="col-lg-5">
                                 <div class="mb-3">
 
-                                    <input type="text" class="form-control" id="observationChest"
+                                    <input type="text" class="form-control" id="physicalexamination_chest_obs"
                                            name="observationChest" placeholder="Enter an observation">
 
                                 </div>
@@ -1445,14 +1445,14 @@
 
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" role="switch"
-                                       id="SwitchCheckAbdomen">
+                                       id="physicalexamination_abdomen">
                                 <label class="form-check-label" for="SwitchCheckAbdomen">Abdomen</label>
                             </div>
 
                             <div class="col-lg-5">
                                 <div class="mb-3">
 
-                                    <input type="text" class="form-control" id="observationAbdomen"
+                                    <input type="text" class="form-control" id="physicalexamination_abdomen_obs"
                                            name="observationAbdomen" placeholder="Enter an observation">
 
                                 </div>
@@ -1463,14 +1463,14 @@
 
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" role="switch"
-                                       id="SwitchCheckPelvis">
+                                       id="physicalexamination_pelvis">
                                 <label class="form-check-label" for="SwitchCheckPelvis">Pelvis</label>
                             </div>
 
                             <div class="col-lg-5">
                                 <div class="mb-3">
 
-                                    <input type="text" class="form-control" id="observationPelvis"
+                                    <input type="text" class="form-control" id="physicalexamination_pelvis_obs"
                                            name="observationPelvis" placeholder="Enter an observation">
 
                                 </div>
@@ -1481,14 +1481,14 @@
 
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" role="switch"
-                                       id="SwitchCheckExtremities">
+                                       id="physicalexamination_limbs">
                                 <label class="form-check-label" for="SwitchCheckExtremities">Extremities</label>
                             </div>
 
                             <div class="col-lg-5">
                                 <div class="mb-3">
 
-                                    <input type="text" class="form-control" id="observationExtremities"
+                                    <input type="text" class="form-control" id="physicalexamination_limbs_obs"
                                            name="observationExtremities" placeholder="Enter an observation">
 
                                 </div>
@@ -1660,7 +1660,7 @@
                                         <div class="row">
                                             <div class="col-lg-12">
                                                 <div class="mb-3">
-                                                    <textarea class="form-control" id="treatmentPlan"
+                                                    <textarea class="form-control" id="consultation_treatmentplan"
                                                               rows="3"
                                                               placeholder="Enter a brief description, if you want to speak press the microphone"></textarea>
                                                     <i id="dictationIcon3" class=" ri-mic-fill position-absolute" style="top: 35px; right: 15px; cursor: pointer;"></i>
@@ -1728,7 +1728,7 @@
                                                     <th scope="col" style="font-size: 12px;">Actions</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
+                                            <tbody id="medicationsTableBody">
                                                 <!-- Las filas se agregarán dinámicamente aquí -->
                                             </tbody>
                                         </table>
@@ -1737,7 +1737,7 @@
                                             <div class="col-lg-12">
                                                 <div class="mb-3">
                                                     <label>Recomendaciones no farmacologicas</label>
-                                                    <textarea class="form-control" id="nonpharmacological"
+                                                    <textarea class="form-control" id="consultation_nonpharmacologycal"
                                                               rows="3"
                                                               placeholder="Enter a brief description, if you want to speak press the microphone"></textarea>
                                                     <i id="dictationIcon4" class=" ri-mic-fill position-absolute" style="top: 35px; right: 15px; cursor: pointer;"></i>
@@ -1751,7 +1751,7 @@
                                             <div class="col-lg-12">
                                                 <div class="mb-3">
                                                     <label>Signos de alarma</label>
-                                                    <textarea class="form-control" id="alarmsigns"
+                                                    <textarea class="form-control" id="consultation_warningsings"
                                                               rows="3"
                                                               placeholder="Enter a brief description, if you want to speak press the microphone"></textarea>
                                                     <i id="dictationIcon5" class=" ri-mic-fill position-absolute" style="top: 35px; right: 15px; cursor: pointer;"></i>
@@ -1908,7 +1908,7 @@
                                         <div class="row">
                                             <div class="col-lg-12">
                                                 <div class="mb-3">
-                                              <input type="type" name="diasincapacidad" value="" />
+                                                    <input type="type" name="diasincapacidad" value="" id="consultation_disablilitydays" />
                                                 </div>
                                             </div>
 
@@ -1941,7 +1941,7 @@
                                         <div class="row">
                                             <div class="col-lg-12">
                                                 <div class="mb-3">
-                                                    <textarea class="form-control" id="observation"
+                                                    <textarea class="form-control" id="consultation_observation"
                                                               rows="3"
                                                               placeholder="Enter a brief description, if you want to speak press the microphone"></textarea>
                                                     <i id="dictationIcon6" class=" ri-mic-fill position-absolute" style="top: 35px; right: 15px; cursor: pointer;"></i>
@@ -2102,5 +2102,26 @@
 
 
         </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+            const allergiesSelect = document.getElementById('allergiesSelect');
+            const selectedAllergiesIdsInput = document.getElementById('selectallergiesId');
 
+            // Actualiza el input oculto cada vez que cambie la selección
+            allergiesSelect.addEventListener('change', function () {
+                const selectedOptions = Array.from(allergiesSelect.selectedOptions).map(option => option.value);
+                selectedAllergiesIdsInput.value = selectedOptions.join(','); // Convierte los valores en una lista separada por comas
+            });
+
+             const surgeriesSelect = document.getElementById('surgeriesSelect');
+            const selectSurgeriesIdsInput = document.getElementById('selectSurgeriesId');
+
+            // Actualiza el input oculto cada vez que cambie la selección
+            surgeriesSelect.addEventListener('change', function () {
+                const selectedOptions = Array.from(surgeriesSelect.selectedOptions).map(option => option.value);
+                selectSurgeriesIdsInput.value = selectedOptions.join(','); // Convierte los valores en una lista separada por comas
+            });
+        });
+
+        </script>
 }

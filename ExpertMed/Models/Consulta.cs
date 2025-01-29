@@ -101,8 +101,6 @@ namespace ExpertMed.Models
     {
        
 
-        public DateTime? AllergiesCreationdate { get; set; } 
-
         public int AllergiesCatalogid { get; set; }
 
         public string? AllergiesObservation { get; set; }

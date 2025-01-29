@@ -20,6 +20,7 @@ namespace ExpertMed.Services
 
 
          public async Task CrearConsultaAsync(
+         DateTime consultation_creationdate,
          int? consultation_usercreate,
          int consultation_sequential,
          int consultation_patient,
@@ -157,7 +158,7 @@ namespace ExpertMed.Services
                     AddSqlParameter(command, "@organssystems_organsenses_Obs", organssystems_organsenses_Obs);
                     AddSqlParameter(command, "@organssystems_respiratory", organssystems_respiratory);
                     AddSqlParameter(command, "@organssystems_respiratory_obs", organssystems_respiratory_obs);
-                    AddSqlParameter(command, "@organssystems_cardiovascular", organssystems_cardiovascular_obs);
+                    AddSqlParameter(command, "@organssystems_cardiovascular", organssystems_cardiovascular);
                     AddSqlParameter(command, "@organssystems_cardiovascular_obs", organssystems_cardiovascular_obs);
                     AddSqlParameter(command, "@organssystems_digestive", organssystems_digestive);
                     AddSqlParameter(command, "@organssystems_digestive_obs", organssystems_digestive_obs);

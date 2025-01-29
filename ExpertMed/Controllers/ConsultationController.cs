@@ -121,99 +121,100 @@ namespace ExpertMed.Controllers
             try
             {
                 await _consultationService.CrearConsultaAsync(
-     consultaDto.ConsultationUsercreate,
-     consultaDto.ConsultationSequential ?? 0, // Add this line to provide a default value
-     consultaDto.ConsultationPatient,
-     consultaDto.ConsultationSpeciality ?? 0, // Add this line to provide a default value
-     consultaDto.ConsultationHistoryclinic,
-     consultaDto.ConsultationReason,
-     consultaDto.ConsultationDisease,
-     consultaDto.ConsultationFamiliaryname,
-     consultaDto.ConsultationWarningsings,
-     consultaDto.ConsultationNonpharmacologycal,
-     consultaDto.ConsultationFamiliarytype ?? 0, // Add this line to provide a default value
-     consultaDto.ConsultationFamiliaryphone,
-     consultaDto.ConsultationTemperature,
-     consultaDto.ConsultationRespirationrate,
-     consultaDto.ConsultationBloodpressuredAs,
-     consultaDto.ConsultationBloodpresuredDis,
-     consultaDto.ConsultationPulse,
-     consultaDto.ConsultationWeight,
-     consultaDto.ConsultationSize,
-     consultaDto.ConsultationTreatmentplan,
-     consultaDto.ConsultationObservation,
-     consultaDto.ConsultationPersonalbackground,
-     consultaDto.ConsultationDisablilitydays ?? 0, // Add this line to provide a default value
-     consultaDto.ConsultationType ?? 0, // Add this line to provide a default value
-     consultaDto.ConsultationStatus ?? 0, // Add this line to provide a default value
-     consultaDto.OrgansSystem?.OrganssystemsOrgansenses,
-     consultaDto.OrgansSystem?.OrganssystemsOrgansensesObs,
-     consultaDto.OrgansSystem?.OrganssystemsRespiratory,
-     consultaDto.OrgansSystem?.OrganssystemsRespiratoryObs,
-     consultaDto.OrgansSystem?.OrganssystemsCardiovascular,
-     consultaDto.OrgansSystem?.OrganssystemsCardiovascularObs,
-     consultaDto.OrgansSystem?.OrganssystemsDigestive,
-     consultaDto.OrgansSystem?.OrganssystemsDigestiveObs,
-     consultaDto.OrgansSystem?.OrganssystemsGenital,
-     consultaDto.OrgansSystem?.OrganssystemsGenitalObs,
-     consultaDto.OrgansSystem?.OrganssystemsUrinary,
-     consultaDto.OrgansSystem?.OrganssystemsUrinaryObs,
-     consultaDto.OrgansSystem?.OrganssystemsSkeletalM,
-     consultaDto.OrgansSystem?.OrganssystemsSkeletalMObs,
-     consultaDto.OrgansSystem?.OrganssystemsEndrocrine,
-     consultaDto.OrgansSystem?.OrganssystemsEndocrine,
-     consultaDto.OrgansSystem?.OrganssystemsLymphatic,
-     consultaDto.OrgansSystem?.OrganssystemsLymphaticObs,
-     consultaDto.OrgansSystem?.OrganssystemsNervous,
-     consultaDto.OrgansSystem?.OrganssystemsNervousObs,
-     consultaDto.PhysicalExamination?.PhysicalexaminationHead,
-     consultaDto.PhysicalExamination?.PhysicalexaminationHeadObs,
-     consultaDto.PhysicalExamination?.PhysicalexaminationNeck,
-     consultaDto.PhysicalExamination?.PhysicalexaminationNeckObs,
-     consultaDto.PhysicalExamination?.PhysicalexaminationChest,
-     consultaDto.PhysicalExamination?.PhysicalexaminationChestObs,
-     consultaDto.PhysicalExamination?.PhysicalexaminationAbdomen,
-     consultaDto.PhysicalExamination?.PhysicalexaminationAbdomenObs,
-     consultaDto.PhysicalExamination?.PhysicalexaminationPelvis,
-     consultaDto.PhysicalExamination?.PhysicalexaminationPelvisObs,
-     consultaDto.PhysicalExamination?.PhysicalexaminationLimbs,
-     consultaDto.PhysicalExamination?.PhysicalexaminationLimbsObs,
-     consultaDto.FamiliaryBackground?.FamiliaryBackgroundHeartdisease,
-     consultaDto.FamiliaryBackground?.FamiliaryBackgroundHeartdiseaseObservation,
-     consultaDto.FamiliaryBackground?.FamiliaryBackgroundRelatshcatalogHeartdisease ?? 0, // Add this line to provide a default value
-     consultaDto.FamiliaryBackground?.FamiliaryBackgroundDiabetes,
-     consultaDto.FamiliaryBackground?.FamiliaryBackgroundDiabetesObservation,
-     consultaDto.FamiliaryBackground?.FamiliaryBackgroundRelatshcatalogDiabetes ?? 0, // Add this line to provide a default value
-     consultaDto.FamiliaryBackground?.FamiliaryBackgroundDxcardiovascular,
-     consultaDto.FamiliaryBackground?.FamiliaryBackgroundDxcardiovascularObservation,
-     consultaDto.FamiliaryBackground?.FamiliaryBackgroundRelatshcatalogDxcardiovascular ?? 0, // Add this line to provide a default value
-     consultaDto.FamiliaryBackground?.FamiliaryBackgroundHypertension,
-     consultaDto.FamiliaryBackground?.FamiliaryBackgroundHypertensionObservation,
-     consultaDto.FamiliaryBackground?.FamiliaryBackgroundRelatshcatalogHypertension ?? 0, // Add this line to provide a default value
-     consultaDto.FamiliaryBackground?.FamiliaryBackgroundCancer,
-     consultaDto.FamiliaryBackground?.FamiliaryBackgroundCancerObservation,
-     consultaDto.FamiliaryBackground?.FamiliaryBackgroundRelatshcatalogCancer ?? 0, // Add this line to provide a default value
-     consultaDto.FamiliaryBackground?.FamiliaryBackgroundTuberculosis,
-     consultaDto.FamiliaryBackground?.FamiliaryBackgroundTuberculosisObservation,
-     consultaDto.FamiliaryBackground?.FamiliaryBackgroundRelatshTuberculosis ?? 0, // Add this line to provide a default value
-     consultaDto.FamiliaryBackground?.FamiliaryBackgroundDxmental,
-     consultaDto.FamiliaryBackground?.FamiliaryBackgroundDxmentalObservation,
-     consultaDto.FamiliaryBackground?.FamiliaryBackgroundRelatshcatalogDxmental ?? 0, // Add this line to provide a default value
-     consultaDto.FamiliaryBackground?.FamiliaryBackgroundDxinfectious,
-     consultaDto.FamiliaryBackground?.FamiliaryBackgroundDxinfectiousObservation,
-     consultaDto.FamiliaryBackground?.FamiliaryBackgroundRelatshcatalogDxinfectious ?? 0, // Add this line to provide a default value
-     consultaDto.FamiliaryBackground?.FamiliaryBackgroundMalformation,
-     consultaDto.FamiliaryBackground?.FamiliaryBackgroundMalformationObservation,
-     consultaDto.FamiliaryBackground?.FamiliaryBackgroundRelatshcatalogMalformation ?? 0, // Add this line to provide a default value
-     consultaDto.FamiliaryBackground?.FamiliaryBackgroundOther,
-     consultaDto.FamiliaryBackground?.FamiliaryBackgroundOtherObservation,
-     consultaDto.FamiliaryBackground?.FamiliaryBackgroundRelatshcatalogOther ?? 0, // Add this line to provide a default value
-     consultaDto.AllergiesConsultations,
-     consultaDto.SurgeriesConsultations,
-     consultaDto.MedicationsConsultations,
-     consultaDto.LaboratoriesConsultations,
-     consultaDto.ImagesConsultations,
-     consultaDto.DiagnosisConsultations // Add this line to provide a default value
+                consultaDto.ConsultationCreationdate ?? DateTime.Now, // Add this line to provide a default value
+                consultaDto.ConsultationUsercreate,
+                consultaDto.ConsultationSequential ?? 0, // Add this line to provide a default value
+                consultaDto.ConsultationPatient,
+                consultaDto.ConsultationSpeciality ?? 0, // Add this line to provide a default value
+                consultaDto.ConsultationHistoryclinic,
+                consultaDto.ConsultationReason,
+                consultaDto.ConsultationDisease,
+                consultaDto.ConsultationFamiliaryname,
+                consultaDto.ConsultationWarningsings,
+                consultaDto.ConsultationNonpharmacologycal,
+                consultaDto.ConsultationFamiliarytype ?? 0, // Add this line to provide a default value
+                consultaDto.ConsultationFamiliaryphone,
+                consultaDto.ConsultationTemperature,
+                consultaDto.ConsultationRespirationrate,
+                consultaDto.ConsultationBloodpressuredAs,
+                consultaDto.ConsultationBloodpresuredDis,
+                consultaDto.ConsultationPulse,
+                consultaDto.ConsultationWeight,
+                consultaDto.ConsultationSize,
+                consultaDto.ConsultationTreatmentplan,
+                consultaDto.ConsultationObservation,
+                consultaDto.ConsultationPersonalbackground,
+                consultaDto.ConsultationDisablilitydays ?? 0, // Add this line to provide a default value
+                consultaDto.ConsultationType ?? 0, // Add this line to provide a default value
+                consultaDto.ConsultationStatus ?? 0, // Add this line to provide a default value
+                consultaDto.OrgansSystem?.OrganssystemsOrgansenses,
+                consultaDto.OrgansSystem?.OrganssystemsOrgansensesObs,
+                consultaDto.OrgansSystem?.OrganssystemsRespiratory,
+                consultaDto.OrgansSystem?.OrganssystemsRespiratoryObs,
+                consultaDto.OrgansSystem?.OrganssystemsCardiovascular,
+                consultaDto.OrgansSystem?.OrganssystemsCardiovascularObs,
+                consultaDto.OrgansSystem?.OrganssystemsDigestive,
+                consultaDto.OrgansSystem?.OrganssystemsDigestiveObs,
+                consultaDto.OrgansSystem?.OrganssystemsGenital,
+                consultaDto.OrgansSystem?.OrganssystemsGenitalObs,
+                consultaDto.OrgansSystem?.OrganssystemsUrinary,
+                consultaDto.OrgansSystem?.OrganssystemsUrinaryObs,
+                consultaDto.OrgansSystem?.OrganssystemsSkeletalM,
+                consultaDto.OrgansSystem?.OrganssystemsSkeletalMObs,
+                consultaDto.OrgansSystem?.OrganssystemsEndrocrine,
+                consultaDto.OrgansSystem?.OrganssystemsEndocrine,
+                consultaDto.OrgansSystem?.OrganssystemsLymphatic,
+                consultaDto.OrgansSystem?.OrganssystemsLymphaticObs,
+                consultaDto.OrgansSystem?.OrganssystemsNervous,
+                consultaDto.OrgansSystem?.OrganssystemsNervousObs,
+                consultaDto.PhysicalExamination?.PhysicalexaminationHead,
+                consultaDto.PhysicalExamination?.PhysicalexaminationHeadObs,
+                consultaDto.PhysicalExamination?.PhysicalexaminationNeck,
+                consultaDto.PhysicalExamination?.PhysicalexaminationNeckObs,
+                consultaDto.PhysicalExamination?.PhysicalexaminationChest,
+                consultaDto.PhysicalExamination?.PhysicalexaminationChestObs,
+                consultaDto.PhysicalExamination?.PhysicalexaminationAbdomen,
+                consultaDto.PhysicalExamination?.PhysicalexaminationAbdomenObs,
+                consultaDto.PhysicalExamination?.PhysicalexaminationPelvis,
+                consultaDto.PhysicalExamination?.PhysicalexaminationPelvisObs,
+                consultaDto.PhysicalExamination?.PhysicalexaminationLimbs,
+                consultaDto.PhysicalExamination?.PhysicalexaminationLimbsObs,
+                consultaDto.FamiliaryBackground?.FamiliaryBackgroundHeartdisease,
+                consultaDto.FamiliaryBackground?.FamiliaryBackgroundHeartdiseaseObservation,
+                consultaDto.FamiliaryBackground?.FamiliaryBackgroundRelatshcatalogHeartdisease ?? null, // Add this line to provide a default value
+                consultaDto.FamiliaryBackground?.FamiliaryBackgroundDiabetes,
+                consultaDto.FamiliaryBackground?.FamiliaryBackgroundDiabetesObservation,
+                consultaDto.FamiliaryBackground?.FamiliaryBackgroundRelatshcatalogDiabetes ?? null, // Add this line to provide a default value
+                consultaDto.FamiliaryBackground?.FamiliaryBackgroundDxcardiovascular,
+                consultaDto.FamiliaryBackground?.FamiliaryBackgroundDxcardiovascularObservation,
+                consultaDto.FamiliaryBackground?.FamiliaryBackgroundRelatshcatalogDxcardiovascular ?? null, // Add this line to provide a default value
+                consultaDto.FamiliaryBackground?.FamiliaryBackgroundHypertension,
+                consultaDto.FamiliaryBackground?.FamiliaryBackgroundHypertensionObservation,
+                consultaDto.FamiliaryBackground?.FamiliaryBackgroundRelatshcatalogHypertension ?? 0, // Add this line to provide a default value
+                consultaDto.FamiliaryBackground?.FamiliaryBackgroundCancer,
+                consultaDto.FamiliaryBackground?.FamiliaryBackgroundCancerObservation,
+                consultaDto.FamiliaryBackground?.FamiliaryBackgroundRelatshcatalogCancer ?? 0, // Add this line to provide a default value
+                consultaDto.FamiliaryBackground?.FamiliaryBackgroundTuberculosis,
+                consultaDto.FamiliaryBackground?.FamiliaryBackgroundTuberculosisObservation,
+                consultaDto.FamiliaryBackground?.FamiliaryBackgroundRelatshTuberculosis ?? 0, // Add this line to provide a default value
+                consultaDto.FamiliaryBackground?.FamiliaryBackgroundDxmental,
+                consultaDto.FamiliaryBackground?.FamiliaryBackgroundDxmentalObservation,
+                consultaDto.FamiliaryBackground?.FamiliaryBackgroundRelatshcatalogDxmental ?? 0, // Add this line to provide a default value
+                consultaDto.FamiliaryBackground?.FamiliaryBackgroundDxinfectious,
+                consultaDto.FamiliaryBackground?.FamiliaryBackgroundDxinfectiousObservation,
+                consultaDto.FamiliaryBackground?.FamiliaryBackgroundRelatshcatalogDxinfectious ?? 0, // Add this line to provide a default value
+                consultaDto.FamiliaryBackground?.FamiliaryBackgroundMalformation,
+                consultaDto.FamiliaryBackground?.FamiliaryBackgroundMalformationObservation,
+                consultaDto.FamiliaryBackground?.FamiliaryBackgroundRelatshcatalogMalformation ?? 0, // Add this line to provide a default value
+                consultaDto.FamiliaryBackground?.FamiliaryBackgroundOther,
+                consultaDto.FamiliaryBackground?.FamiliaryBackgroundOtherObservation,
+                consultaDto.FamiliaryBackground?.FamiliaryBackgroundRelatshcatalogOther ?? 0, // Add this line to provide a default value
+                consultaDto.AllergiesConsultations,
+                consultaDto.SurgeriesConsultations,
+                consultaDto.MedicationsConsultations,
+                consultaDto.LaboratoriesConsultations,
+                consultaDto.ImagesConsultations,
+                consultaDto.DiagnosisConsultations // Add this line to provide a default value
  );
 
                 _logger.LogInformation("Consulta creada exitosamente.");
