@@ -103,7 +103,7 @@ namespace ExpertMed.Controllers
         }
 
 
-        [HttpPost("Crear-Consulta")]
+        [HttpPost]
         public async Task<IActionResult> CrearConsulta([FromBody] Consulta consultaDto)
         {
             if (!ModelState.IsValid)

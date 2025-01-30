@@ -1963,13 +1963,19 @@
                         </div>
                         <!--end region observacion-->
 
+                            <div class="form-group">
+                                <a asp-action="ListarConsultas" asp-controller="Consultation" class="btn btn-outline-danger"><i class="fa fa-close"></i> Salir</a>
+                
+                                <button type="submit" class="btn btn-outline-primary"><i class="fa fa-save"></i> Guardar Consulta</button>
 
+                            </div>
                     </div>
 
                     <!-- #endregion Cuarto Panel-->
 
                 </div>
                 <!-- #endregion Tab Content-->
+                
             </form>
             <!-- #endregion  Formulario(FORM)-->
         </div>
@@ -1977,7 +1983,6 @@
 </div>
 <!-- #endregion Formulario-->
 @section Scripts {
-        <script src="~/assets/js/consultation.js"></script>
 
         <script>
 
@@ -2019,7 +2024,7 @@
 
         <script>
 
-                    document.addEventListener("DOMContentLoaded", function () {
+               document.addEventListener("DOMContentLoaded", function () {
                 // Selecciona todos los switches
                 const switches = document.querySelectorAll(".form-check-input");
 
@@ -2124,4 +2129,6 @@
         });
 
         </script>
+    <script src="~/assets/js/consultation.js"></script>
+
 }
