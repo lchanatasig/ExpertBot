@@ -1,4 +1,5 @@
 ﻿using ExpertMed.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.CodeAnalysis;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -55,6 +56,7 @@ namespace ExpertMed.Services
                         user = new User
                         {
                             UsersId = GetValueOrDefault<int>(reader, "users_id"),
+                            UsersSpecialityid = GetValueOrDefault<int>(reader, "speciality_id"),
                             UsersDocumentNumber = GetValueOrDefault<string>(reader, "users_document_number"),
                             UsersNames = GetValueOrDefault<string>(reader, "users_names"),
                             UsersSurcenames = GetValueOrDefault<string>(reader, "users_surcenames"),
@@ -86,6 +88,7 @@ namespace ExpertMed.Services
                         session.SetInt32("UsuarioId", user.UsersId);
                         session.SetString("UsuarioApellido", user.UsersSurcenames);
                         session.SetString("UsuarioDescripcion", user.UsersDescription ?? "No description");
+                        session.SetInt32("UsuarioEspecialidadId", user.UsersSpecialityid ?? 0);
                         session.SetString("UsuarioEspecialidad", user.UsersSpeciality?.SpecialityName ?? "No specialty");
                         session.SetString("UsuarioEstablecimiento", user.UsersEstablishmentName ?? "No establish");
                         session.SetString("UsuarioEstablecimientoDireccion", user.UsersEstablishmentAddress ?? "No Address");

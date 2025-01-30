@@ -172,7 +172,6 @@ namespace ExpertMed.Models
 
         public bool? DiagnosisDefinitive { get; set; }
 
-        public int? DiagnosisSequential { get; set; }
 
         public int? DiagnosisStatus { get; set; } = 1;
 

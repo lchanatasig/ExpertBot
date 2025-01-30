@@ -218,8 +218,8 @@ namespace ExpertMed.Services
                     AddSqlParameter(command, "@familiary_background_malformation_observation", familiary_background_malformation_observation);
                     AddSqlParameter(command, "familiary_background_relatshcatalog_malformation", familiary_background_relatshcatalog_malformation);
                     AddSqlParameter(command, "@familiary_background_other", familiary_background_other);
-                    AddSqlParameter(command, "@obser_otro", familiary_background_other_observation);
-                    AddSqlParameter(command, "@familiary_background_other_observation", familiary_background_relatshcatalog_other);
+                    AddSqlParameter(command, "@familiary_background_other_observation", familiary_background_other_observation);
+                    AddSqlParameter(command, "@familiary_background_relatshcatalog_other", familiary_background_relatshcatalog_other);
 
                     // Tablas relacionadas (se inicializan con CreateDataTable)
                     AddSqlParameter(command, "@allergies", CreateDataTable(allergies_consultation));

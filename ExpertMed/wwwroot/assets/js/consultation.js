@@ -380,416 +380,419 @@ document
         value.slice(0, 3);
     }
   });
+
 document
-  .getElementById("consultationForm")
-  .addEventListener("submit", async function (event) {
-    event.preventDefault(); // Evitar el comportamiento por defecto del formulario
+    .getElementById("consultationForm")
+    .addEventListener("submit", async function (event) {
+        event.preventDefault(); // Evitar el comportamiento por defecto del formulario
 
-    // Parámetros de consulta
-    const consultaDto = {
-      ConsultationDate:
-        document.getElementById("consultation_date")?.value || null,
-      ConsultationUsercreate:
-        document.getElementById("consultation_usercreate")?.value || null,
-      ConsultationSequential:
-        document.getElementById("consultation_sequential")?.value || null,
-      ConsultationPatient:
-        document.getElementById("consultation_patient")?.value || null,
-      ConsultationSpeciality:
-        document.getElementById("consultation_speciality")?.value || null,
-      ConsultationHistoryclinic:
-        document.getElementById("consultation_historyclinic")?.value || null,
-      ConsultationReason:
-        document.getElementById("consultation_reason")?.value || null,
-      ConsultationDisease:
-        document.getElementById("consultation_disease")?.value || null,
-      ConsultationFamiliaryname:
-        document.getElementById("consultation_familiaryname")?.value || null,
-      ConsultationWarningsings:
-        document.getElementById("consultation_warningsings")?.value || null,
-      ConsultationNonpharmacologycal:
-        document.getElementById("consultation_nonpharmacologycal")?.value ||
-        null,
-      ConsultationFamiliarytype:
-        parseInt(
-          document.getElementById("consultation_familiarytype")?.value
-        ) || null,
-      ConsultationFamiliaryphone:
-        document.getElementById("consultation_familiaryphone")?.value || null,
-      ConsultationTemperature:
-        document.getElementById("consultation_temperature")?.value || null,
-      ConsultationRespirationrate:
-        document.getElementById("consultation_respirationrate")?.value || null,
-      ConsultationBloodpressuredAs:
-        document.getElementById("consultation_bloodpressuredAS")?.value || null,
-      ConsultationBloodpresuredDis:
-        document.getElementById("consultation_bloodpresuredDIS")?.value || null,
-      ConsultationPulse:
-        document.getElementById("consultation_pulse")?.value || null,
-      ConsultationWeight:
-        document.getElementById("consultation_weight")?.value || null,
-      ConsultationSize:
-        document.getElementById("consultation_size")?.value || null,
-      ConsultationTreatmentplan:
-        document.getElementById("consultation_treatmentplan")?.value || null,
-      ConsultationObservation:
-        document.getElementById("consultation_observation")?.value || null,
-      ConsultationPersonalbackground:
-        document.getElementById("consultation_personalbackground")?.value ||
-        null,
-      ConsultationDisablilitydays:
-        parseInt(
-          document.getElementById("consultation_disablilitydays")?.value
-        ) || 0,
-      ConsultationType:
-        parseInt(document.getElementById("consultation_type")?.value) || null,
-      ConsultationStatus:
-        parseInt(document.getElementById("consultation_status")?.value) || 1,
+        // Obtener los valores de los campos ocultos
+        const allergiesIds = document.getElementById('selectallergiesId').value;
+        const surgeriesIds = document.getElementById('selectSurgeriesId').value;
 
-      // Parámetros de órganos y sistemas
-      OrgansSystem: {
-        OrganssystemsOrgansenses:
-          document.getElementById("organssystems_organsenses")?.checked || null,
-        OrganssystemsOrgansensesObs:
-          document.getElementById("organssystems_organsenses_Obs")?.value ||
-          null,
-        OrganssystemsRespiratory:
-          document.getElementById("organssystems_respiratory")?.checked || null,
-        OrganssystemsRespiratoryObs:
-          document.getElementById("organssystems_respiratory_obs")?.value ||
-          null,
-        OrganssystemsCardiovascular:
-          document.getElementById("organssystems_cardiovascular")?.checked ||
-          null,
-        OrganssystemsCardiovascularObs:
-          document.getElementById("organssystems_cardiovascular_obs")?.value ||
-          null,
-        OrganssystemsDigestive:
-          document.getElementById("organssystems_digestive")?.checked || null,
-        OrganssystemsDigestiveObs:
-          document.getElementById("organssystems_digestive_obs")?.value || null,
-        OrganssystemsGenital:
-          document.getElementById("organssystems_genital")?.checked || null,
-        OrganssystemsGenitalObs:
-          document.getElementById("organssystems_genital_obs")?.value || null,
-        OrganssystemsUrinary:
-          document.getElementById("organssystems_urinary")?.checked || null,
-        OrganssystemsUrinaryObs:
-          document.getElementById("organssystems_urinary_obs")?.value || null,
-        OrganssystemsSkeletalM:
-          document.getElementById("organssystems_skeletal_m")?.checked || null,
-        OrganssystemsSkeletalMObs:
-          document.getElementById("organssystems_skeletal_m_obs")?.value ||
-          null,
-        OrganssystemsEndrocrine:
-          document.getElementById("organssystems_endrocrine")?.checked || null,
-        OrganssystemsEndocrine:
-          document.getElementById("organssystems_endocrine")?.value || null,
-        OrganssystemsLymphatic:
-          document.getElementById("organssystems_lymphatic")?.checked || null,
-        OrganssystemsLymphaticObs:
-          document.getElementById("organssystems_lymphatic_obs")?.value || null,
-        OrganssystemsNervous:
-          document.getElementById("organssystems_nervous")?.checked || null,
-        OrganssystemsNervousObs:
-          document.getElementById("organssystems_nervous_obs")?.value || null,
-      },
+        // Mapear los valores a los objetos correspondientes
+        const AllergiesConsultations = allergiesIds.split(',').map(id => ({
+            AllergiesCatalogid: parseInt(id, 10) || 0,
+            AllergiesObservation: "",
+            AllergiesStatus: 1,
+        }));
 
-      // Parámetros de examen físico
-      PhysicalExamination: {
-        PhysicalexaminationHead:
-          document.getElementById("physicalexamination_head")?.checked || null,
-        PhysicalexaminationHeadObs:
-          document.getElementById("physicalexamination_head_obs")?.value ||
-          null,
-        PhysicalexaminationNeck:
-          document.getElementById("physicalexamination_neck")?.checked || null,
-        PhysicalexaminationNeckObs:
-          document.getElementById("physicalexamination_neck_obs")?.value ||
-          null,
-        PhysicalexaminationChest:
-          document.getElementById("physicalexamination_chest")?.checked || null,
-        PhysicalexaminationChestObs:
-          document.getElementById("physicalexamination_chest_obs")?.value ||
-          null,
-        PhysicalexaminationAbdomen:
-          document.getElementById("physicalexamination_abdomen")?.checked ||
-          null,
-        PhysicalexaminationAbdomenObs:
-          document.getElementById("physicalexamination_abdomen_obs")?.value ||
-          null,
-        PhysicalexaminationPelvis:
-          document.getElementById("physicalexamination_pelvis")?.checked ||
-          null,
-        PhysicalexaminationPelvisObs:
-          document.getElementById("physicalexamination_pelvis_obs")?.value ||
-          null,
-        PhysicalexaminationLimbs:
-          document.getElementById("physicalexamination_limbs")?.checked || null,
-        PhysicalexaminationLimbsObs:
-          document.getElementById("physicalexamination_limbs_obs")?.value ||
-          null,
-      },
+        const SurgeriesConsultations = surgeriesIds.split(',').map(id => ({
+            SurgeriesCatalogid: parseInt(id, 10) || 0,
+            SurgeriesObservation: "",
+            SurgeriesStatus: 1,
+        }));
 
-      // Parámetros de antecedentes familiares
-      FamiliaryBackground: {
-        FamiliaryBackgroundHeartdisease:
-          document.getElementById("familiary_background_heartdisease")
-            ?.checked || null,
-        FamiliaryBackgroundHeartdiseaseObservation:
-          document.getElementById(
-            "familiary_background_heartdisease_observation"
-          )?.value || null,
-        FamiliaryBackgroundRelatshcatalogHeartdisease: document.getElementById(
-          "familiary_background_relatshcatalog_heartdisease"
-        )?.value
-          ? parseInt(
-              document.getElementById(
-                "familiary_background_relatshcatalog_heartdisease"
-              )?.value
-            )
-          : null,
-        FamiliaryBackgroundDiabetes:
-          document.getElementById("familiary_background_diabetes")?.checked ||
-          null,
-        FamiliaryBackgroundDiabetesObservation:
-          document.getElementById("familiary_background_diabetes_observation")
-            ?.value || null,
-        FamiliaryBackgroundRelatshcatalogDiabetes: document.getElementById(
-          "familiary_background_relatshcatalog_diabetes"
-        )?.value
-          ? parseInt(
-              document.getElementById(
-                "familiary_background_relatshcatalog_diabetes"
-              )?.value
-            )
-          : null,
-        FamiliaryBackgroundDxcardiovascular:
-          document.getElementById("familiary_background_dxcardiovascular")
-            ?.checked || null,
-        FamiliaryBackgroundDxcardiovascularObservation:
-          document.getElementById(
-            "familiary_background_dxcardiovascular_observation"
-          )?.value || null,
-        FamiliaryBackgroundRelatshcatalogDxcardiovascular:
-          document.getElementById(
-            "familiary_background_relatshcatalog_dxcardiovascular"
-          )?.value
-            ? parseInt(
-                document.getElementById(
-                  "familiary_background_relatshcatalog_dxcardiovascular"
+        // Parámetros de consulta
+        const consultaDto = {
+            ConsultationDate:
+                document.getElementById("consultation_date")?.value || null,
+            ConsultationUsercreate:
+                document.getElementById("consultation_usercreate")?.value || null,
+            ConsultationSequential:
+                document.getElementById("consultation_sequential")?.value || null,
+            ConsultationPatient:
+                document.getElementById("consultation_patient")?.value || null,
+            ConsultationSpeciality:
+                document.getElementById("consultation_speciality")?.value || null,
+            ConsultationHistoryclinic:
+                document.getElementById("consultation_historyclinic")?.value || null,
+            ConsultationReason:
+                document.getElementById("consultation_reason")?.value || null,
+            ConsultationDisease:
+                document.getElementById("consultation_disease")?.value || null,
+            ConsultationFamiliaryname:
+                document.getElementById("consultation_familiaryname")?.value || null,
+            ConsultationWarningsings:
+                document.getElementById("consultation_warningsings")?.value || null,
+            ConsultationNonpharmacologycal:
+                document.getElementById("consultation_nonpharmacologycal")?.value ||
+                null,
+            ConsultationFamiliarytype:
+                parseInt(
+                    document.getElementById("consultation_familiarytype")?.value
+                ) || null,
+            ConsultationFamiliaryphone:
+                document.getElementById("consultation_familiaryphone")?.value || null,
+            ConsultationTemperature:
+                document.getElementById("consultation_temperature")?.value || null,
+            ConsultationRespirationrate:
+                document.getElementById("consultation_respirationrate")?.value || null,
+            ConsultationBloodpressuredAs:
+                document.getElementById("consultation_bloodpressuredAS")?.value || null,
+            ConsultationBloodpresuredDis:
+                document.getElementById("consultation_bloodpresuredDIS")?.value || null,
+            ConsultationPulse:
+                document.getElementById("consultation_pulse")?.value || null,
+            ConsultationWeight:
+                document.getElementById("consultation_weight")?.value || null,
+            ConsultationSize:
+                document.getElementById("consultation_size")?.value || null,
+            ConsultationTreatmentplan:
+                document.getElementById("consultation_treatmentplan")?.value || null,
+            ConsultationObservation:
+                document.getElementById("consultation_observation")?.value || null,
+            ConsultationPersonalbackground:
+                document.getElementById("consultation_personalbackground")?.value ||
+                null,
+            ConsultationDisablilitydays:
+                parseInt(
+                    document.getElementById("consultation_disablilitydays")?.value
+                ) || 0,
+            ConsultationType:
+                parseInt(document.getElementById("consultation_type")?.value) || null,
+            ConsultationStatus:
+                parseInt(document.getElementById("consultation_status")?.value) || 1,
+
+            // Parámetros de órganos y sistemas
+            OrgansSystem: {
+                OrganssystemsOrgansenses:
+                    document.getElementById("organssystems_organsenses")?.checked || null,
+                OrganssystemsOrgansensesObs:
+                    document.getElementById("organssystems_organsenses_Obs")?.value ||
+                    null,
+                OrganssystemsRespiratory:
+                    document.getElementById("organssystems_respiratory")?.checked || null,
+                OrganssystemsRespiratoryObs:
+                    document.getElementById("organssystems_respiratory_obs")?.value ||
+                    null,
+                OrganssystemsCardiovascular:
+                    document.getElementById("organssystems_cardiovascular")?.checked ||
+                    null,
+                OrganssystemsCardiovascularObs:
+                    document.getElementById("organssystems_cardiovascular_obs")?.value ||
+                    null,
+                OrganssystemsDigestive:
+                    document.getElementById("organssystems_digestive")?.checked || null,
+                OrganssystemsDigestiveObs:
+                    document.getElementById("organssystems_digestive_obs")?.value || null,
+                OrganssystemsGenital:
+                    document.getElementById("organssystems_genital")?.checked || null,
+                OrganssystemsGenitalObs:
+                    document.getElementById("organssystems_genital_obs")?.value || null,
+                OrganssystemsUrinary:
+                    document.getElementById("organssystems_urinary")?.checked || null,
+                OrganssystemsUrinaryObs:
+                    document.getElementById("organssystems_urinary_obs")?.value || null,
+                OrganssystemsSkeletalM:
+                    document.getElementById("organssystems_skeletal_m")?.checked || null,
+                OrganssystemsSkeletalMObs:
+                    document.getElementById("organssystems_skeletal_m_obs")?.value ||
+                    null,
+                OrganssystemsEndrocrine:
+                    document.getElementById("organssystems_endrocrine")?.checked || null,
+                OrganssystemsEndocrine:
+                    document.getElementById("organssystems_endocrine")?.value || null,
+                OrganssystemsLymphatic:
+                    document.getElementById("organssystems_lymphatic")?.checked || null,
+                OrganssystemsLymphaticObs:
+                    document.getElementById("organssystems_lymphatic_obs")?.value || null,
+                OrganssystemsNervous:
+                    document.getElementById("organssystems_nervous")?.checked || null,
+                OrganssystemsNervousObs:
+                    document.getElementById("organssystems_nervous_obs")?.value || null,
+            },
+
+            // Parámetros de examen físico
+            PhysicalExamination: {
+                PhysicalexaminationHead:
+                    document.getElementById("physicalexamination_head")?.checked || null,
+                PhysicalexaminationHeadObs:
+                    document.getElementById("physicalexamination_head_obs")?.value ||
+                    null,
+                PhysicalexaminationNeck:
+                    document.getElementById("physicalexamination_neck")?.checked || null,
+                PhysicalexaminationNeckObs:
+                    document.getElementById("physicalexamination_neck_obs")?.value ||
+                    null,
+                PhysicalexaminationChest:
+                    document.getElementById("physicalexamination_chest")?.checked || null,
+                PhysicalexaminationChestObs:
+                    document.getElementById("physicalexamination_chest_obs")?.value ||
+                    null,
+                PhysicalexaminationAbdomen:
+                    document.getElementById("physicalexamination_abdomen")?.checked ||
+                    null,
+                PhysicalexaminationAbdomenObs:
+                    document.getElementById("physicalexamination_abdomen_obs")?.value ||
+                    null,
+                PhysicalexaminationPelvis:
+                    document.getElementById("physicalexamination_pelvis")?.checked ||
+                    null,
+                PhysicalexaminationPelvisObs:
+                    document.getElementById("physicalexamination_pelvis_obs")?.value ||
+                    null,
+                PhysicalexaminationLimbs:
+                    document.getElementById("physicalexamination_limbs")?.checked || null,
+                PhysicalexaminationLimbsObs:
+                    document.getElementById("physicalexamination_limbs_obs")?.value ||
+                    null,
+            },
+
+            // Parámetros de antecedentes familiares
+            FamiliaryBackground: {
+                FamiliaryBackgroundHeartdisease:
+                    document.getElementById("familiary_background_heartdisease")
+                        ?.checked || null,
+                FamiliaryBackgroundHeartdiseaseObservation:
+                    document.getElementById(
+                        "familiary_background_heartdisease_observation"
+                    )?.value || null,
+                FamiliaryBackgroundRelatshcatalogHeartdisease: document.getElementById(
+                    "familiary_background_relatshcatalog_heartdisease"
                 )?.value
-              )
-            : null,
-        FamiliaryBackgroundHypertension:
-          document.getElementById("familiary_background_hypertension")
-            ?.checked || null,
-        FamiliaryBackgroundHypertensionObservation:
-          document.getElementById(
-            "familiary_background_hypertension_observation"
-          )?.value || null,
-        FamiliaryBackgroundRelatshcatalogHypertension: document.getElementById(
-          "familiary_background_relatshcatalog_hypertension"
-        )?.value
-          ? parseInt(
-              document.getElementById(
-                "familiary_background_relatshcatalog_hypertension"
-              )?.value
-            )
-          : null,
-        FamiliaryBackgroundCancer:
-          document.getElementById("familiary_background_cancer")?.checked ||
-          null,
-        FamiliaryBackgroundCancerObservation:
-          document.getElementById("familiary_background_cancer_observation")
-            ?.value || null,
-        FamiliaryBackgroundRelatshcatalogCancer: document.getElementById(
-          "familiary_background_relatshcatalog_cancer"
-        )?.value
-          ? parseInt(
-              document.getElementById(
-                "familiary_background_relatshcatalog_cancer"
-              )?.value
-            )
-          : null,
-        FamiliaryBackgroundTuberculosis:
-          document.getElementById("familiary_background_tuberculosis")
-            ?.checked || null,
-        FamiliaryBackgroundTuberculosisObservation:
-          document.getElementById(
-            "familiary_background_tuberculosis_observation"
-          )?.value || null,
-        FamiliaryBackgroundRelatshTuberculosis: document.getElementById(
-          "familiary_background_relatshcatalog_tuberculosis"
-        )?.value
-          ? parseInt(
-              document.getElementById(
-                "familiary_background_relatshcatalog_tuberculosis"
-              )?.value
-            )
-          : null,
-        FamiliaryBackgroundDxmental:
-          document.getElementById("familiary_background_dxmental")?.checked ||
-          null,
-        FamiliaryBackgroundDxmentalObservation:
-          document.getElementById("familiary_background_dxmental_observation")
-            ?.value || null,
-        FamiliaryBackgroundRelatshcatalogDxmental: document.getElementById(
-          "familiary_background_relatshcatalog_dxmental"
-        )?.value
-          ? parseInt(
-              document.getElementById(
-                "familiary_background_relatshcatalog_dxmental"
-              )?.value
-            )
-          : null,
-        FamiliaryBackgroundDxinfectious:
-          document.getElementById("familiary_background_dxinfectious")
-            ?.checked || null,
-        FamiliaryBackgroundDxinfectiousObservation:
-          document.getElementById(
-            "familiary_background_dxinfectious_observation"
-          )?.value || null,
-        FamiliaryBackgroundRelatshcatalogDxinfectious: document.getElementById(
-          "familiary_background_relatshcatalog_dxinfectious"
-        )?.value
-          ? parseInt(
-              document.getElementById(
-                "familiary_background_relatshcatalog_dxinfectious"
-              )?.value
-            )
-          : null,
-        FamiliaryBackgroundMalformation:
-          document.getElementById("familiary_background_malformation")
-            ?.checked || null,
-        FamiliaryBackgroundMalformationObservation:
-          document.getElementById(
-            "familiary_background_malformation_observation"
-          )?.value || null,
-        FamiliaryBackgroundRelatshcatalogMalformation: document.getElementById(
-          "familiary_background_relatshcatalog_malformation"
-        )?.value
-          ? parseInt(
-              document.getElementById(
-                "familiary_background_relatshcatalog_malformation"
-              )?.value
-            )
-          : null,
-        FamiliaryBackgroundOther:
-          document.getElementById("familiary_background_other")?.checked ||
-          null,
-        FamiliaryBackgroundOtherObservation:
-          document.getElementById("familiary_background_other_observation")
-            ?.value || null,
-        FamiliaryBackgroundRelatshcatalogOther: document.getElementById(
-          "familiary_background_relatshcatalog_other"
-        )?.value
-          ? parseInt(
-              document.getElementById(
-                "familiary_background_relatshcatalog_other"
-              )?.value
-            )
-          : null,
-      },
+                    ? parseInt(
+                        document.getElementById(
+                            "familiary_background_relatshcatalog_heartdisease"
+                        )?.value
+                    )
+                    : null,
+                FamiliaryBackgroundDiabetes:
+                    document.getElementById("familiary_background_diabetes")?.checked ||
+                    null,
+                FamiliaryBackgroundDiabetesObservation:
+                    document.getElementById("familiary_background_diabetes_observation")
+                        ?.value || null,
+                FamiliaryBackgroundRelatshcatalogDiabetes: document.getElementById(
+                    "familiary_background_relatshcatalog_diabetes"
+                )?.value
+                    ? parseInt(
+                        document.getElementById(
+                            "familiary_background_relatshcatalog_diabetes"
+                        )?.value
+                    )
+                    : null,
+                FamiliaryBackgroundDxcardiovascular:
+                    document.getElementById("familiary_background_dxcardiovascular")
+                        ?.checked || null,
+                FamiliaryBackgroundDxcardiovascularObservation:
+                    document.getElementById(
+                        "familiary_background_dxcardiovascular_observation"
+                    )?.value || null,
+                FamiliaryBackgroundRelatshcatalogDxcardiovascular:
+                    document.getElementById(
+                        "familiary_background_relatshcatalog_dxcardiovascular"
+                    )?.value
+                        ? parseInt(
+                            document.getElementById(
+                                "familiary_background_relatshcatalog_dxcardiovascular"
+                            )?.value
+                        )
+                        : null,
+                FamiliaryBackgroundHypertension:
+                    document.getElementById("familiary_background_hypertension")
+                        ?.checked || null,
+                FamiliaryBackgroundHypertensionObservation:
+                    document.getElementById(
+                        "familiary_background_hypertension_observation"
+                    )?.value || null,
+                FamiliaryBackgroundRelatshcatalogHypertension: document.getElementById(
+                    "familiary_background_relatshcatalog_hypertension"
+                )?.value
+                    ? parseInt(
+                        document.getElementById(
+                            "familiary_background_relatshcatalog_hypertension"
+                        )?.value
+                    )
+                    : null,
+                FamiliaryBackgroundCancer:
+                    document.getElementById("familiary_background_cancer")?.checked ||
+                    null,
+                FamiliaryBackgroundCancerObservation:
+                    document.getElementById("familiary_background_cancer_observation")
+                        ?.value || null,
+                FamiliaryBackgroundRelatshcatalogCancer: document.getElementById(
+                    "familiary_background_relatshcatalog_cancer"
+                )?.value
+                    ? parseInt(
+                        document.getElementById(
+                            "familiary_background_relatshcatalog_cancer"
+                        )?.value
+                    )
+                    : null,
+                FamiliaryBackgroundTuberculosis:
+                    document.getElementById("familiary_background_tuberculosis")
+                        ?.checked || null,
+                FamiliaryBackgroundTuberculosisObservation:
+                    document.getElementById(
+                        "familiary_background_tuberculosis_observation"
+                    )?.value || null,
+                FamiliaryBackgroundRelatshTuberculosis: document.getElementById(
+                    "familiary_background_relatshcatalog_tuberculosis"
+                )?.value
+                    ? parseInt(
+                        document.getElementById(
+                            "familiary_background_relatshcatalog_tuberculosis"
+                        )?.value
+                    )
+                    : null,
+                FamiliaryBackgroundDxmental:
+                    document.getElementById("familiary_background_dxmental")?.checked ||
+                    null,
+                FamiliaryBackgroundDxmentalObservation:
+                    document.getElementById("familiary_background_dxmental_observation")
+                        ?.value || null,
+                FamiliaryBackgroundRelatshcatalogDxmental: document.getElementById(
+                    "familiary_background_relatshcatalog_dxmental"
+                )?.value
+                    ? parseInt(
+                        document.getElementById(
+                            "familiary_background_relatshcatalog_dxmental"
+                        )?.value
+                    )
+                    : null,
+                FamiliaryBackgroundDxinfectious:
+                    document.getElementById("familiary_background_dxinfectious")
+                        ?.checked || null,
+                FamiliaryBackgroundDxinfectiousObservation:
+                    document.getElementById(
+                        "familiary_background_dxinfectious_observation"
+                    )?.value || null,
+                FamiliaryBackgroundRelatshcatalogDxinfectious: document.getElementById(
+                    "familiary_background_relatshcatalog_dxinfectious"
+                )?.value
+                    ? parseInt(
+                        document.getElementById(
+                            "familiary_background_relatshcatalog_dxinfectious"
+                        )?.value
+                    )
+                    : null,
+                FamiliaryBackgroundMalformation:
+                    document.getElementById("familiary_background_malformation")
+                        ?.checked || null,
+                FamiliaryBackgroundMalformationObservation:
+                    document.getElementById(
+                        "familiary_background_malformation_observation"
+                    )?.value || null,
+                FamiliaryBackgroundRelatshcatalogMalformation: document.getElementById(
+                    "familiary_background_relatshcatalog_malformation"
+                )?.value
+                    ? parseInt(
+                        document.getElementById(
+                            "familiary_background_relatshcatalog_malformation"
+                        )?.value
+                    )
+                    : null,
+                FamiliaryBackgroundOther:
+                    document.getElementById("familiary_background_other")?.checked ||
+                    null,
+                FamiliaryBackgroundOtherObservation:
+                    document.getElementById("familiary_background_other_observation")
+                        ?.value || null,
+                FamiliaryBackgroundRelatshcatalogOther: document.getElementById(
+                    "familiary_background_relatshcatalog_other"
+                )?.value
+                    ? parseInt(
+                        document.getElementById(
+                            "familiary_background_relatshcatalog_other"
+                        )?.value
+                    )
+                    : null,
+            },
 
-      // Tablas relacionadas (Arrays de objetos)
-      AllergiesConsultations: Array.from(
-        document.querySelectorAll("#selectallergiesId input")
-      ).map((input) => ({
-        AllergiesCatalogid: parseInt(input.value, 10) || 0,
-        AllergiesObservation: "",
-        AllergiesStatus: 1,
-      })),
+            // Tablas relacionadas (Arrays de objetos)
+            AllergiesConsultations: AllergiesConsultations,
+            SurgeriesConsultations: SurgeriesConsultations,
 
-      SurgeriesConsultations: Array.from(
-        document.querySelectorAll("#selectSurgeriesId input")
-      ).map((input) => ({
-        SurgeriesCatalogid: parseInt(input.value, 10) || 0,
-        SurgeriesObservation: "",
-        SurgeriesStatus: 1,
-      })),
+            MedicationsConsultations: Array.from(
+                document.querySelectorAll("#selectedMedicationsTable tbody tr")
+            ).map((tr) => ({
+                MedicationsMedicationsid:
+                    parseInt(tr.cells[0]?.textContent.trim(), 10) || 0, // ID del medicamento (oculto en la celda 0)
+                MedicationsAmount:
+                    tr.querySelector('input[name^="amount_"]')?.value?.trim() || null, // Valor de cantidad
+                MedicationsObservation:
+                    tr.querySelector('input[name^="observation_"]')?.value?.trim() ||
+                    null, // Observación
+                MedicationsStatus: 1, // Estado activo
+            })),
 
-      MedicationsConsultations: Array.from(
-        document.querySelectorAll("#selectedMedicationsTable tbody tr")
-      ).map((tr) => ({
-        MedicationsMedicationsid:
-          parseInt(tr.cells[0]?.textContent.trim(), 10) || 0, // ID del medicamento (oculto en la celda 0)
-        MedicationsAmount:
-          tr.querySelector('input[name^="amount_"]')?.value?.trim() || null, // Valor de cantidad
-        MedicationsObservation:
-          tr.querySelector('input[name^="observation_"]')?.value?.trim() ||
-          null, // Observación
-        MedicationsSequential: null, // Valor nulo por defecto
-        MedicationsStatus: 1, // Estado activo
-      })),
+            LaboratoriesConsultations: Array.from(
+                document.querySelectorAll("#selectedLaboratoriesTable tbody tr")
+            ).map((tr) => ({
+                LaboratoriesLaboratoriesid:
+                    parseInt(tr.cells[0]?.textContent.trim(), 10) || 0, // ID del laboratorio (oculto en la celda 0)
+                LaboratoriesAmount: String(parseInt(tr.querySelector('input[name^="amount_"]')?.value, 10) || 0),
+                LaboratoriesObservation:
+                    tr.querySelector('input[name^="observation_"]')?.value?.trim() ||
+                    null, // Observación
+                LaboratoriesStatus: 1, // Estado activo
+            })),
 
-      LaboratoriesConsultations: Array.from(
-        document.querySelectorAll("#selectedLaboratoriesTable tbody tr")
-      ).map((tr) => ({
-        LaboratoriesLaboratoriesid:
-          parseInt(tr.cells[0]?.textContent.trim(), 10) || 0, // ID del laboratorio (oculto en la celda 0)
-        LaboratoriesAmount:
-          parseInt(tr.querySelector('input[name^="amount_"]')?.value, 10) || 0, // Valor de cantidad
-        LaboratoriesObservation:
-          tr.querySelector('input[name^="observation_"]')?.value?.trim() ||
-          null, // Observación
-        LaboratoriesSequential: null, // Valor nulo por defecto
-        LaboratoriesStatus: 1, // Estado activo
-      })),
+            ImagesConsultations: Array.from(
+                document.querySelectorAll("#selectedImagesTable tbody tr")
+            ).map((tr) => ({
+                ImagesImagesid: parseInt(tr.cells[0]?.textContent.trim(), 10) || 0, // ID de la imagen (oculto en la celda 0)
+                ImagesAmount:
+                    String(parseInt(tr.querySelector('input[name^="amount_"]')?.value, 10) || 0), // Valor de cantidad
+                ImagesObservation:
+                    tr.querySelector('input[name^="observation_"]')?.value?.trim() ||
+                    null, // Observación
+                ImagesStatus: 1, // Estado activo
+            })),
 
-      ImagesConsultations: Array.from(
-        document.querySelectorAll("#selectedImagesTable tbody tr")
-      ).map((tr) => ({
-        ImagesImagesid: parseInt(tr.cells[0]?.textContent.trim(), 10) || 0, // ID de la imagen (oculto en la celda 0)
-        ImagesAmount:
-          parseInt(tr.querySelector('input[name^="amount_"]')?.value, 10) || 0, // Valor de cantidad
-        ImagesObservation:
-          tr.querySelector('input[name^="observation_"]')?.value?.trim() ||
-          null, // Observación
-        ImagesSequential: null, // Valor nulo por defecto
-        ImagesStatus: 1, // Estado activo
-      })),
+            DiagnosisConsultations: Array.from(
+                document.querySelectorAll("#selectedDiagnosesTable tbody tr")
+            ).map((tr) => ({
+                DiagnosisDiagnosisid:
+                    parseInt(tr.cells[0]?.textContent.trim(), 10) || 0, // ID del diagnóstico (oculto en la celda 0)
+                DiagnosisPresumptive:
+                    tr.querySelector('input[name^="presumptive_"]')?.checked || false, // Si el checkbox está marcado
+                DiagnosisDefinitive:
+                    tr.querySelector('input[name^="definitive_"]')?.checked || false, // Si el checkbox está marcado
+                DiagnosisObservation: null, // No hay campo de observación en la tabla
+                DiagnosisStatus: 1, // Estado activo
+            })),
+        };
 
-      DiagnosisConsultations: Array.from(
-        document.querySelectorAll("#selectedDiagnosesTable tbody tr")
-      ).map((tr) => ({
-        DiagnosisDiagnosisid:
-          parseInt(tr.cells[0]?.textContent.trim(), 10) || 0, // ID del diagnóstico (oculto en la celda 0)
-        DiagnosisPresumptive:
-          tr.querySelector('input[name^="presumptive_"]')?.checked || false, // Si el checkbox está marcado
-        DiagnosisDefinitive:
-          tr.querySelector('input[name^="definitive_"]')?.checked || false, // Si el checkbox está marcado
-        DiagnosisObservation: null, // No hay campo de observación en la tabla
-        DiagnosisSequential: null, // Valor nulo por defecto
-        DiagnosisStatus: 1, // Estado activo
-      })),
-    };
+        // Muestra el JSON generado en la consola para debug
+        console.log("JSON generado para consulta:", JSON.stringify(consultaDto));
+        console.log(
+            "Parámetros de antecedentes familiares:",
+            consultaDto.FamiliaryBackground
+        );
 
-    // Muestra el JSON generado en la consola para debug
-    console.log("JSON generado para consulta:", JSON.stringify(consultaDto));
-    console.log(
-      "Parámetros de antecedentes familiares:",
-      consultaDto.FamiliaryBackground
-    );
-    const consultaUrl = "/Consultation/CrearConsulta";
-    try {
-      const response = await fetch(consultaUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(consultaDto),
-      });
+        const consultaUrl = "/Consultation/CrearConsulta";
+        const redirectur = "/Consultation/ConsultationList";
 
-      const result = await response.json();
+        try {
+            const response = await fetch(consultaUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(consultaDto),
+            });
 
-      if (response.ok) {
-        console.log("Consulta creada exitosamente:", result);
-        window.location.href = redirectur; // Cambia esta URL si es diferente
-      } else {
-        console.error("Error al crear la consulta:", result);
-      }
-    } catch (error) {
-      console.error("Error de la solicitud:", error);
-    }
-  });
+            const result = await response.json();
+
+            if (response.ok) {
+                console.log("Consulta creada exitosamente:", result);
+                window.location.href = redirectur; // Cambia esta URL si es diferente
+            } else {
+                console.error("Error al crear la consulta:", result);
+            }
+        } catch (error) {
+            console.error("Error de la solicitud:", error);
+        }
+    });

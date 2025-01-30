@@ -190,25 +190,25 @@ namespace ExpertMed.Controllers
                 consultaDto.FamiliaryBackground?.FamiliaryBackgroundRelatshcatalogDxcardiovascular ?? null, // Add this line to provide a default value
                 consultaDto.FamiliaryBackground?.FamiliaryBackgroundHypertension,
                 consultaDto.FamiliaryBackground?.FamiliaryBackgroundHypertensionObservation,
-                consultaDto.FamiliaryBackground?.FamiliaryBackgroundRelatshcatalogHypertension ?? 0, // Add this line to provide a default value
+                consultaDto.FamiliaryBackground?.FamiliaryBackgroundRelatshcatalogHypertension ?? null, // Add this line to provide a default value
                 consultaDto.FamiliaryBackground?.FamiliaryBackgroundCancer,
                 consultaDto.FamiliaryBackground?.FamiliaryBackgroundCancerObservation,
-                consultaDto.FamiliaryBackground?.FamiliaryBackgroundRelatshcatalogCancer ?? 0, // Add this line to provide a default value
+                consultaDto.FamiliaryBackground?.FamiliaryBackgroundRelatshcatalogCancer ?? null, // Add this line to provide a default value
                 consultaDto.FamiliaryBackground?.FamiliaryBackgroundTuberculosis,
                 consultaDto.FamiliaryBackground?.FamiliaryBackgroundTuberculosisObservation,
-                consultaDto.FamiliaryBackground?.FamiliaryBackgroundRelatshTuberculosis ?? 0, // Add this line to provide a default value
+                consultaDto.FamiliaryBackground?.FamiliaryBackgroundRelatshTuberculosis ?? null, // Add this line to provide a default value
                 consultaDto.FamiliaryBackground?.FamiliaryBackgroundDxmental,
                 consultaDto.FamiliaryBackground?.FamiliaryBackgroundDxmentalObservation,
-                consultaDto.FamiliaryBackground?.FamiliaryBackgroundRelatshcatalogDxmental ?? 0, // Add this line to provide a default value
+                consultaDto.FamiliaryBackground?.FamiliaryBackgroundRelatshcatalogDxmental ?? null, // Add this line to provide a default value
                 consultaDto.FamiliaryBackground?.FamiliaryBackgroundDxinfectious,
                 consultaDto.FamiliaryBackground?.FamiliaryBackgroundDxinfectiousObservation,
-                consultaDto.FamiliaryBackground?.FamiliaryBackgroundRelatshcatalogDxinfectious ?? 0, // Add this line to provide a default value
+                consultaDto.FamiliaryBackground?.FamiliaryBackgroundRelatshcatalogDxinfectious ?? null, // Add this line to provide a default value
                 consultaDto.FamiliaryBackground?.FamiliaryBackgroundMalformation,
                 consultaDto.FamiliaryBackground?.FamiliaryBackgroundMalformationObservation,
-                consultaDto.FamiliaryBackground?.FamiliaryBackgroundRelatshcatalogMalformation ?? 0, // Add this line to provide a default value
+                consultaDto.FamiliaryBackground?.FamiliaryBackgroundRelatshcatalogMalformation ?? null, // Add this line to provide a default value
                 consultaDto.FamiliaryBackground?.FamiliaryBackgroundOther,
                 consultaDto.FamiliaryBackground?.FamiliaryBackgroundOtherObservation,
-                consultaDto.FamiliaryBackground?.FamiliaryBackgroundRelatshcatalogOther ?? 0, // Add this line to provide a default value
+                consultaDto.FamiliaryBackground?.FamiliaryBackgroundRelatshcatalogOther ?? null, // Add this line to provide a default value
                 consultaDto.AllergiesConsultations,
                 consultaDto.SurgeriesConsultations,
                 consultaDto.MedicationsConsultations,
