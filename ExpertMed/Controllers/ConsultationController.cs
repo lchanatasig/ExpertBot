@@ -29,10 +29,17 @@ namespace ExpertMed.Controllers
 
 
 
-        public IActionResult ConsultationList()
-        {
-            return View();
+
+        [HttpGet]
+        public async Task<IActionResult> ConsultationList()
+        {  // Obtén el ID del usuario y el perfil desde la sesión
+            var userId = HttpContext.Session.GetInt32("UsuarioId");
+            var profileId = HttpContext.Session.GetInt32("PerfilId");
+
+            var consultations = await _consultationService.GetConsultationsAsync(userId, profileId);
+            return Ok(consultations);
         }
+
 
         [HttpGet]
         public async Task<IActionResult> NewConsultation(int patientId)

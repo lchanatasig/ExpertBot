@@ -1,0 +1,58 @@
+﻿@{
+    ViewBag.Title = "Consultation List";
+    ViewBag.pTitle = "Consultation List";
+    ViewBag.pageTitle = "Consultation List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var successMessage = TempData["SuccessMessage"] as string;
+    var errorMessage = TempData["ErrorMessage"] as string;
+}
+
+@section styles {
+    <!--datatable css-->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" />
+    <!--datatable responsive css-->
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" />
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
+}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">User List</h5>
+            </div>
+
+            <div class="card-body">
+                <table id="alternative-pagination"
+                       class="table nowrap dt-responsive align-middle table-hover table-bordered" style="width:100%">
+
+                    <thead>
+                        <tr>
+                            <th>Secuencial Consulta</th>
+                            <th>Medico Consulta</th>
+                            <th>Historia Clinica</th>
+                            <th>Fecha de la consulta</th>
+                            <th>Paciente de la consulta</th>
+                            <th>Especialidad </th>
+                            <th>Motivo</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                       <td></td>
+                       <td></td>
+                       <td></td>
+                       <td></td>
+                       <td></td>
+                       <td></td>
+                       <td></td>
+                       <td></td>
+                    </tbody>
+
+                </table>
+            </div>
+
+
+        </div>
+    </div>
+</div>

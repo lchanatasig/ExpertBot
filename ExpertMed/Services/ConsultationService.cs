@@ -19,7 +19,18 @@ namespace ExpertMed.Services
         }
 
 
-         public async Task CrearConsultaAsync(
+        public async Task<List<Consultation>> GetConsultationsAsync(int? userId, int? profileId)
+        {
+            // Llamar al procedimiento almacenado usando FromSqlRaw
+            var consultations = await _dbContext.Consultations
+                .FromSqlRaw("EXEC sp_ListAllConsultation @user_id={0}, @profile_id={1}", userId, profileId)
+                .ToListAsync();
+
+            return consultations;
+        }
+
+
+        public async Task CrearConsultaAsync(
          DateTime consultation_creationdate,
          int? consultation_usercreate,
          int consultation_sequential,
