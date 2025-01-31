@@ -1,8 +1,13 @@
-﻿@{
+﻿@model IEnumerable<ExpertMed.Models.Consultation>
+@using Microsoft.AspNetCore.Http
+
+@{
     ViewBag.Title = "Consultation List";
     ViewBag.pTitle = "Consultation List";
     ViewBag.pageTitle = "Consultation List";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var perfilId = ViewContext.HttpContext.Session.GetInt32("PerfilId");
+
     var successMessage = TempData["SuccessMessage"] as string;
     var errorMessage = TempData["ErrorMessage"] as string;
 }
@@ -18,18 +23,25 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="card">
+            <a href="@Url.Action("AppointmentList", "Appointment")" class="btn btn-sm btn-info">
+                <i class="bx bx-user-plus"></i> Create new consultation
+            </a>
             <div class="card-header">
-                <h5 class="card-title mb-0">User List</h5>
+                <h5 class="card-title mb-0">consultation List</h5>
             </div>
 
             <div class="card-body">
                 <table id="alternative-pagination"
-                       class="table nowrap dt-responsive align-middle table-hover table-bordered" style="width:100%">
+                class="table nowrap dt-responsive align-middle table-hover table-bordered" style="width:100%">
 
                     <thead>
                         <tr>
-                            <th>Secuencial Consulta</th>
-                            <th>Medico Consulta</th>
+                            @if(perfilId ==1)
+                            {
+                                <th>Secuencial Consulta</th>
+                                <th>Medico Consulta</th>
+                            }
+                        
                             <th>Historia Clinica</th>
                             <th>Fecha de la consulta</th>
                             <th>Paciente de la consulta</th>
@@ -39,14 +51,36 @@
                         </tr>
                     </thead>
                     <tbody>
-                       <td></td>
-                       <td></td>
-                       <td></td>
-                       <td></td>
-                       <td></td>
-                       <td></td>
-                       <td></td>
-                       <td></td>
+                        @foreach (var consultation in Model)
+                        {
+                            <tr>
+                                @if (perfilId == 1)
+                                {
+                                    <td>@consultation.ConsultationId</td>
+                                    <td>
+                                        <div class="d-flex align-items-center fw-medium">
+                                            <img src="~/assets/images/svg/medicUsers.svg" alt="" class="avatar-xxs me-2">
+                                            <a href="javascript:void(0);" class="currency_name">@consultation.ConsultationUsercreateNavigation.UsersNames</a>
+                                        </div>
+                                    </td>
+                                }
+
+
+                              
+                                <td>@consultation.ConsultationHistoryclinic</td>
+                                <td>@consultation.ConsultationCreationdate</td>
+                                <td>@consultation.ConsultationPatientNavigation.PatientFirstname</td>
+                                <td>@consultation.ConsultationSpecialityNavigation.SpecialityName</td>
+                                <td>@consultation.ConsultationReason</td>
+                                <td>
+                                    <a href="#" class="btn btn-sm btn-soft-info"
+                                       data-bs-toggle="modal" data-bs-target="#optionModal"
+                                       onclick="openOptionModal(@consultation.ConsultationId)">
+                                        <i class="ri-edit-line"></i> Review
+                                    </a>
+                                </td>
+                            </tr>
+                        }
                     </tbody>
 
                 </table>
@@ -56,3 +90,187 @@
         </div>
     </div>
 </div>
+
+<!--Modal opciones cita-->
+<div class="modal flip" id="optionModal" tabindex="-1" aria-labelledby="exampleModalgridLabel" aria-modal="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Hidden input to store AppointmentId -->
+            <input type="hidden" id="appointmentIdInput" name="AppointmentId" />
+            <input type="hidden" id="perfiltIdInput" value="@perfilId" name="AppointmentId" />
+            <input type="hidden" id="appointmentConsultationId" name="AppointmenConsultationtId" />
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="optionModal">Que desea hacer con esta consulta?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row g-3">
+                    <!-- Buttons Group -->
+                    <div class="col-6">
+                        <button type="button" class="btn btn-soft-info btn-label btn-sm w-100 waves-effect waves-light"
+                                onclick="openRescheduleModal()">
+
+                            <i class=" ri-eye-fill label-icon align-middle fs-16 me-2"></i> Revisar Consulta
+
+                        </button>
+                    </div>
+
+                    <div class="col-6">
+                        <button type="button" class="btn btn-soft-success btn-label btn-sm w-100 waves-effect waves-light"
+                                onclick="openModalDocument()">
+                            <i class="ri-file-text-fill label-icon align-middle fs-16 me-2"></i> Generar Documento
+                        </button>
+                    </div>
+
+                   
+
+                </div><!--end row-->
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="optionsDocuments" tabindex="-1" aria-labelledby="optionsDocuments">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="optionsDocuments">¿Qué documento desea generar?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="javascript:void(0);">
+                    <div class="row g-3">
+                        <select class="form-select mb-3" id="documentType" aria-label="Seleccione un documento" onchange="enableDownloadButton()">
+                            <option selected>Seleccione un documento</option>
+                            <option value="justificante">Justificante Médico</option>
+                            <option value="formulario">Formulario Médico</option>
+                            <option value="receta">Receta</option>
+                            <option value="laboratorio">Laboratorio</option>
+                            <option value="imagen">Imagen</option>
+                        </select>
+                    </div><!--end row-->
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="downloadButton" onclick="downloadDocument()" disabled>
+                    <span id="downloadText">Descargar</span>
+                    <span id="downloadSpinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <!--datatable js-->
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script>
+        function openModalDocument() {
+            var myModal = new bootstrap.Modal(document.getElementById('optionsDocuments'), {
+                keyboard: false
+            });
+            myModal.show();
+        }
+    </script>
+    <script>
+        function openModal() {
+            var myModal = new bootstrap.Modal(document.getElementById('optionsDocuments'), {
+                keyboard: false
+            });
+            myModal.show();
+        }
+
+                function enableDownloadButton() {
+            const selectedValue = document.getElementById('documentType').value;
+            const downloadButton = document.getElementById('downloadButton');
+
+            if (selectedValue === "Seleccione un documento") {
+                downloadButton.disabled = true;
+            } else {
+                downloadButton.disabled = false;
+            }
+        }
+                function downloadDocument() {
+            const selectedValue = document.getElementById('documentType').value;
+            const downloadButton = document.getElementById('downloadButton');
+            const downloadText = document.getElementById('downloadText');
+            const downloadSpinner = document.getElementById('downloadSpinner');
+
+            // Mostrar el spinner y deshabilitar el botón
+            downloadText.textContent = "Generando...";
+            downloadSpinner.classList.remove('d-none');
+            downloadButton.disabled = true;
+
+            // Mapear el valor seleccionado a la acción correspondiente en el controlador
+            const actions = {
+                justificante: "/Documents/MedicalCertificate",
+                formulario: "/Documents/MedicalForm",
+                receta: "/Documents/MedicationRecipe",
+                laboratorio: "/Documents/LaboratoryDoc",
+                imagen: "/Documents/ImageDoc"
+            };
+
+            // Redirigir a la acción correspondiente
+            if (actions[selectedValue]) {
+                window.open(actions[selectedValue], '_blank'); // Abrir en una nueva pestaña
+            } else {
+                alert("Opción no válida.");
+            }
+
+            // Restaurar el botón después de 2 segundos (simulando la generación del PDF)
+            setTimeout(() => {
+                downloadText.textContent = "Descargar";
+                downloadSpinner.classList.add('d-none');
+                downloadButton.disabled = false;
+            }, 2000);
+        }
+    </script>
+    <script src="~/assets/js/pages/datatables.init.js"></script>
+
+
+
+    @if (!string.IsNullOrEmpty(successMessage))
+    {
+        <script>
+            Swal.fire({
+                title: '¡Success!',
+                text: '@successMessage',
+                icon: 'success',
+                confirmButtonText: 'OK',
+                timer: 3000
+            });
+        </script>
+    }
+
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <script>
+            Swal.fire({
+                title: 'Success',
+                text: '@errorMessage',
+                icon: 'error',
+                confirmButtonText: 'OK',
+                timer: 3000
+            });
+        </script>
+    }
+
+}

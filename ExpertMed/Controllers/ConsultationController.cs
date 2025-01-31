@@ -32,12 +32,16 @@ namespace ExpertMed.Controllers
 
         [HttpGet]
         public async Task<IActionResult> ConsultationList()
-        {  // Obtén el ID del usuario y el perfil desde la sesión
+        {
+            // Obtén el ID del usuario y el perfil desde la sesión
             var userId = HttpContext.Session.GetInt32("UsuarioId");
             var profileId = HttpContext.Session.GetInt32("PerfilId");
 
-            var consultations = await _consultationService.GetConsultationsAsync(userId, profileId);
-            return Ok(consultations);
+            // Obtén las consultas del servicio
+            var consultations = await _consultationService.GetConsultationsAsync(userId.Value, profileId.Value);
+
+            // Pasa las consultas a la vista
+            return View(consultations);
         }
 
 

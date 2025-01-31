@@ -72,6 +72,9 @@ namespace ExpertMed
                     pattern: "{controller=Authentication}/{action=SignIn}/{id?}");
             });
 
+            // Configuración de Rotativa
+            Rotativa.AspNetCore.RotativaConfiguration.Setup(app.Environment.WebRootPath, "../Rotativa");
+
             app.Run();
         }
     }

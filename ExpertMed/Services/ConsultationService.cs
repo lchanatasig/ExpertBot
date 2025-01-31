@@ -1,4 +1,5 @@
-﻿using ExpertMed.Models;
+﻿using ExpertMed.Migrations;
+using ExpertMed.Models;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
@@ -19,15 +20,39 @@ namespace ExpertMed.Services
         }
 
 
-        public async Task<List<Consultation>> GetConsultationsAsync(int? userId, int? profileId)
+        public async Task<List<Consultation>> GetConsultationsAsync(int userId, int profileId)
         {
-            // Llamar al procedimiento almacenado usando FromSqlRaw
-            var consultations = await _dbContext.Consultations
-                .FromSqlRaw("EXEC sp_ListAllConsultation @user_id={0}, @profile_id={1}", userId, profileId)
-                .ToListAsync();
+            try
+            {
+                var consultations = await _dbContext.Consultations
+                    .FromSqlRaw("EXEC sp_ListAllConsultation @user_id = {0}, @profile_id = {1}", userId, profileId)
+                    .ToListAsync();
+                // Cargar relaciones necesarias explícitamente
+                foreach (var consultation in consultations)
+                {
+                    // Esto es útil si necesitas cargar relaciones adicionales como PatientNationalityNavigation o PatientCreationuserNavigation
+                    // Usamos 'LoadAsync' solo cuando sea necesario, pero si tienes muchas relaciones o muchos pacientes, puede afectar el rendimiento
+                    await _dbContext.Entry(consultation)
+                        .Reference(p => p.ConsultationPatientNavigation)
+                        .LoadAsync();
 
-            return consultations;
+                    await _dbContext.Entry(consultation)
+                        .Reference(p => p.ConsultationUsercreateNavigation)
+                        .LoadAsync();
+
+                    await _dbContext.Entry(consultation)
+                        .Reference(p => p.ConsultationSpecialityNavigation)
+                        .LoadAsync();
+                }
+                return consultations;
+            }
+            catch (Exception ex)
+            {
+                // Manejo de errores (log, excepción personalizada, etc.)
+                throw new ApplicationException("Error al obtener las consultas", ex);
+            }
         }
+
 
 
         public async Task CrearConsultaAsync(
@@ -285,6 +310,24 @@ namespace ExpertMed.Services
             return table;
         }
 
+
+        public DataSet GetConsultationDetails(int consultationId)
+        {
+            using (SqlConnection connection = new SqlConnection(_dbContext.Database.GetConnectionString()))
+            {
+                using (SqlCommand command = new SqlCommand("sp_GetConsultationDetails", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("@consultation_id", consultationId));
+
+                    SqlDataAdapter adapter = new SqlDataAdapter(command);
+                    DataSet dataSet = new DataSet();
+                    adapter.Fill(dataSet);
+
+                    return dataSet;
+                }
+            }
+        }
 
     }
 }
