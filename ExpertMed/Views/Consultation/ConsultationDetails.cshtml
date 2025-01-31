@@ -1153,7 +1153,7 @@
                             <!-- #region organos de los sentidos-->
                             <div class="form-check form-switch">
                                 <input class="form-check-input" name="SwitchCheckSenseOrgans"
-                                       type="checkbox" role="switch" id="organssystems_organsenses">
+                                       type="checkbox" role="switch" id="organssystems_organsenses" @(Model.Consultation.OrgansSystem.OrganssystemsOrgansenses == true ? "checked" : "")>
                                 <label class="form-check-label" for="SwitchCheckSenseOrgans">
                                     Sense Organs
                                 </label>
@@ -1163,14 +1163,14 @@
                             <div class="col-lg-5">
                                 <div class="mb-3">
                                     <input type="text" class="form-control" id="organssystems_organsenses_Obs"
-                                           name="observationSenseOrgans" placeholder="Enter an observation">
+                                           name="observationSenseOrgans" value="@Model.Consultation.OrgansSystem.OrganssystemsOrgansensesObs" placeholder="Enter an observation">
                                 </div>
                             </div>
                             <!-- #endregion organos de los sentidos-->
                             <!-- #region Respiratory-->
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" role="switch"
-                                       id="organssystems_respiratory" name="SwitchCheckRespiratory">
+                                       id="organssystems_respiratory" name="SwitchCheckRespiratory" @(Model.Consultation.OrgansSystem.OrganssystemsRespiratory == true ? "checked" : "")>
                                 <label class="form-check-label" for="SwitchCheckRespiratory">Respiratory</label>
                             </div>
 
@@ -1178,14 +1178,14 @@
                             <div class="col-lg-5">
                                 <div class="mb-3">
                                     <input type="text" class="form-control" id="organssystems_respiratory_obs"
-                                           name="observationRespiratory" placeholder="Enter an observation">
+                                           name="observationRespiratory" placeholder="Enter an observation" value="@Model.Consultation.OrgansSystem.OrganssystemsRespiratoryObs">
                                 </div>
                             </div>
                             <!-- #endregion Respiratory-->
                             <!-- #region Cardiovascular-->
                             <div class="form-check form-switch">
                                 <input class="form-check-input" name="SwitchCheckCardiovascular"
-                                       type="checkbox" role="switch" id="organssystems_cardiovascular">
+                                       type="checkbox" role="switch" id="organssystems_cardiovascular" @(Model.Consultation.OrgansSystem.OrganssystemsCardiovascular == true ? "checked" : "")>
                                 <label class="form-check-label" for="SwitchCheckCardiovascular">Cardiovascular</label>
                             </div>
 
@@ -1193,21 +1193,21 @@
                             <div class="col-lg-5">
                                 <div class="mb-3">
                                     <input type="text" class="form-control" id="organssystems_cardiovascular_obs"
-                                           name="observationCardiovascular" placeholder="Enter an observation">
+                                           name="observationCardiovascular" placeholder="Enter an observation" value="@Model.Consultation.OrgansSystem.OrganssystemsCardiovascularObs">
                                 </div>
                             </div>
                             <!-- #endregion Cardiovascular-->
                             <!-- #region Digestive-->
                             <div class="form-check form-switch">
                                 <input class="form-check-input" name="SwitchCheckDigestive"
-                                       type="checkbox" role="switch" id="organssystems_digestive">
+                                       type="checkbox" role="switch" id="organssystems_digestive" @(Model.Consultation.OrgansSystem.OrganssystemsDigestive == true ? "checked" : "")>
                                 <label class="form-check-label" for="SwitchCheckDigestive">Digestive</label>
                             </div>
 
 
                             <div class="col-lg-5">
                                 <div class="mb-3">
-                                    <input type="text" class="form-control" id="organssystems_digestive_obs"
+                                    <input type="text" class="form-control" id="organssystems_digestive_obs" value="@Model.Consultation.OrgansSystem.OrganssystemsDigestiveObs"
                                            name="observationDigestive" placeholder="Enter an observation">
                                 </div>
                             </div>
@@ -1215,7 +1215,7 @@
                             <!-- #region Genital-->
                             <div class="form-check form-switch">
                                 <input class="form-check-input" name="SwitchCheckGenital"
-                                       type="checkbox" role="switch" id="organssystems_genital">
+                                       type="checkbox" role="switch" id="organssystems_genital" @(Model.Consultation.OrgansSystem.OrganssystemsGenital == true ? "checked" : "")>
                                 <label class="form-check-label" for="SwitchCheckGenital">Genital</label>
                             </div>
 
@@ -1223,14 +1223,14 @@
                             <div class="col-lg-5">
                                 <div class="mb-3">
                                     <input type="text" class="form-control" id="organssystems_genital_obs"
-                                           name="observationGenital" placeholder="Enter an observation">
+                                           name="observationGenital" placeholder="Enter an observation" value="@Model.Consultation.OrgansSystem.OrganssystemsGenitalObs">
                                 </div>
                             </div>
                             <!-- #endregion Genital-->
                             <!-- #region Urinary-->
                             <div class="form-check form-switch">
                                 <input class="form-check-input" name="SwitchCheckUrinary"
-                                       type="checkbox" role="switch" id="organssystems_urinary">
+                                       type="checkbox" role="switch" id="organssystems_urinary" @(Model.Consultation.OrgansSystem.OrganssystemsUrinary == true ? "checked" : "")>
                                 <label class="form-check-label" for="SwitchCheckUrinary">Urinary</label>
                             </div>
 
@@ -1238,14 +1238,14 @@
                             <div class="col-lg-5">
                                 <div class="mb-3">
                                     <input type="text" class="form-control" id="organssystems_urinary_obs"
-                                           name="observationUrinary" placeholder="Enter an observation">
+                                           name="observationUrinary" placeholder="Enter an observation" value="@Model.Consultation.OrgansSystem.OrganssystemsUrinaryObs">
                                 </div>
                             </div>
                             <!-- #endregion Urinary-->
                             <!-- #region Skeletal Muscle-->
                             <div class="form-check form-switch">
                                 <input class="form-check-input" name="SwitchCheckSkeletalMuscle"
-                                       type="checkbox" role="switch" id="organssystems_skeletal_m">
+                                       type="checkbox" role="switch" id="organssystems_skeletal_m" @(Model.Consultation.OrgansSystem.OrganssystemsSkeletalM == true ? "checked" : "")>
                                 <label class="form-check-label" for="SwitchCheckSkeletalMuscle">Skeletal Muscle</label>
                             </div>
 
@@ -1253,14 +1253,14 @@
                             <div class="col-lg-5">
                                 <div class="mb-3">
                                     <input type="text" class="form-control" id="organssystems_skeletal_m_obs"
-                                           name="observationSkeletalMuscle" placeholder="Enter an observation">
+                                           name="observationSkeletalMuscle" placeholder="Enter an observation" value="@Model.Consultation.OrgansSystem.OrganssystemsSkeletalMObs">
                                 </div>
                             </div>
                             <!-- #endregion Skeletal Muscle-->
                             <!-- #region Endocrine-->
                             <div class="form-check form-switch">
                                 <input class="form-check-input" name="SwitchCheckEndocrine"
-                                       type="checkbox" role="switch" id="organssystems_endrocrine">
+                                       type="checkbox" role="switch" id="organssystems_endrocrine" @(Model.Consultation.OrgansSystem.OrganssystemsEndrocrine == true ? "checked" : "")>
                                 <label class="form-check-label" for="SwitchCheckEndocrine">Endocrine</label>
                             </div>
 
@@ -1268,14 +1268,14 @@
                             <div class="col-lg-5">
                                 <div class="mb-3">
                                     <input type="text" class="form-control" id="organssystems_endocrine"
-                                           name="observationEndocrine" placeholder="Enter an observation">
+                                           name="observationEndocrine" placeholder="Enter an observation" value="@Model.Consultation.OrgansSystem.OrganssystemsEndocrine"> 
                                 </div>
                             </div>
                             <!-- #endregion Endocrine-->
                             <!-- #region Lymphatic Heme-->
                             <div class="form-check form-switch">
                                 <input class="form-check-input" name="SwitchCheckLymphaticHeme"
-                                       type="checkbox" role="switch" id="organssystems_lymphatic">
+                                       type="checkbox" role="switch" id="organssystems_lymphatic" @(Model.Consultation.OrgansSystem.OrganssystemsLymphatic == true ? "checked" : "")>
                                 <label class="form-check-label" for="SwitchCheckLymphaticHeme">Lymphatic Heme</label>
                             </div>
 
@@ -1284,14 +1284,14 @@
                             <div class="col-lg-5">
                                 <div class="mb-3">
                                     <input type="text" class="form-control" id="organssystems_lymphatic_obs"
-                                           name="observationLymphaticHeme" placeholder="Enter an observation">
+                                           name="observationLymphaticHeme" placeholder="Enter an observation" value="@Model.Consultation.OrgansSystem.OrganssystemsLymphaticObs">
                                 </div>
                             </div>
                             <!-- #endregion Lymphatic Heme-->
                             <!-- #region Nervous System-->
                             <div class="form-check form-switch">
                                 <input class="form-check-input" name="SwitchCheckHighlystrung"
-                                       type="checkbox" role="switch" id="organssystems_nervous">
+                                       type="checkbox" role="switch" id="organssystems_nervous" @(Model.Consultation.OrgansSystem.OrganssystemsNervous == true ? "checked" : "")>
                                 <label class="form-check-label" for="SwitchCheckHighlystrung">Highly strung</label>
                             </div>
 
@@ -1299,7 +1299,7 @@
                             <div class="col-lg-5">
                                 <div class="mb-3">
                                     <input type="text" class="form-control" id="organssystems_nervous_obs"
-                                           name="observationHighlystrung" placeholder="Enter an observation">
+                                           name="observationHighlystrung" placeholder="Enter an observation" value="@Model.Consultation.OrgansSystem.OrganssystemsNervousObs">
                                 </div>
                             </div>
                             <!-- #endregion Nervous System-->

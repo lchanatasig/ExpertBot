@@ -437,7 +437,7 @@ namespace ExpertMed.Services
                         while (reader.Read())
                         {
                             consulta.SurgeriesConsultations.Add(new ConsultaCirugiaDTO
-                            { 
+                            {
                                 SurgeriesCatalogid = reader.IsDBNull(2) ? (int?)null : reader.GetInt32(2),
                                 SurgeriesObservation = reader.IsDBNull(3) ? null : reader.GetString(3),
                                 SurgeriesStatus = reader.IsDBNull(4) ? (int?)null : reader.GetInt32(4)
@@ -510,13 +510,56 @@ namespace ExpertMed.Services
                         reader.NextResult();
                         if (reader.Read())
                         {
-                            consulta.OrgansSystem = new OrgansSystem
+
+                            try
                             {
-                                 
+                                // Imprimir valores crudos desde la base de datos para depuración
+                                for (int i = 0; i < reader.FieldCount; i++)
+                                {
+                                    Console.WriteLine($"Columna {i} ({reader.GetName(i)}): {reader.GetValue(i)}");
+                                }
 
-                            };
+                                consulta.OrgansSystem = new OrgansSystem
+                                {
+
+                                    OrganssystemsOrgansenses = reader.IsDBNull(0) ? false : Convert.ToBoolean(reader.GetValue(0)),
+                                    OrganssystemsOrgansensesObs = reader.IsDBNull(1) ? null : reader.GetString(1),
+
+                                    OrganssystemsRespiratory = reader.IsDBNull(2) ? false : Convert.ToBoolean(reader.GetValue(2)),
+                                    OrganssystemsRespiratoryObs = reader.IsDBNull(3) ? null : reader.GetString(3),
+
+                                    OrganssystemsCardiovascular = reader.IsDBNull(4) ? false : Convert.ToBoolean(reader.GetValue(4)),
+                                    OrganssystemsCardiovascularObs = reader.IsDBNull(5) ? null : reader.GetString(5),
+
+                                    OrganssystemsDigestive = reader.IsDBNull(6) ? false : Convert.ToBoolean(reader.GetValue(6)),
+                                    OrganssystemsDigestiveObs = reader.IsDBNull(7) ? null : reader.GetString(7),
+
+                                    OrganssystemsGenital = reader.IsDBNull(8) ? false : Convert.ToBoolean(reader.GetValue(8)),
+                                    OrganssystemsGenitalObs = reader.IsDBNull(9) ? null : reader.GetString(9),
+
+                                    OrganssystemsUrinary = reader.IsDBNull(10) ? false : Convert.ToBoolean(reader.GetValue(10)),
+                                    OrganssystemsUrinaryObs = reader.IsDBNull(11) ? null : reader.GetString(11),
+
+                                    OrganssystemsSkeletalM = reader.IsDBNull(12) ? false : Convert.ToBoolean(reader.GetValue(12)),
+                                    OrganssystemsSkeletalMObs = reader.IsDBNull(13) ? null : reader.GetString(13),
+
+                                    OrganssystemsEndrocrine = reader.IsDBNull(14) ? false : Convert.ToBoolean(reader.GetValue(14)),
+                                    OrganssystemsEndocrine = reader.IsDBNull(15) ? null : reader.GetString(15),
+
+                                    OrganssystemsLymphatic = reader.IsDBNull(16) ? false : Convert.ToBoolean(reader.GetValue(16)),
+                                    OrganssystemsLymphaticObs = reader.IsDBNull(17) ? null : reader.GetString(17),
+
+                                    OrganssystemsNervous = reader.IsDBNull(18) ? false : Convert.ToBoolean(reader.GetValue(18)),
+                                    OrganssystemsNervousObs = reader.IsDBNull(19) ? null : reader.GetString(19),
+
+                                };
+
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine($"Error al mapear FamiliaryBackground: {ex.Message}");
+                            }
                         }
-
                         // Leer el examen físico
                         reader.NextResult();
                         if (reader.Read())
