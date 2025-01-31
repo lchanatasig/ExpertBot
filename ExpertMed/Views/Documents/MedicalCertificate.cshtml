@@ -6,6 +6,117 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Justificación Médica</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+            .header h1 {
+                font-size: 20px;
+                font-weight: bold;
+                margin: 0;
+            }
+
+            .header p {
+                font-size: 9px;
+                margin: 2px 0;
+            }
+
+        .content {
+            margin-top: 30px;
+        }
+
+            .content h2 {
+                font-size: 20px;
+                font-weight: bold;
+                text-align: center;
+                text-decoration: underline;
+                margin-bottom: 15px;
+            }
+
+            .content p {
+                font-size: 11px;
+                margin: 5px 0;
+            }
+
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #808080;
+            font-style: italic;
+        }
+
+        .signature {
+            margin-top: 20px;
+            border-top: 1px solid black;
+            padding-top: 20px;
+        }
+
+            .signature .left {
+                float: left;
+                font-size: 14px;
+                font-weight: bold;
+            }
+
+            .signature .right {
+                float: right;
+                font-size: 14px;
+                font-weight: bold;
+            }
+
+        .clear {
+            clear: both;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Dr. {{consulta.NombresMedico}} {{consulta.ApellidosMedico}}</h1>
+        <p>Colegiado No. {{consulta.CodigoMedico}}</p>
+        <p>Especialista en {{consulta.NombreEspecialidad}}</p>
+        <p>{{consulta.DireccionMedico}}</p>
+        <p>Teléfono: {{consulta.TelefonoMedico}}</p>
+        <p>Correo electrónico: {{consulta.EmailMedico}}</p>
+    </div>
+
+    <div class="content">
+        <p>Quito, {{DateTime.Now.ToString("dddd, dd 'de' MMMM 'de' yyyy", new CultureInfo("es-ES"))}}</p>
+        <h2>CERTIFICADO MÉDICO</h2>
+        <p>
+            Por medio de la presente, se hace constar que el/la paciente {{consulta.PrimerNombrePaciente}} {{consulta.PrimerApellidoPaciente}}, con documento de identidad {{consulta.CiPacientes}}, ha sido atendido/a en esta consulta el día {{consulta.FechaCreacion}}, debido a: {{string.Join(", ", consulta.Diagnosticos.Select(d => $"{d.CIE10DIA} - {d.NombreDiagnostico}"))}}.
+        </p>
+        <p>
+            {{consulta.FechaCreacion.HasValue
+            ? $"Se le ha indicado {consulta.DiasIncapacidad} días de incapacidad, por lo cual se recomienda que se abstenga de asistir a sus actividades desde {consulta.FechaCreacion.Value.ToString("dd/MM/yyyy")} hasta {consulta.FechaCreacion.Value.AddDays(consulta.DiasIncapacidad).ToString("dd/MM/yyyy")} durante dicho período."
+            : "La fecha de creación de la consulta no está disponible."}}
+        </p>
+        <p>
+            <strong>Su diagnóstico fue:</strong> {{string.Join(", ", consulta.Diagnosticos.Select(d => d.NombreDiagnostico)).ToString()}}
+        </p>
+    </div>
+
+    <div class="signature">
+        <div class="left">Dr. {{consulta.NombresMedico}} {{consulta.ApellidosMedico}}</div>
+        <div class="right">Firma y sello</div>
+        <div class="clear"></div>
+    </div>
+
+    <div class="footer">
+        Emitido el {{DateTime.Now.ToString("dd/MM/yyyy")}}
+    </div>
+</body>
+</html>
+<head>
+    <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Receta Médica IESS</title>

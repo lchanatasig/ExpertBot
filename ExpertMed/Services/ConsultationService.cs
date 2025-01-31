@@ -311,22 +311,226 @@ namespace ExpertMed.Services
         }
 
 
-        public DataSet GetConsultationDetails(int consultationId)
+        public Consulta GetConsultationDetails(int consultationId)
         {
-            using (SqlConnection connection = new SqlConnection(_dbContext.Database.GetConnectionString()))
+            var consulta = new Consulta();
+
+            using (var connection = new SqlConnection(_dbContext.Database.GetConnectionString()))
             {
-                using (SqlCommand command = new SqlCommand("sp_GetConsultationDetails", connection))
+                connection.Open();
+
+                using (var command = new SqlCommand("sp_GetConsultationDetails", connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.Add(new SqlParameter("@consultation_id", consultationId));
+                    command.Parameters.AddWithValue("@consultation_id", consultationId);
 
-                    SqlDataAdapter adapter = new SqlDataAdapter(command);
-                    DataSet dataSet = new DataSet();
-                    adapter.Fill(dataSet);
+                    using (var reader = command.ExecuteReader())
+                    {
+                        // Leer la consulta principal
+                        if (reader.Read())
+                        {
+                            consulta.ConsultationId = reader.GetInt32(0);
+                            consulta.ConsultationCreationdate = reader.IsDBNull(1) ? (DateTime?)null : reader.GetDateTime(1);
+                            consulta.ConsultationUsercreate = reader.IsDBNull(2) ? (int?)null : reader.GetInt32(2);
+                            consulta.ConsultationPatient = reader.GetInt32(3);
+                            consulta.ConsultationSpeciality = reader.IsDBNull(4) ? (int?)null : reader.GetInt32(4);
+                            consulta.ConsultationHistoryclinic = reader.GetString(5);
+                            consulta.ConsultationSequential = reader.IsDBNull(6) ? (int?)null : reader.GetInt32(6);
+                            consulta.ConsultationReason = reader.IsDBNull(7) ? null : reader.GetString(7);
+                            consulta.ConsultationDisease = reader.IsDBNull(8) ? null : reader.GetString(8);
+                            consulta.ConsultationFamiliaryname = reader.IsDBNull(9) ? null : reader.GetString(9);
+                            consulta.ConsultationWarningsings = reader.IsDBNull(10) ? null : reader.GetString(10);
+                            consulta.ConsultationNonpharmacologycal = reader.IsDBNull(11) ? null : reader.GetString(11);
+                            consulta.ConsultationFamiliarytype = reader.IsDBNull(12) ? (int?)null : reader.GetInt32(12);
+                            consulta.ConsultationFamiliaryphone = reader.IsDBNull(13) ? null : reader.GetString(13);
+                            consulta.ConsultationTemperature = reader.IsDBNull(14) ? null : reader.GetString(14);
+                            consulta.ConsultationRespirationrate = reader.IsDBNull(15) ? null : reader.GetString(15);
+                            consulta.ConsultationBloodpressuredAs = reader.IsDBNull(16) ? null : reader.GetString(16);
+                            consulta.ConsultationBloodpresuredDis = reader.IsDBNull(17) ? null : reader.GetString(17);
+                            consulta.ConsultationPulse = reader.GetString(18);
+                            consulta.ConsultationWeight = reader.GetString(19);
+                            consulta.ConsultationSize = reader.GetString(20);
+                            consulta.ConsultationTreatmentplan = reader.IsDBNull(21) ? null : reader.GetString(21);
+                            consulta.ConsultationObservation = reader.IsDBNull(22) ? null : reader.GetString(22);
+                            consulta.ConsultationPersonalbackground = reader.IsDBNull(23) ? null : reader.GetString(23);
+                            consulta.ConsultationDisablilitydays = reader.IsDBNull(24) ? (int?)null : reader.GetInt32(24);
+                            consulta.ConsultationType = reader.IsDBNull(25) ? (int?)null : reader.GetInt32(25);
+                            consulta.ConsultationStatus = reader.IsDBNull(26) ? (int?)null : reader.GetInt32(26);
+                        }
 
-                    return dataSet;
+                        // Leer los diagnósticos
+                        reader.NextResult();
+                        consulta.DiagnosisConsultations = new List<ConsultaDiagnosticoDTO>();
+                        while (reader.Read())
+                        {
+                            consulta.DiagnosisConsultations.Add(new ConsultaDiagnosticoDTO
+                            {
+                                DiagnosisDiagnosisid = reader.IsDBNull(1) ? (int?)null : reader.GetInt32(1),
+                                DiagnosisObservation = reader.IsDBNull(2) ? null : reader.GetString(2),
+                                DiagnosisPresumptive = reader.IsDBNull(3) ? (bool?)null : reader.GetBoolean(3),
+                                DiagnosisDefinitive = reader.IsDBNull(4) ? (bool?)null : reader.GetBoolean(4),
+                                DiagnosisStatus = reader.IsDBNull(6) ? (int?)null : reader.GetInt32(6)
+                            });
+                        }
+
+                        // Leer las alergias
+                        reader.NextResult();
+                        consulta.AllergiesConsultations = new List<ConsultaAlergiaDTO>();
+                        while (reader.Read())
+                        {
+                            consulta.AllergiesConsultations.Add(new ConsultaAlergiaDTO
+                            {
+                                AllergiesCatalogid = reader.GetInt32(1),
+                                AllergiesObservation = reader.IsDBNull(2) ? null : reader.GetString(2),
+                                AllergiesStatus = reader.IsDBNull(3) ? (int?)null : reader.GetInt32(3)
+                            });
+                        }
+
+                        // Leer las imágenes
+                        reader.NextResult();
+                        consulta.ImagesConsultations = new List<ConsultaImagenDTO>();
+                        while (reader.Read())
+                        {
+                            consulta.ImagesConsultations.Add(new ConsultaImagenDTO
+                            {
+                                ImagesImagesid = reader.IsDBNull(1) ? (int?)null : reader.GetInt32(1),
+                                ImagesAmount = reader.IsDBNull(2) ? null : reader.GetString(2),
+                                ImagesObservation = reader.IsDBNull(3) ? null : reader.GetString(3),
+                                ImagesSequential = reader.IsDBNull(4) ? (int?)null : reader.GetInt32(4),
+                                ImagesStatus = reader.IsDBNull(5) ? (int?)null : reader.GetInt32(5)
+                            });
+                        }
+
+                        // Leer los laboratorios
+                        reader.NextResult();
+                        consulta.LaboratoriesConsultations = new List<ConsultaLaboratorioDTO>();
+                        while (reader.Read())
+                        {
+                            consulta.LaboratoriesConsultations.Add(new ConsultaLaboratorioDTO
+                            {
+                                LaboratoriesLaboratoriesid = reader.IsDBNull(1) ? (int?)null : reader.GetInt32(1),
+                                LaboratoriesAmount = reader.IsDBNull(2) ? null : reader.GetString(2),
+                                LaboratoriesObservation = reader.IsDBNull(3) ? null : reader.GetString(3),
+                                LaboratoriesSequential = reader.IsDBNull(4) ? (int?)null : reader.GetInt32(4),
+                                LaboratoriesStatus = reader.IsDBNull(5) ? (int?)null : reader.GetInt32(5)
+                            });
+                        }
+
+                        // Leer los medicamentos
+                        reader.NextResult();
+                        consulta.MedicationsConsultations = new List<ConsultaMedicamentoDTO>();
+                        while (reader.Read())
+                        {
+                            consulta.MedicationsConsultations.Add(new ConsultaMedicamentoDTO
+                            {
+                                MedicationsMedicationsid = reader.IsDBNull(1) ? (int?)null : reader.GetInt32(1),
+                                MedicationsAmount = reader.IsDBNull(2) ? null : reader.GetString(2),
+                                MedicationsObservation = reader.IsDBNull(3) ? null : reader.GetString(3),
+                                MedicationsSequential = reader.IsDBNull(4) ? (int?)null : reader.GetInt32(4),
+                                MedicationsStatus = reader.IsDBNull(5) ? (int?)null : reader.GetInt32(5)
+                            });
+                        }
+
+                        // Leer las cirugías
+                        reader.NextResult();
+                        consulta.SurgeriesConsultations = new List<ConsultaCirugiaDTO>();
+                        while (reader.Read())
+                        {
+                            consulta.SurgeriesConsultations.Add(new ConsultaCirugiaDTO
+                            { 
+                                SurgeriesCatalogid = reader.IsDBNull(2) ? (int?)null : reader.GetInt32(2),
+                                SurgeriesObservation = reader.IsDBNull(3) ? null : reader.GetString(3),
+                                SurgeriesStatus = reader.IsDBNull(4) ? (int?)null : reader.GetInt32(4)
+                            });
+                        }
+
+                        // Leer los antecedentes familiares
+                        reader.NextResult();
+                        if (reader.Read())
+                        {
+                            try
+                            {
+                                // Imprimir valores crudos desde la base de datos para depuración
+                                for (int i = 0; i < reader.FieldCount; i++)
+                                {
+                                    Console.WriteLine($"Columna {i} ({reader.GetName(i)}): {reader.GetValue(i)}");
+                                }
+
+                                consulta.FamiliaryBackground = new FamiliaryBackground
+                                {
+                                    // Mapea las propiedades de FamiliaryBackground
+                                    FamiliaryBackgroundHeartdisease = reader.IsDBNull(0) ? false : Convert.ToBoolean(reader.GetValue(0)),
+                                    FamiliaryBackgroundHeartdiseaseObservation = reader.IsDBNull(1) ? null : reader.GetString(1),
+                                    FamiliaryBackgroundRelatshcatalogHeartdisease = reader.IsDBNull(2) ? (int?)null : reader.GetInt32(2),
+
+                                    FamiliaryBackgroundDiabetes = reader.IsDBNull(3) ? false : Convert.ToBoolean(reader.GetValue(3)),
+                                    FamiliaryBackgroundDiabetesObservation = reader.IsDBNull(4) ? null : reader.GetString(4),
+                                    FamiliaryBackgroundRelatshcatalogDiabetes = reader.IsDBNull(5) ? (int?)null : reader.GetInt32(5),
+
+                                    FamiliaryBackgroundDxcardiovascular = reader.IsDBNull(6) ? false : Convert.ToBoolean(reader.GetValue(6)),
+                                    FamiliaryBackgroundDxcardiovascularObservation = reader.IsDBNull(7) ? null : reader.GetString(7),
+                                    FamiliaryBackgroundRelatshcatalogDxcardiovascular = reader.IsDBNull(8) ? (int?)null : reader.GetInt32(8),
+
+                                    FamiliaryBackgroundHypertension = reader.IsDBNull(9) ? false : Convert.ToBoolean(reader.GetValue(9)),
+                                    FamiliaryBackgroundHypertensionObservation = reader.IsDBNull(10) ? null : reader.GetString(10),
+                                    FamiliaryBackgroundRelatshcatalogHypertension = reader.IsDBNull(11) ? (int?)null : reader.GetInt32(11),
+
+                                    FamiliaryBackgroundCancer = reader.IsDBNull(12) ? false : Convert.ToBoolean(reader.GetValue(12)),
+                                    FamiliaryBackgroundCancerObservation = reader.IsDBNull(13) ? null : reader.GetString(13),
+                                    FamiliaryBackgroundRelatshcatalogCancer = reader.IsDBNull(14) ? (int?)null : reader.GetInt32(14),
+
+                                    FamiliaryBackgroundTuberculosis = reader.IsDBNull(15) ? false : Convert.ToBoolean(reader.GetValue(15)),
+                                    FamiliaryBackgroundTuberculosisObservation = reader.IsDBNull(16) ? null : reader.GetString(16),
+                                    FamiliaryBackgroundRelatshTuberculosis = reader.IsDBNull(17) ? (int?)null : reader.GetInt32(17),
+
+                                    FamiliaryBackgroundDxmental = reader.IsDBNull(18) ? false : Convert.ToBoolean(reader.GetValue(18)),
+                                    FamiliaryBackgroundDxmentalObservation = reader.IsDBNull(19) ? null : reader.GetString(19),
+                                    FamiliaryBackgroundRelatshcatalogDxmental = reader.IsDBNull(20) ? (int?)null : reader.GetInt32(20),
+
+                                    FamiliaryBackgroundDxinfectious = reader.IsDBNull(21) ? false : Convert.ToBoolean(reader.GetValue(21)),
+                                    FamiliaryBackgroundDxinfectiousObservation = reader.IsDBNull(22) ? null : reader.GetString(22),
+                                    FamiliaryBackgroundRelatshcatalogDxinfectious = reader.IsDBNull(23) ? (int?)null : reader.GetInt32(23),
+
+                                    FamiliaryBackgroundMalformation = reader.IsDBNull(24) ? false : Convert.ToBoolean(reader.GetValue(24)),
+                                    FamiliaryBackgroundMalformationObservation = reader.IsDBNull(25) ? null : reader.GetString(25),
+                                    FamiliaryBackgroundRelatshcatalogMalformation = reader.IsDBNull(26) ? (int?)null : reader.GetInt32(26),
+
+                                    FamiliaryBackgroundOther = reader.IsDBNull(27) ? false : Convert.ToBoolean(reader.GetValue(27)),
+                                    FamiliaryBackgroundOtherObservation = reader.IsDBNull(28) ? null : reader.GetString(28),
+                                    FamiliaryBackgroundRelatshcatalogOther = reader.IsDBNull(29) ? (int?)null : reader.GetInt32(29),
+                                };
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine($"Error al mapear FamiliaryBackground: {ex.Message}");
+                            }
+                        }
+
+                        // Leer los sistemas de órganos
+                        reader.NextResult();
+                        if (reader.Read())
+                        {
+                            consulta.OrgansSystem = new OrgansSystem
+                            {
+                                 
+
+                            };
+                        }
+
+                        // Leer el examen físico
+                        reader.NextResult();
+                        if (reader.Read())
+                        {
+                            consulta.PhysicalExamination = new PhysicalExamination
+                            {
+                                // Mapea las propiedades de PhysicalExamination
+                            };
+                        }
+                    }
                 }
             }
+
+            return consulta;
         }
 
     }

@@ -27,6 +27,7 @@
         public DetailsPatientConsult DetailsPatient { get; set; }
         public List<DoctorPatient> Doctors { get; set; } // Lista de médicos asociados al paciente
 
+        public Consulta Consultation { get; set; }
 
         public virtual Catalog? PatientBloodtypeNavigation { get; set; }
 

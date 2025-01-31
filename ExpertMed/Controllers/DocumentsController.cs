@@ -22,22 +22,13 @@ namespace ExpertMed.Controllers
             _consultationService = consultationService;
         }
 
-        [HttpGet("{consultationId}")]
-        public IActionResult GetConsultationDetails(int consultationId)
-        {
-            var result = _consultationService.GetConsultationDetails(consultationId);
-            if (result.Tables.Count == 0)
-            {
-                return NotFound("No se encontraron detalles para la consulta proporcionada.");
-            }
-            return Ok(result);
-        }
+       
         public IActionResult MedicalCertificate()
         {
             return new ViewAsPdf("MedicalCertificate")
             {
-                PageSize = Rotativa.AspNetCore.Options.Size.A5,
-                PageOrientation = Rotativa.AspNetCore.Options.Orientation.Landscape
+                PageSize = Rotativa.AspNetCore.Options.Size.A4,
+                PageOrientation = Rotativa.AspNetCore.Options.Orientation.Portrait
 
             };
         }  
@@ -54,6 +45,7 @@ namespace ExpertMed.Controllers
             return new ViewAsPdf("MedicationRecipe")
             {
                 PageSize = Rotativa.AspNetCore.Options.Size.A5,
+                PageOrientation = Rotativa.AspNetCore.Options.Orientation.Landscape,
             };
         }
         public IActionResult LaboratoryDoc()

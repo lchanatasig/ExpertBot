@@ -1,0 +1,136 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Receta Médica</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .table-container {
+            width: 100%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse; /* Elimina los bordes duplicados entre celdas */
+        }
+
+        th, td {
+            padding: 6px; /* Espaciado reducido entre filas */
+            text-align: left;
+            font-size: 12px; /* Tamaño de fuente reducido */
+            border: none; /* Eliminar bordes */
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 10px; /* Tamaño de fuente para el pie de página */
+            color: #888;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .signature {
+            width: 45%; /* Ajusta el ancho de cada firma */
+            text-align: center;
+            font-size: 12px; /* Tamaño de fuente para firmas */
+        }
+
+            .signature p {
+                margin: 5px 0;
+            }
+    </style>
+</head>
+
+<body>
+    <table class="table-container">
+        <!-- Datos del médico en columnas A y B -->
+        <tr>
+            <td colspan="2" style="border-right:1px">
+                <p><strong>Nombre:</strong> Dr. Carlos Gómez</p>
+                <p><strong>Especialidad:</strong> Cardiología</p>
+                <p><strong>Email:</strong> cgomez@hospital.com</p>
+                <p><strong>Teléfono:</strong> +593 999 888 777</p>
+            </td>
+            <!-- Datos del médico en la columna B (redundante para simular como Excel) -->
+            <td colspan="2">
+                <p><strong>Nombre:</strong> Dr. Carlos Gómez</p>
+                <p><strong>Especialidad:</strong> Cardiología</p>
+                <p><strong>Email:</strong> cgomez@hospital.com</p>
+                <p><strong>Teléfono:</strong> +593 999 888 777</p>
+            </td>
+        </tr>
+
+        <!-- Datos del paciente en columnas C y D -->
+        <tr>
+            <td colspan="2">
+                <p><strong>Nombre:</strong> Juan Pérez</p>
+                <p><strong>Identificación:</strong> 0987654321</p>
+                <p><strong>Fecha:</strong> 31/01/2025</p>
+                <p><strong>Edad:</strong> 45</p>
+                <p><strong>Alergias:</strong> Penicilina y Mariscos</p>
+                <p><strong>Diagnóstico:</strong> Hipertensión arterial</p>
+            </td>
+        </tr>
+
+        <!-- Título de la receta -->
+        <tr>
+            <th colspan="4" style="text-align: center">PRESCRIPCIÓN</th>
+        </tr>
+
+        <!-- Detalles de la prescripción -->
+        <tr>
+            <td colspan="4">
+                <h2>Recomendaciones no Farmacológicas</h2>
+                <p>Ejercicio moderado diario y reducción de consumo de sodio.</p>
+            </td>
+        </tr>
+
+        <!-- Título de las indicaciones -->
+        <tr>
+            <th colspan="4" style="text-align: center">INDICACIONES</th>
+        </tr>
+
+        <!-- Detalles de las indicaciones -->
+        <tr>
+            <td colspan="4">
+                <h2>Recomendaciones no Farmacológicas</h2>
+                <p>Ejercicio moderado diario y reducción de consumo de sodio.</p>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Firmas del médico -->
+    <div class="footer">
+        <div class="signature">
+            <p><strong>Firma del Médico</strong></p>
+            <p>_______________________________</p>
+            <p>Dr. Carlos Gómez</p>
+            <p>Cardiología</p>
+        </div>
+        <div class="signature">
+            <p><strong>Firma del Médico</strong></p>
+            <p>_______________________________</p>
+            <p>Dr. Carlos Gómez</p>
+            <p>Cardiología</p>
+        </div>
+    </div>
+</body>
+</html>
