@@ -78,6 +78,19 @@
                 </tr>
                 <tr>
                     <td class="motivodes">
+                        <strong>Cirugias:</strong>
+                        @{
+                            var surgeriesName = Model.Consultation.SurgeriesConsultations?
+                            .Select(alle => Model.SurgeriesTypes
+                            .FirstOrDefault(d => d.CatalogId == alle.SurgeriesCatalogid)?.CatalogName ?? "N/A")
+                            .ToList() ?? new List<string>();
+                        }
+                        @string.Join(", ", surgeriesName)
+                    </td>
+
+                </tr>
+                <tr>
+                    <td class="motivodes">
                         <strong>Diagnostico:</strong>
                         @{
                             var ultimoDiagnosticoDefinitivo = Model.Consultation.DiagnosisConsultations?
@@ -104,7 +117,7 @@
                 <!-- Primera fila: check marks para cada antecedente -->
                 <tr>
                     <!-- 1. CARDIOPATÍA -->
-                    <td class="antf">1. CARDIOPATÍA</td>
+                    <td class="antf">1.CARDIOPATÍA</td>
                     <td class="antfx">
                         @if (Model.Consultation.FamiliaryBackground?.FamiliaryBackgroundHeartdisease == true)
                         {
@@ -471,46 +484,446 @@
 
         </table>
         <div class="spaciado"></div>
+
+
+
         <table class="MotivoConsulta">
             <thead>
                 <tr>
-                    <td class="motivotitle" colspan="15">5. REVISION ACTUAL DE ORGANOS Y SISTEMAS</td>
+                    <td class="motivotitle" colspan="15">
+                        5. REVISION ACTUAL DE ORGANOS Y SISTEMAS
+                    </td>
                 </tr>
                 <tr>
-                    <td style="background-color: #99ccff; height: 20px"></td>
-                    <td style="background-color: #99ccff; height: 20px; width: 10px; text-align: center;">CP</td>
-                    <td style="background-color: #99ccff; height: 20px; width: 10px; text-align: center;">SP</td>
-                    <td style="background-color: #99ccff; height: 20px"></td>
-                    <td style="background-color: #99ccff; height: 20px; width: 10px; text-align: center;">CP</td>
-                    <td style="background-color: #99ccff; height: 20px; width: 10px; text-align: center;">SP</td>
-                    <td style="background-color: #99ccff; height: 20px"></td>
-                    <td style="background-color: #99ccff; height: 20px; width: 10px; text-align: center;">CP</td>
-                    <td style="background-color: #99ccff; height: 20px; width: 10px; text-align: center;">SP</td>
-                    <td style="background-color: #99ccff; height: 20px"></td>
-                    <td style="background-color: #99ccff; height: 20px; width: 10px; text-align: center;">CP</td>
-                    <td style="background-color: #99ccff; height: 20px; width: 10px; text-align: center;">SP</td>
-                    <td style="background-color: #99ccff; height: 20px"></td>
-                    <td style="background-color: #99ccff; height: 20px; width: 10px; text-align: center;">CP</td>
-                    <td style="background-color: #99ccff; height: 20px; width: 10px; text-align: center;">SP</td>
-                </tr>
-                <tr>
-                    <td style="background-color: #ccffcc; height: 20px">1. ORGANOS DE LOS SENTIDOS</td>
-                    <td style="background-color: #ffff99; height: 20px; width: 10px; text-align: center;">CP</td>
-                    <td style="background-color: #ffff99; height: 20px; width: 10px; text-align: center;">SP</td>
-                    <td style="background-color: #ccffcc; height: 20px">2. RESPIRATORIO</td>
-                    <td style="background-color: #ffff99; height: 20px; width: 10px; text-align: center;">CP</td>
-                    <td style="background-color: #ffff99; height: 20px; width: 10px; text-align: center;">SP</td>
-                    <td style="background-color: #ccffcc; height: 20px"></td>
-                    <td style="background-color: #ffff99; height: 20px; width: 10px; text-align: center;">CP</td>
-                    <td style="background-color: #ffff99; height: 20px; width: 10px; text-align: center;">SP</td>
-                    <td style="background-color: #ccffcc; height: 20px"></td>
-                    <td style="background-color: #ffff99; height: 20px; width: 10px; text-align: center;">CP</td>
-                    <td style="background-color: #ffff99; height: 20px; width: 10px; text-align: center;">SP</td>
-                    <td style="background-color: #ccffcc; height: 20px"></td>
-                    <td style="background-color: #ffff99; height: 20px; width: 10px; text-align: center;">CP</td>
-                    <td style="background-color: #ffff99; height: 20px; width: 10px; text-align: center;">SP</td>
+                    <td class="header-cell"></td>
+                    <td class="header-cell">CP</td>
+                    <td class="header-cell">SP</td>
+                    <td class="header-cell"></td>
+                    <td class="header-cell">CP</td>
+                    <td class="header-cell">SP</td>
+                    <td class="header-cell"></td>
+                    <td class="header-cell">CP</td>
+                    <td class="header-cell">SP</td>
+                    <td class="header-cell"></td>
+                    <td class="header-cell">CP</td>
+                    <td class="header-cell">SP</td>
+                    <td class="header-cell"></td>
+                    <td class="header-cell">CP</td>
+                    <td class="header-cell">SP</td>
                 </tr>
             </thead>
+            <tbody>
+                @* Add a <tbody> tag *@
+                <tr>
+                    <td class="system-name">1 ÓRGANO DE LOS SENTIDOS</td>
+                    <td class="data-cell">@(Model.Consultation.OrgansSystem.OrganssystemsOrgansenses == true ? "X" : "")</td>
+                    <td class="data-cell">@(Model.Consultation.OrgansSystem.OrganssystemsOrgansenses == false ? "X" : "")</td>
+                    <td class="system-name">3 CARDIO VASCULAR</td>
+                    <td class="data-cell">@(Model.Consultation.OrgansSystem.OrganssystemsCardiovascular == true ? "X" : "")</td>
+                    <td class="data-cell">@(Model.Consultation.OrgansSystem.OrganssystemsCardiovascular == false ? "X" : "")</td>
+                    <td class="system-name">5. GENITAL</td>
+                    <td class="data-cell">@(Model.Consultation.OrgansSystem.OrganssystemsGenital == true ? "X" : "")</td>
+                    <td class="data-cell">@(Model.Consultation.OrgansSystem.OrganssystemsGenital == false ? "X" : "")</td>
+                    <td class="system-name">7.MUSCULO ESQUELETICO</td>
+                    <td class="data-cell">@(Model.Consultation.OrgansSystem.OrganssystemsSkeletalM == true ? "X" : "")</td>
+                    <td class="data-cell">@(Model.Consultation.OrgansSystem.OrganssystemsSkeletalM == false ? "X" : "")</td>
+                    <td class="system-name">9.HEMO LINFATICO</td>
+                    <td class="data-cell">@(Model.Consultation.OrgansSystem.OrganssystemsLymphatic == true ? "X" : "")</td>
+                    <td class="data-cell">@(Model.Consultation.OrgansSystem.OrganssystemsLymphatic == false ? "X" : "")</td>
+                </tr>
+                <tr>
+                    <td class="system-name">2.RESPIRATORIO</td>
+                    <td class="data-cell">@(Model.Consultation.OrgansSystem.OrganssystemsRespiratory == true ? "X" : "")</td>
+                    <td class="data-cell">@(Model.Consultation.OrgansSystem.OrganssystemsRespiratory == false ? "X" : "")</td>
+                    <td class="system-name">4. DIGESTIVO</td>
+                    <td class="data-cell">@(Model.Consultation.OrgansSystem.OrganssystemsDigestive == true ? "X" : "")</td>
+                    <td class="data-cell">@(Model.Consultation.OrgansSystem.OrganssystemsDigestive == false ? "X" : "")</td>
+                    <td class="system-name">6. URINARIO</td>
+                    <td class="data-cell">@(Model.Consultation.OrgansSystem.OrganssystemsUrinary == true ? "X" : "")</td>
+                    <td class="data-cell">@(Model.Consultation.OrgansSystem.OrganssystemsUrinary == false ? "X" : "")</td>
+                    <td class="system-name">8. ENDOCRINO</td>
+                    <td class="data-cell">@(Model.Consultation.OrgansSystem.OrganssystemsEndrocrine == true ? "X" : "")</td>
+                    <td class="data-cell">@(Model.Consultation.OrgansSystem.OrganssystemsEndrocrine == false ? "X" : "")</td>
+                    <td class="system-name">10. NERVIOSO</td>
+                    <td class="data-cell">@(Model.Consultation.OrgansSystem.OrganssystemsNervous == true ? "X" : "")</td>
+                    <td class="data-cell">@(Model.Consultation.OrgansSystem.OrganssystemsNervous == false ? "X" : "")</td>
+                </tr>
+
+
+                @* Dynamic Observation Row *@
+                @if (!string.IsNullOrEmpty(Model.Consultation.OrgansSystem.OrganssystemsOrgansensesObs)) // Check for null or empty observation
+                {
+                    <tr>
+                        <td colspan="15" class="observation-cell">
+                            <strong>Observaciones:</strong> @Model.Consultation.OrgansSystem.OrganssystemsOrgansensesObs)
+                        </td>
+                    </tr>
+                }
+                @if (!string.IsNullOrEmpty(Model.Consultation.OrgansSystem.OrganssystemsRespiratoryObs)) // Check for null or empty observation
+                {
+                    <tr>
+                        <td colspan="15" class="observation-cell">
+                            <strong>Observaciones:</strong> @Model.Consultation.OrgansSystem.OrganssystemsRespiratoryObs)
+                        </td>
+                    </tr>
+                }
+                @if (!string.IsNullOrEmpty(Model.Consultation.OrgansSystem.OrganssystemsCardiovascularObs)) // Check for null or empty observation
+                {
+                    <tr>
+                        <td colspan="15" class="observation-cell">
+                            <strong>Observaciones:</strong> @Model.Consultation.OrgansSystem.OrganssystemsCardiovascularObs)
+                        </td>
+                    </tr>
+                }
+                @if (!string.IsNullOrEmpty(Model.Consultation.OrgansSystem.OrganssystemsDigestiveObs)) // Check for null or empty observation
+                {
+                    <tr>
+                        <td colspan="15" class="observation-cell">
+                            <strong>Observaciones:</strong> @Model.Consultation.OrgansSystem.OrganssystemsDigestiveObs)
+                        </td>
+                    </tr>
+                }
+                @if (!string.IsNullOrEmpty(Model.Consultation.OrgansSystem.OrganssystemsGenitalObs)) // Check for null or empty observation
+                {
+                    <tr>
+                        <td colspan="15" class="observation-cell">
+                            <strong>Observaciones:</strong> @Model.Consultation.OrgansSystem.OrganssystemsGenitalObs)
+                        </td>
+                    </tr>
+                }
+                @if (!string.IsNullOrEmpty(Model.Consultation.OrgansSystem.OrganssystemsUrinaryObs)) // Check for null or empty observation
+                {
+                    <tr>
+                        <td colspan="15" class="observation-cell">
+                            <strong>Observaciones:</strong> @Model.Consultation.OrgansSystem.OrganssystemsUrinaryObs)
+                        </td>
+                    </tr>
+                }
+                @if (!string.IsNullOrEmpty(Model.Consultation.OrgansSystem.OrganssystemsSkeletalMObs)) // Check for null or empty observation
+                {
+                    <tr>
+                        <td colspan="15" class="observation-cell">
+                            <strong>Observaciones:</strong> @Model.Consultation.OrgansSystem.OrganssystemsSkeletalMObs)
+                        </td>
+                    </tr>
+                }
+                @if (!string.IsNullOrEmpty(Model.Consultation.OrgansSystem.OrganssystemsEndocrine)) // Check for null or empty observation
+                {
+                    <tr>
+                        <td colspan="15" class="observation-cell">
+                            <strong>Observaciones:</strong> @Model.Consultation.OrgansSystem.OrganssystemsEndocrine)
+                        </td>
+                    </tr>
+                }
+                @if (!string.IsNullOrEmpty(Model.Consultation.OrgansSystem.OrganssystemsLymphaticObs)) // Check for null or empty observation
+                {
+                    <tr>
+                        <td colspan="15" class="observation-cell">
+                            <strong>Observaciones:</strong> @Model.Consultation.OrgansSystem.OrganssystemsLymphaticObs)
+                        </td>
+                    </tr>
+                }
+                @if (!string.IsNullOrEmpty(Model.Consultation.OrgansSystem.OrganssystemsNervousObs)) // Check for null or empty observation
+                {
+                    <tr>
+                        <td colspan="15" class="observation-cell">
+                            <strong>Observaciones:</strong> @Model.Consultation.OrgansSystem.OrganssystemsNervousObs)
+                        </td>
+                    </tr>
+                }
+            </tbody> @* Close the <tbody> tag *@
+        </table>
+        <div class="spaciado"></div>
+        <table class="MotivoConsulta">
+
+            <thead>
+                <tr>
+                    <td class="motivotitle" colspan="15">
+                        6. SIGNOS VITALES Y ANTROPOMETRIA
+                    </td>
+
+                </tr>
+                <tr>
+                    <td style="background-color:ccffcc" class="sgvtitle"> FECHA DE MEDICION</td>
+                    <td class="sgvvalue"> @Model.Consultation.ConsultationCreationdate</td>
+                    <td class="sgvvalue"> </td>
+                    <td class="sgvvalue"> </td>
+                    <td class="sgvvalue"> </td>
+                    <td class="sgvvalue"> </td>
+                    <td class="sgvvalue"> </td>
+
+                </tr>
+                <tr>
+                    <td style="background-color:ccffcc" class="sgvtitle"> TEMPERATURA °C </td>
+                    <td class="sgvvalue"> @Model.Consultation.ConsultationTemperature °C</td>
+                    <td class="sgvvalue"> </td>
+                    <td class="sgvvalue"> </td>
+                    <td class="sgvvalue"> </td>
+                    <td class="sgvvalue"> </td>
+                    <td class="sgvvalue"> </td>
+                </tr>
+                <tr>
+                    <td class="sgvtitle">PRESION ARTERIAL</td>
+                    <td class="sgvvalueAs" style="width:2px">@Model.Consultation.ConsultationBloodpressuredAs| @Model.Consultation.ConsultationBloodpresuredDis</td>  @* Systolic *@
+                    <td class="sgvvalueAs"></td>  @* Diastolic *@
+                    <td class="sgvvalueAs"></td>  @* Empty cell for spacing or other data *@
+                    <td class="sgvvalueAs"></td>  @* Empty cell for spacing or other data *@
+                    <td class="sgvvalueAs"></td>  @* Empty cell for spacing or other data *@
+                    <td class="sgvvalueAs"></td>  @* Empty cell for spacing or other data *@
+
+                </tr>
+
+                <tr>
+                    <td class="sgvtitle">PULSO / min FRECUENCIA</td>
+                    <td class="sgvvalueAs" style="width:2px">@Model.Consultation.ConsultationPulse| @Model.Consultation.ConsultationRespirationrate</td>  @* Systolic *@
+                    <td class="sgvvalueAs"></td>  @* Diastolic *@
+                    <td class="sgvvalueAs"></td>  @* Empty cell for spacing or other data *@
+                    <td class="sgvvalueAs"></td>  @* Empty cell for spacing or other data *@
+                    <td class="sgvvalueAs"></td>  @* Empty cell for spacing or other data *@
+                    <td class="sgvvalueAs"></td>  @* Empty cell for spacing or other data *@
+
+                </tr>
+                <tr>
+                    <td class="sgvtitle">PESO / Kg TALLA / cm </td>
+                    <td class="sgvvalueAs" style="width:2px">@Model.Consultation.ConsultationSize| @Model.Consultation.ConsultationWeight</td>  @* Systolic *@
+                    <td class="sgvvalueAs"></td>  @* Diastolic *@
+                    <td class="sgvvalueAs"></td>  @* Empty cell for spacing or other data *@
+                    <td class="sgvvalueAs"></td>  @* Empty cell for spacing or other data *@
+                    <td class="sgvvalueAs"></td>  @* Empty cell for spacing or other data *@
+                    <td class="sgvvalueAs"></td>  @* Empty cell for spacing or other data *@
+
+                </tr>
+
+
+            </thead>
+
+        </table>
+        <div class="spaciado"></div>
+
+        <table class="MotivoConsulta">
+            <thead>
+                <tr>
+                    <td class="motivotitle" colspan="6">
+                        7 EXAMEN FÍSICO
+                    </td>
+                    <td class="motivotitle" style="font-size:11px" colspan="6">
+                        CP = CON EVIDENCIA DE PATOLOGÍA:
+                        MARCAR "X" Y DESCRIBIR
+
+                    </td>
+                    <td class="motivotitle" style="font-size:11px" colspan="8">
+                        SP = SIN EVIDENCIA DE PATOLOGÍA:
+                        MARCAR "X" Y NO DESCRIBIR
+                    </td>
+                </tr>
+                <tr>
+                    <td class="header-cell"></td>
+                    <td class="header-cell">CP</td>
+                    <td class="header-cell">SP</td>
+                    <td class="header-cell"></td>
+                    <td class="header-cell">CP</td>
+                    <td class="header-cell">SP</td>
+                    <td class="header-cell"></td>
+                    <td class="header-cell">CP</td>
+                    <td class="header-cell">SP</td>
+                    <td class="header-cell"></td>
+                    <td class="header-cell">CP</td>
+                    <td class="header-cell">SP</td>
+                    <td class="header-cell"></td>
+                    <td class="header-cell">CP</td>
+                    <td class="header-cell">SP</td>
+                    <td class="header-cell"></td>
+                    <td class="header-cell">CP</td>
+                    <td class="header-cell">SP</td>
+                </tr>
+            </thead>
+            <tbody>
+                @* Add a <tbody> tag *@
+                <tr>
+                    <td class="system-name">1 CABEZA</td>
+                    <td class="data-cell">@(Model.Consultation.PhysicalExamination.PhysicalexaminationHead == true ? "X" : "")</td>
+                    <td class="data-cell">@(Model.Consultation.PhysicalExamination.PhysicalexaminationHead == false ? "X" : "")</td>
+                    <td class="system-name">2 CUELLO</td>
+                    <td class="data-cell">@(Model.Consultation.PhysicalExamination.PhysicalexaminationNeck == true ? "X" : "")</td>
+                    <td class="data-cell">@(Model.Consultation.PhysicalExamination.PhysicalexaminationNeck == false ? "X" : "")</td>
+                    <td class="system-name">3. TORAX</td>
+                    <td class="data-cell">@(Model.Consultation.PhysicalExamination.PhysicalexaminationChest == true ? "X" : "")</td>
+                    <td class="data-cell">@(Model.Consultation.PhysicalExamination.PhysicalexaminationChest == false ? "X" : "")</td>
+                    <td class="system-name">4 ABDOMEN</td>
+                    <td class="data-cell">@(Model.Consultation.PhysicalExamination.PhysicalexaminationAbdomen == true ? "X" : "")</td>
+                    <td class="data-cell">@(Model.Consultation.PhysicalExamination.PhysicalexaminationAbdomen == false ? "X" : "")</td>
+                    <td class="system-name">5. PELVIS</td>
+                    <td class="data-cell">@(Model.Consultation.PhysicalExamination.PhysicalexaminationPelvis == true ? "X" : "")</td>
+                    <td class="data-cell">@(Model.Consultation.PhysicalExamination.PhysicalexaminationPelvis == false ? "X" : "")</td>
+                    <td class="system-name" style="text-align:left">6. EXTREMIDADES</td>
+                    <td class="data-cell">@(Model.Consultation.PhysicalExamination.PhysicalexaminationLimbs == true ? "X" : "")</td>
+                    <td class="data-cell">@(Model.Consultation.PhysicalExamination.PhysicalexaminationLimbs == false ? "X" : "")</td>
+                </tr>
+                @* Dynamic Observation Row *@
+                @if (!string.IsNullOrEmpty(Model.Consultation.PhysicalExamination.PhysicalexaminationHeadObs)) // Check for null or empty observation
+                {
+                    <tr>
+                        <td colspan="15" class="observation-cell">
+                            <strong>Observaciones:</strong> @Model.Consultation.PhysicalExamination.PhysicalexaminationHeadObs)
+                        </td>
+                    </tr>
+                }
+                @* Dynamic Observation Row *@
+                @if (!string.IsNullOrEmpty(Model.Consultation.PhysicalExamination.PhysicalexaminationNeckObs)) // Check for null or empty observation
+                {
+                    <tr>
+                        <td colspan="15" class="observation-cell">
+                            <strong>Observaciones:</strong> @Model.Consultation.PhysicalExamination.PhysicalexaminationNeckObs)
+                        </td>
+                    </tr>
+                }
+                @* Dynamic Observation Row *@
+                @if (!string.IsNullOrEmpty(Model.Consultation.PhysicalExamination.PhysicalexaminationChestObs)) // Check for null or empty observation
+                {
+                    <tr>
+                        <td colspan="15" class="observation-cell">
+                            <strong>Observaciones:</strong> @Model.Consultation.PhysicalExamination.PhysicalexaminationChestObs)
+                        </td>
+                    </tr>
+                }
+                @* Dynamic Observation Row *@
+                @if (!string.IsNullOrEmpty(Model.Consultation.PhysicalExamination.PhysicalexaminationAbdomenObs)) // Check for null or empty observation
+                {
+                    <tr>
+                        <td colspan="15" class="observation-cell">
+                            <strong>Observaciones:</strong> @Model.Consultation.PhysicalExamination.PhysicalexaminationAbdomenObs)
+                        </td>
+                    </tr>
+                }
+                @* Dynamic Observation Row *@
+                @if (!string.IsNullOrEmpty(Model.Consultation.PhysicalExamination.PhysicalexaminationPelvisObs)) // Check for null or empty observation
+                {
+                    <tr>
+                        <td colspan="15" class="observation-cell">
+                            <strong>Observaciones:</strong> @Model.Consultation.PhysicalExamination.PhysicalexaminationPelvisObs)
+                        </td>
+                    </tr>
+                }
+                @* Dynamic Observation Row *@
+                @if (!string.IsNullOrEmpty(Model.Consultation.PhysicalExamination.PhysicalexaminationLimbsObs)) // Check for null or empty observation
+                {
+                    <tr>
+                        <td colspan="15" class="observation-cell">
+                            <strong>Observaciones:</strong> @Model.Consultation.PhysicalExamination.PhysicalexaminationLimbsObs)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="spaciado"></div>
+        <table class="MotivoConsulta">
+            <thead>
+                <tr>
+                    <td class="motivotitle" colspan="4">
+                        8 DIAGNOSTICO
+                    </td>
+                    <td class="motivotitle" style="font-size:11px">
+                        PRE = PRESUNTIVO
+                        DEF = DEFINITIVO
+
+                    </td>
+                    <td class="motivotitle" style="font-size:11px" >
+                        CIE10
+                    </td>
+                    <td class="motivotitle" style="font-size:11px" >
+                      PRE
+                    </td>     <td class="motivotitle" style="font-size:11px" >
+                 DEF
+                    </td>
+                    </td>
+                    <td class="motivotitle" style="font-size:11px" colspan="16">
+                        
+                    </td> 
+         
+                    <td class="motivotitle" style="font-size:11px">
+                        CIE 10
+                    </td>
+                    <td class="motivotitle" style="font-size:11px" >
+                        PRE
+                    </td>
+                    <td class="motivotitle" style="font-size:11px" >
+                        DEF
+                    </td>
+                </tr>
+                <tr>
+                    @{
+                        var diagnosis = Model.Consultation.DiagnosisConsultations?
+                        .Select(alle => new
+                        {
+                            Description = Model.Diagnoses
+                        .FirstOrDefault(d => d.DiagnosisId == alle.DiagnosisDiagnosisid)?.DiagnosisDescription ?? "N/A",
+                            CIE10 = Model.Diagnoses
+                        .FirstOrDefault(d => d.DiagnosisId == alle.DiagnosisDiagnosisid)?.DiagnosisCie10 ?? "N/A",
+                            IsPresumptive = alle.DiagnosisPresumptive ?? false, // Manejo de nulos
+                            IsDefinitive = alle.DiagnosisDefinitive ?? false
+                        })
+                        .ToList(); // Eliminado '?? new List<dynamic>()'
+                    }
+
+                    @for (int i = 0; i < diagnosis.Count; i += 2)
+                    {
+                        var diag1 = diagnosis[i];
+                        var diag2 = (i + 1 < diagnosis.Count) ? diagnosis[i + 1] : null; // Verifica si hay segundo diagnóstico
+
+                    <tr>
+                        <!-- Primer diagnóstico -->
+                        <td class="sgvvalue" style="width: 20PX" >@diag1.Description</td>
+                        <td class="sgvvalue" style="width: 20PX" >@diag1.CIE10</td>
+                        <td class="sgvvalue" style="width: 20PX" >@(diag1.IsPresumptive ? "PRE" : "")</td>
+                        <td class="sgvvalue" style="width: 20PX" >@(diag1.IsDefinitive ? "DEF" : "")</td>
+
+
+                            @if (diag2 != null)
+                            {
+                            <!-- Segundo diagnóstico -->
+                            <td class="sgvvalue">@diag2.Description</td>
+
+                            <td class="sgvvalue">@diag2.CIE10</td>
+                            <td class="sgvvalue">@(diag2.IsPresumptive ? "PRE" : "")</td>
+                            <td class="sgvvalue">@(diag2.IsDefinitive ? "DEF" : "")</td>
+                            }
+                            else
+                            {
+                            <!-- Espacios vacíos si no hay segundo diagnóstico -->
+                            <td class="sgvvalue"></td>
+                            <td class="sgvvalue"></td>
+                            <td class="sgvvalue"></td>
+                            <td class="sgvvalue"></td>
+                            <td class="sgvvalue"></td>
+                            }
+                    </tr>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @* Add a <tbody> tag *@
+                <tr>
+                    <td class="system-name">1 CABEZA</td>
+                    <td class="data-cell">@(Model.Consultation.PhysicalExamination.PhysicalexaminationHead == true ? "X" : "")</td>
+                    <td class="data-cell">@(Model.Consultation.PhysicalExamination.PhysicalexaminationHead == false ? "X" : "")</td>
+                    <td class="system-name">2 CUELLO</td>
+                    <td class="data-cell">@(Model.Consultation.PhysicalExamination.PhysicalexaminationNeck == true ? "X" : "")</td>
+                    <td class="data-cell">@(Model.Consultation.PhysicalExamination.PhysicalexaminationNeck == false ? "X" : "")</td>
+                    <td class="system-name">3. TORAX</td>
+                    <td class="data-cell">@(Model.Consultation.PhysicalExamination.PhysicalexaminationChest == true ? "X" : "")</td>
+                    <td class="data-cell">@(Model.Consultation.PhysicalExamination.PhysicalexaminationChest == false ? "X" : "")</td>
+                    <td class="system-name">4 ABDOMEN</td>
+                    <td class="data-cell">@(Model.Consultation.PhysicalExamination.PhysicalexaminationAbdomen == true ? "X" : "")</td>
+                    <td class="data-cell">@(Model.Consultation.PhysicalExamination.PhysicalexaminationAbdomen == false ? "X" : "")</td>
+                    <td class="system-name">5. PELVIS</td>
+                    <td class="data-cell">@(Model.Consultation.PhysicalExamination.PhysicalexaminationPelvis == true ? "X" : "")</td>
+                    <td class="data-cell">@(Model.Consultation.PhysicalExamination.PhysicalexaminationPelvis == false ? "X" : "")</td>
+                    <td class="system-name" style="text-align:left">6. EXTREMIDADES</td>
+                    <td class="data-cell">@(Model.Consultation.PhysicalExamination.PhysicalexaminationLimbs == true ? "X" : "")</td>
+                    <td class="data-cell">@(Model.Consultation.PhysicalExamination.PhysicalexaminationLimbs == false ? "X" : "")</td>
+                </tr>
+              
+            </tbody>
         </table>
 
     </header>
