@@ -59,6 +59,16 @@ namespace ExpertMed.Models
 
         public int? ConsultationStatus { get; set; }
 
+        public string? UsersNames { get; set; }
+        public string? UsersSurcenames { get; set; }
+        public string? UsersEmail { get; set; }
+        public string? UsersPhone { get; set; }
+        public string? UsersEstablishmentName { get; set; }
+
+        public string? UsersEstablishmentAddress { get; set; }
+
+        public string? SpecialityName { get; set; }
+
         // Relaciones con otras tablas
         public List<ConsultaAlergiaDTO> AllergiesConsultations { get; set; } // Lista de alergias asociadas a la consulta
         public List<ConsultaCirugiaDTO> SurgeriesConsultations { get; set; } // Lista de cirugías asociadas a la consulta
@@ -66,6 +76,7 @@ namespace ExpertMed.Models
         public List<ConsultaLaboratorioDTO> LaboratoriesConsultations { get; set; } // Lista de laboratorios asociadosss
         public List<ConsultaImagenDTO> ImagesConsultations { get; set; } // Lista de imágenes asociadas
         public List<ConsultaDiagnosticoDTO> DiagnosisConsultations { get; set; }
+       
         public OrgansSystem OrgansSystem { get; set; } // Órganos y sistemas asociados
         public PhysicalExamination PhysicalExamination { get; set; } // Examen físico asociado
         public FamiliaryBackground FamiliaryBackground { get; set; } // Antecedentes familiares asociados

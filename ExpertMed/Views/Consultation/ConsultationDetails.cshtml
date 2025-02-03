@@ -472,6 +472,11 @@
                                         data-nexttab="steparrow-consultation-data-tab">
                                     Next
                                 </button>
+
+                                <a class="btn btn-outline-info"><i class="ri-calendar-todo-fill"></i> Agendar Cita seguimiento</a>
+
+                                <a asp-action="ConsultationList" asp-controller="Consultation" class="btn btn-outline-danger"><i class="fa fa-close"></i> Salir</a>
+
                             </div>
 
                         </div>
@@ -1053,10 +1058,14 @@
                                         data-previous="steparrow-gen-info-tab">
                                     Back
                                 </button>
+                                <a class="btn btn-outline-info"><i class="fa fa-close"></i> Agendar Cita seguimiento</a>
+
                                 <button type="button" class="btn btn-success nexttab"
                                         data-nexttab="steparrow-vital-signs-tab">
                                     Next
                                 </button>
+                                <a asp-action="ConsultationList" asp-controller="Consultation" class="btn btn-outline-danger"><i class="fa fa-close"></i> Salir</a>
+
                             </div>
 
                         </div>
@@ -1305,6 +1314,7 @@
                             <!-- #endregion Nervous System-->
                             <!-- #endregion Revision de organos y sistemas-->
 
+                         
                             <br /> <br />
 
                             <div class="divider-with-text">
@@ -1325,21 +1335,21 @@
                             <div class="col-lg-4">
                                 <div class="mb-3">
                                     <label for="temperatureInput" class="form-label">Temperature ºC *</label>
-                                    <input type="text" class="form-control" id="consultation_temperature" name="temperatureInput" placeholder="37.5" required>
+                                    <input type="text" class="form-control" id="consultation_temperature" name="temperatureInput"value="@Model.Consultation.ConsultationTemperature" placeholder="37.5" required>
                                 </div>
                             </div>
 
                             <div class="col-lg-4">
                                 <div class="mb-3">
                                     <label for="respiratoryRateInput" class="form-label"> Respiratory rate *</label>
-                                    <input type="text" class="form-control" id="consultation_respirationrate" name="respiratoryRateInput" placeholder="12" required>
+                                    <input type="text" class="form-control" id="consultation_respirationrate" name="respiratoryRateInput" value="@Model.Consultation.ConsultationRespirationrate" placeholder="12" required>
                                 </div>
                             </div>
 
                             <div class="col-lg-4">
                                 <div class="mb-3">
                                     <label for="bloodPressureInput" class="form-label"> Blood pressure * </label>
-                                    <input type="text" class="form-control" id="bloodPressureInput" name="bloodPressureInput" placeholder="/" required>
+                                    <input type="text" class="form-control" id="bloodPressureInput" name="bloodPressureInput" value="@Model.Consultation.ConsultationBloodpresuredDis / @Model.Consultation.ConsultationBloodpressuredAs" placeholder="/" required>
                                     <span>Si la presión es de dos cifras, anteceda el 0 antes del número. Ej: 046/123 siempre colocar como el ejemplo</span>
 
                                     <input type="hidden" name="PresionArterialDiastolica" id="consultation_bloodpresuredDIS" />
@@ -1351,14 +1361,14 @@
                             <div class="col-lg-4">
                                 <div class="mb-3">
                                     <label for="pulseMinuteInput" class="form-label"> Pulse per minute * </label>
-                                    <input type="text" class="form-control" id="consultation_pulse" name="pulseMinuteInput" placeholder="12" required>
+                                    <input type="text" class="form-control" id="consultation_pulse" name="pulseMinuteInput" value="@Model.Consultation.ConsultationPulse" placeholder="12" required>
                                 </div>
                             </div>
 
                             <div class="col-lg-4">
                                 <div class="mb-3">
                                     <label for="weightInput" class="form-label"> Weight * (Kg)</label>
-                                    <input type="text" class="form-control" id="consultation_weight" name="weightInput" placeholder="40" required>
+                                    <input type="text" class="form-control" id="consultation_weight" name="weightInput" value="@Model.Consultation.ConsultationWeight" placeholder="40" required>
                                 </div>
                             </div>
 
@@ -1366,7 +1376,7 @@
                             <div class="col-lg-4">
                                 <div class="mb-3">
                                     <label for="pointofsaleInput" class="form-label"> Size * (cm)</label>
-                                    <input type="text" class="form-control" id="consultation_size" name="weightInput" placeholder="160" required>
+                                    <input type="text" class="form-control" id="consultation_size" name="weightInput" value="@Model.Consultation.ConsultationSize" placeholder="160" required>
                                 </div>
                             </div>
                             <!-- #endregion Signos Vitales-->
@@ -1382,7 +1392,7 @@
                             <!-- #region  Head-->
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" role="switch"
-                                       id="physicalexamination_head">
+                                       id="physicalexamination_head" @(Model.Consultation.PhysicalExamination.PhysicalexaminationHead == true ? "checked" : "")>
                                 <label class="form-check-label" for="SwitchCheckHead">Head</label>
                             </div>
 
@@ -1391,7 +1401,7 @@
                                 <div class="mb-3">
 
                                     <input type="text" class="form-control" id="physicalexamination_head_obs"
-                                           name="observationHead" placeholder="Enter an observation">
+                                           name="observationHead" placeholder="Enter an observation" value="@Model.Consultation.PhysicalExamination.PhysicalexaminationHeadObs">
 
                                 </div>
                             </div>
@@ -1401,7 +1411,7 @@
 
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" role="switch"
-                                       id="physicalexamination_neck">
+                                       id="physicalexamination_neck" @(Model.Consultation.PhysicalExamination.PhysicalexaminationNeck == true ? "checked" : "")>
                                 <label class="form-check-label" for="SwitchCheckNeck">Neck</label>
                             </div>
 
@@ -1409,7 +1419,7 @@
                                 <div class="mb-3">
 
                                     <input type="text" class="form-control" id="physicalexamination_neck_obs"
-                                           name="observationNeck" placeholder="Enter an observation">
+                                           name="observationNeck" placeholder="Enter an observation" value="@Model.Consultation.PhysicalExamination.PhysicalexaminationNeckObs">
 
                                 </div>
                             </div>
@@ -1419,7 +1429,7 @@
 
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" role="switch"
-                                       id="physicalexamination_chest">
+                                       id="physicalexamination_chest" @(Model.Consultation.PhysicalExamination.PhysicalexaminationChest == true ? "checked" : "")>
                                 <label class="form-check-label" for="SwitchCheckNeck">Chest</label>
                             </div>
 
@@ -1427,7 +1437,7 @@
                                 <div class="mb-3">
 
                                     <input type="text" class="form-control" id="physicalexamination_chest_obs"
-                                           name="observationChest" placeholder="Enter an observation">
+                                           name="observationChest" placeholder="Enter an observation" value="@Model.Consultation.PhysicalExamination.PhysicalexaminationChestObs">
 
                                 </div>
                             </div>
@@ -1437,7 +1447,7 @@
 
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" role="switch"
-                                       id="physicalexamination_abdomen">
+                                       id="physicalexamination_abdomen" @(Model.Consultation.PhysicalExamination.PhysicalexaminationAbdomen == true ? "checked" : "")>
                                 <label class="form-check-label" for="SwitchCheckAbdomen">Abdomen</label>
                             </div>
 
@@ -1445,7 +1455,7 @@
                                 <div class="mb-3">
 
                                     <input type="text" class="form-control" id="physicalexamination_abdomen_obs"
-                                           name="observationAbdomen" placeholder="Enter an observation">
+                                           name="observationAbdomen" placeholder="Enter an observation" value="@Model.Consultation.PhysicalExamination.PhysicalexaminationAbdomenObs">
 
                                 </div>
                             </div>
@@ -1455,7 +1465,7 @@
 
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" role="switch"
-                                       id="physicalexamination_pelvis">
+                                       id="physicalexamination_pelvis" @(Model.Consultation.PhysicalExamination.PhysicalexaminationPelvis == true ? "checked" : "") >
                                 <label class="form-check-label" for="SwitchCheckPelvis">Pelvis</label>
                             </div>
 
@@ -1463,7 +1473,7 @@
                                 <div class="mb-3">
 
                                     <input type="text" class="form-control" id="physicalexamination_pelvis_obs"
-                                           name="observationPelvis" placeholder="Enter an observation">
+                                           name="observationPelvis" placeholder="Enter an observation" value="@Model.Consultation.PhysicalExamination.PhysicalexaminationPelvisObs">
 
                                 </div>
                             </div>
@@ -1473,7 +1483,7 @@
 
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" role="switch"
-                                       id="physicalexamination_limbs">
+                                       id="physicalexamination_limbs" @(Model.Consultation.PhysicalExamination.PhysicalexaminationLimbs == true ? "checked" : "")>
                                 <label class="form-check-label" for="SwitchCheckExtremities">Extremities</label>
                             </div>
 
@@ -1481,7 +1491,7 @@
                                 <div class="mb-3">
 
                                     <input type="text" class="form-control" id="physicalexamination_limbs_obs"
-                                           name="observationExtremities" placeholder="Enter an observation">
+                                           name="observationExtremities" placeholder="Enter an observation" value="@Model.Consultation.PhysicalExamination.PhysicalexaminationLimbsObs">
 
                                 </div>
                             </div>
@@ -1494,10 +1504,15 @@
                                         data-previous="steparrow-consultation-data-tab">
                                     Back
                                 </button>
+
+                                <a class="btn btn-outline-info"><i class="fa fa-close"></i> Agendar Cita seguimiento</a>
+
                                 <button type="button" class="btn btn-success nexttab"
                                         data-nexttab="steparrow-diagnostic-tab">
                                     Next
                                 </button>
+                                <a asp-action="ConsultationList" asp-controller="Consultation" class="btn btn-outline-danger"><i class="fa fa-close"></i> Salir</a>
+
                             </div>
 
                         </div>
@@ -1611,7 +1626,6 @@
                                             </div>
                                         </div>
 
-
                                         <table class="table table-nowrap" id="selectedDiagnosesTable">
                                             <thead>
                                                 <tr>
@@ -1623,10 +1637,36 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <!-- Las filas se agregarán dinámicamente aquí -->
+                                                @if (Model.Consultation.DiagnosisConsultations != null)
+                                                {
+                                                    foreach (var diag in Model.Consultation.DiagnosisConsultations)
+                                                    {
+                                                        <tr>
+                                                            <td hidden>@diag.DiagnosisDiagnosisid</td>
+                                                            <!-- Suponiendo que tienes el nombre en alguna propiedad, por ejemplo diag.DiagnosisName,
+                                                                 de lo contrario, podrías hacer una búsqueda en Model.Diagnoses -->
+                                                            <td>
+                                                                @* Si no cuentas con el nombre directamente, puedes buscarlo:
+                               Model.Diagnoses.FirstOrDefault(d => d.DiagnosisId == diag.DiagnosisDiagnosisid)?.DiagnosisName
+                             *@
+                                                                @(Model.Diagnoses.FirstOrDefault(d => d.DiagnosisId == diag.DiagnosisDiagnosisid)?.DiagnosisName ?? "N/A")
+                                                            </td>
+                                                            <td>
+                                                                <input type="checkbox" disabled @(diag.DiagnosisPresumptive == true ? "checked" : "") />
+                                                            </td>
+                                                            <td>
+                                                                <input type="checkbox" disabled @(diag.DiagnosisDefinitive == true ? "checked" : "") />
+                                                            </td>
+                                                            <td>
+                                                                <button class="btn btn-danger btn-sm">Eliminar</button>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
                                             </tbody>
                                         </table>
                                     </div>
+
 
 
 
@@ -1652,7 +1692,7 @@
                                             <div class="col-lg-12">
                                                 <div class="mb-3">
                                                     <textarea class="form-control" id="consultation_treatmentplan"
-                                                              rows="3"
+                                                              rows="3" asp-for="@Model.Consultation.ConsultationTreatmentplan"
                                                               placeholder="Enter a brief description, if you want to speak press the microphone"></textarea>
                                                     <i id="dictationIcon3" class=" ri-mic-fill position-absolute" style="top: 35px; right: 15px; cursor: pointer;"></i>
 
@@ -1689,13 +1729,12 @@
                                             <div class="col-lg-12">
                                                 <div class="mb-3">
                                                     <select name="MedicationsConsultation" id="MedicationsConsultation"
-                                                            class="form-control" data-choices
-                                                            data-choices-sorting-false>
+                                                            class="form-control" data-choices data-choices-sorting-false>
                                                         <option value="">Search and select a Medications</option>
-                                                        @foreach (var medications in Model.Medications)
+                                                        @foreach (var medication in Model.Medications)
                                                         {
-                                                            <option value="@medications.MedicationsId" data-name="@medications.MedicationsDescription">
-                                                                @medications.MedicationsDescription
+                                                            <option value="@medication.MedicationsId" data-name="@medication.MedicationsDescription">
+                                                                @medication.MedicationsDescription
                                                             </option>
                                                         }
                                                     </select>
@@ -1707,28 +1746,45 @@
                                             </div>
                                         </div>
 
-
                                         <table class="table table-nowrap" id="selectedMedicationsTable">
                                             <thead>
                                                 <tr>
-                                                    <th scope="col" hidden style="font-size: 12px;">Diagnosis ID</th>
-                                                    <th scope="col" style="font-size: 12px;">Diagnosis Name</th>
+                                                    <th scope="col" hidden style="font-size: 12px;">Medication ID</th>
+                                                    <th scope="col" style="font-size: 12px;">Medication Description</th>
                                                     <th scope="col" style="font-size: 12px;">Amount</th>
                                                     <th scope="col" style="font-size: 12px;">Observation</th>
                                                     <th scope="col" style="font-size: 12px;">Actions</th>
                                                 </tr>
                                             </thead>
-                                            <tbody id="medicationsTableBody">
-                                                <!-- Las filas se agregarán dinámicamente aquí -->
+                                            <tbody>
+                                                @if (Model.Consultation.MedicationsConsultations != null)
+                                                {
+                                                    foreach (var med in Model.Consultation.MedicationsConsultations)
+                                                    {
+                                                        <tr>
+                                                            <td hidden>@med.MedicationsMedicationsid</td>
+                                                            <td>
+                                                                @* Buscamos la descripción en la lista de medicamentos, en caso de que el DTO no la tenga directamente *@
+                                                                @(Model.Medications.FirstOrDefault(m => m.MedicationsId == med.MedicationsMedicationsid)?.MedicationsDescription ?? "N/A")
+                                                            </td>
+                                                            <td>@med.MedicationsAmount</td>
+                                                            <td>@med.MedicationsObservation</td>
+                                                            <td>
+                                                                <button class="btn btn-danger btn-sm">Eliminar</button>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
                                             </tbody>
                                         </table>
+
 
                                         <div class="row">
                                             <div class="col-lg-12">
                                                 <div class="mb-3">
                                                     <label>Recomendaciones no farmacologicas</label>
                                                     <textarea class="form-control" id="consultation_nonpharmacologycal"
-                                                              rows="3"
+                                                              rows="3" asp-for="Consultation.ConsultationNonpharmacologycal"
                                                               placeholder="Enter a brief description, if you want to speak press the microphone"></textarea>
                                                     <i id="dictationIcon4" class=" ri-mic-fill position-absolute" style="top: 35px; right: 15px; cursor: pointer;"></i>
 
@@ -1742,7 +1798,7 @@
                                                 <div class="mb-3">
                                                     <label>Signos de alarma</label>
                                                     <textarea class="form-control" id="consultation_warningsings"
-                                                              rows="3"
+                                                              rows="3" asp-for="Consultation.ConsultationWarningsings"
                                                               placeholder="Enter a brief description, if you want to speak press the microphone"></textarea>
                                                     <i id="dictationIcon5" class=" ri-mic-fill position-absolute" style="top: 35px; right: 15px; cursor: pointer;"></i>
 
@@ -1764,39 +1820,31 @@
                         <!-- #endregion Medicamentos-->
                         <!-- #region Imagenes-->
                         <div class="row">
-
                             <div class="col-xxl-12 col-lg-12">
-
                                 <div class="card" id="baccard">
-
                                     <div class="card-header" id="card-header-color">
                                         <h6 class="card-title mb-0">Images(Test)</h6>
                                     </div>
-
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-lg-12">
                                                 <div class="mb-3">
                                                     <select name="ImagesConsultation" id="ImagesConsultation"
-                                                            class="form-control" data-choices
-                                                            data-choices-sorting-false>
+                                                            class="form-control" data-choices data-choices-sorting-false>
                                                         <option value="">Search and select a Images</option>
-                                                        @foreach (var images in Model.Images)
+                                                        @foreach (var image in Model.Images)
                                                         {
-                                                            <option value="@images.ImagesId" data-name="@images.ImagesDescription">
-                                                                @images.ImagesDescription
+                                                            <option value="@image.ImagesId" data-name="@image.ImagesDescription">
+                                                                @image.ImagesDescription
                                                             </option>
                                                         }
                                                     </select>
                                                 </div>
                                             </div>
-
                                             <div class="col-lg-2">
                                                 <button type="button" class="btn btn-soft-success waves-effect waves-light" id="selectImages">Select</button>
                                             </div>
                                         </div>
-
-
                                         <table class="table table-nowrap" id="selectedImagesTable">
                                             <thead>
                                                 <tr>
@@ -1808,53 +1856,57 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <!-- Las filas se agregarán dinámicamente aquí -->
+                                                @if (Model.Consultation.ImagesConsultations != null)
+                                                {
+                                                    foreach (var img in Model.Consultation.ImagesConsultations)
+                                                    {
+                                                        <tr>
+                                                            <td hidden>@img.ImagesImagesid</td>
+                                                            <td>
+                                                                @(Model.Images.FirstOrDefault(i => i.ImagesId == img.ImagesImagesid)?.ImagesDescription ?? "N/A")
+                                                            </td>
+                                                            <td>@img.ImagesAmount</td>
+                                                            <td>@img.ImagesObservation</td>
+                                                            <td>
+                                                                <button class="btn btn-danger btn-sm">Eliminar</button>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
                                             </tbody>
                                         </table>
                                     </div>
-
-
-
                                 </div>
-
                             </div>
-
                         </div>
                         <!-- #endregion Imagenes-->
                         <!-- #region Laboratories-->
                         <div class="row">
-
                             <div class="col-xxl-12 col-lg-12">
-
                                 <div class="card" id="baccard">
-
                                     <div class="card-header" id="card-header-color">
                                         <h6 class="card-title mb-0">Laboratories(Test)</h6>
                                     </div>
-
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-lg-12">
                                                 <div class="mb-3">
                                                     <select name="LaboratoriesConsultation" id="LaboratoriesConsultation"
-                                                            class="form-control" data-choices
-                                                            data-choices-sorting-false>
+                                                            class="form-control" data-choices data-choices-sorting-false>
                                                         <option value="">Search and select a Laboratories</option>
-                                                        @foreach (var images in Model.Laboratories)
+                                                        @foreach (var lab in Model.Laboratories)
                                                         {
-                                                            <option value="@images.LaboratoriesId" data-name="@images.LaboratoriesDescription">
-                                                                @images.LaboratoriesDescription
+                                                            <option value="@lab.LaboratoriesId" data-name="@lab.LaboratoriesDescription">
+                                                                @lab.LaboratoriesDescription
                                                             </option>
                                                         }
                                                     </select>
                                                 </div>
                                             </div>
-
                                             <div class="col-lg-2">
                                                 <button type="button" class="btn btn-soft-success waves-effect waves-light" id="selectLaboratories">Select</button>
                                             </div>
                                         </div>
-
 
                                         <table class="table table-nowrap" id="selectedLaboratoriesTable">
                                             <thead>
@@ -1867,17 +1919,28 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <!-- Las filas se agregarán dinámicamente aquí -->
+                                                @if (Model.Consultation.LaboratoriesConsultations != null)
+                                                {
+                                                    foreach (var labConsulta in Model.Consultation.LaboratoriesConsultations)
+                                                    {
+                                                        <tr>
+                                                            <td hidden>@labConsulta.LaboratoriesLaboratoriesid</td>
+                                                            <td>
+                                                                @(Model.Laboratories.FirstOrDefault(l => l.LaboratoriesId == labConsulta.LaboratoriesLaboratoriesid)?.LaboratoriesDescription ?? "N/A")
+                                                            </td>
+                                                            <td>@labConsulta.LaboratoriesAmount</td>
+                                                            <td>@labConsulta.LaboratoriesObservation</td>
+                                                            <td>
+                                                                <button class="btn btn-danger btn-sm">Eliminar</button>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
                                             </tbody>
                                         </table>
                                     </div>
-
-
-
                                 </div>
-
                             </div>
-
                         </div>
                         <!-- #endregion Laboratories-->
                         <!--region dias incapacidad-->
@@ -1895,7 +1958,7 @@
                                         <div class="row">
                                             <div class="col-lg-12">
                                                 <div class="mb-3">
-                                                    <input type="type" name="diasincapacidad" value="" id="consultation_disablilitydays" />
+                                                    <input type="type" name="diasincapacidad" value="@Model.Consultation.ConsultationDisablilitydays" id="consultation_disablilitydays" />
                                                 </div>
                                             </div>
 
@@ -1928,7 +1991,7 @@
                                             <div class="col-lg-12">
                                                 <div class="mb-3">
                                                     <textarea class="form-control" id="consultation_observation"
-                                                              rows="3"
+                                                              rows="3" asp-for="@Model.Consultation.ConsultationObservation"
                                                               placeholder="Enter a brief description, if you want to speak press the microphone"></textarea>
                                                     <i id="dictationIcon6" class=" ri-mic-fill position-absolute" style="top: 35px; right: 15px; cursor: pointer;"></i>
 
@@ -1950,9 +2013,8 @@
                         <!--end region observacion-->
 
                         <div class="form-group">
-                            <a asp-action="ListarConsultas" asp-controller="Consultation" class="btn btn-outline-danger"><i class="fa fa-close"></i> Salir</a>
+                            <a asp-action="ConsultationList" asp-controller="Consultation" class="btn btn-outline-danger"><i class="fa fa-close"></i> Salir</a>
 
-                            <button type="submit" class="btn btn-outline-primary"><i class="fa fa-save"></i> Guardar Consulta</button>
 
                             <a class="btn btn-outline-info"><i class="fa fa-close"></i> Agendar Cita seguimiento</a>
 
@@ -2008,6 +2070,33 @@
         });
     </script>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Selecciona todos los switches
+            const switches = document.querySelectorAll(".form-check-input");
+
+            switches.forEach(switchElement => {
+                // Obtén el contenedor del switch
+                const formCheckDiv = switchElement.closest(".form-check");
+                if (!formCheckDiv) return;
+
+                // Asume que el contenedor del campo de observación es el siguiente elemento
+                const observationContainer = formCheckDiv.nextElementSibling;
+                if (!observationContainer) return;
+
+                // Función para actualizar la visibilidad del contenedor de observación
+                const updateVisibility = () => {
+                    observationContainer.style.display = switchElement.checked ? "block" : "none";
+                };
+
+                // Aplica la lógica inicial al cargar la página
+                updateVisibility();
+
+                // Agrega el evento para actualizar cuando cambie el switch
+                switchElement.addEventListener("change", updateVisibility);
+            });
+        });
+    </script>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {

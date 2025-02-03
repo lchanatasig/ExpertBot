@@ -1,13 +1,15 @@
 ﻿@{
     Layout = null;
 }
+@using System.Globalization
 
+@model NewPatientViewModel
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Justificación Médica</title>
+    <title>Certificado Médico</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -29,22 +31,24 @@
                 font-size: 9px;
                 margin: 2px 0;
             }
+            
+        .division {
+            border: 3px solid black
+        }
 
         .content {
-            margin-top: 30px;
+            margin-top: 40px;
         }
 
             .content h2 {
-                font-size: 20px;
+                font-size: 30px;
                 font-weight: bold;
                 text-align: center;
-                text-decoration: underline;
                 margin-bottom: 15px;
             }
 
             .content p {
-                font-size: 11px;
-                margin: 5px 0;
+                font-size: 23px;
             }
 
         .footer {
@@ -57,19 +61,24 @@
 
         .signature {
             margin-top: 20px;
-            border-top: 1px solid black;
-            padding-top: 20px;
+            padding-top: 150px;
         }
 
             .signature .left {
                 float: left;
-                font-size: 14px;
-                font-weight: bold;
+                font-size: 20px;
+                font-weight: lighter;
             }
 
             .signature .right {
                 float: right;
-                font-size: 14px;
+                font-size: 20px;
+                font-weight: bold;
+            }
+
+            .signature p {
+                float: right;
+                font-size: 20px;
                 font-weight: bold;
             }
 
@@ -80,165 +89,107 @@
 </head>
 <body>
     <div class="header">
-        <h1>Dr. {{consulta.NombresMedico}} {{consulta.ApellidosMedico}}</h1>
-        <p>Colegiado No. {{consulta.CodigoMedico}}</p>
-        <p>Especialista en {{consulta.NombreEspecialidad}}</p>
-        <p>{{consulta.DireccionMedico}}</p>
-        <p>Teléfono: {{consulta.TelefonoMedico}}</p>
-        <p>Correo electrónico: {{consulta.EmailMedico}}</p>
+        <img src="~/assets/images/Logo-IESS-1.png" style="width: 400px" />
+        <div class="division"></div>
     </div>
 
     <div class="content">
-        <p>Quito, {{DateTime.Now.ToString("dddd, dd 'de' MMMM 'de' yyyy", new CultureInfo("es-ES"))}}</p>
+        <br />
+        <br />
+
+        <h3 style="text-align: end; font-family: Arial;">
+            @{
+                // Obtener la fecha inicial (nullable)
+                var fechaInicial = Model.Consultation.ConsultationCreationdate;
+
+                // Obtener los días de descanso (nullable)
+                var diasDescanso = Model.Consultation.ConsultationDisablilitydays;
+
+                // Declarar variables para fechas formateadas
+                string fechaInicialFormateada = "";
+                string fechaFinalFormateada = "";
+
+                // Verificar si la fecha inicial y los días de descanso tienen valor
+                if (fechaInicial.HasValue && diasDescanso.HasValue)
+                {
+                    // Convertir días de descanso a double (no nullable)
+                    double diasDescansoDouble = diasDescanso.Value;
+
+                    // Calcular la fecha final sumando los días de descanso
+                    var fechaFinal = fechaInicial.Value.AddDays(diasDescansoDouble);
+
+                    // Formatear la fecha inicial
+                    fechaInicialFormateada = String.Format(CultureInfo.CreateSpecificCulture("es-ES"), "{0:dddd dd MMMM yyyy}", fechaInicial.Value);
+                    var fechaInicialCapitalizada = char.ToUpper(fechaInicialFormateada[0]) + fechaInicialFormateada.Substring(1);
+
+                    // Formatear la fecha final
+                    fechaFinalFormateada = String.Format(CultureInfo.CreateSpecificCulture("es-ES"), "{0:dddd dd MMMM yyyy}", fechaFinal);
+
+                    // Mostrar la fecha inicial
+                    <text>Quito, @fechaInicialCapitalizada</text>
+                }
+                else
+                {
+                // Mostrar un mensaje alternativo si la fecha o los días de descanso son null
+                    <text>Quito, Fecha o días de descanso no disponibles</text>
+                }
+            }
+        </h3>
+        <br />
+        <br />
         <h2>CERTIFICADO MÉDICO</h2>
-        <p>
-            Por medio de la presente, se hace constar que el/la paciente {{consulta.PrimerNombrePaciente}} {{consulta.PrimerApellidoPaciente}}, con documento de identidad {{consulta.CiPacientes}}, ha sido atendido/a en esta consulta el día {{consulta.FechaCreacion}}, debido a: {{string.Join(", ", consulta.Diagnosticos.Select(d => $"{d.CIE10DIA} - {d.NombreDiagnostico}"))}}.
+        <p style="text-align: justify; max-width: 880px; margin: 0 auto;">
+            @{
+                var ultimoDiagnosticoDefinitivo = Model.Consultation.DiagnosisConsultations
+                ?.Where(d => d.DiagnosisDefinitive == true)
+                .OrderByDescending(d => d.DiagnosisDiagnosisid) // Ajusta si el ID no indica el más reciente
+                .FirstOrDefault();
+
+                var nombreDiagnostico = ultimoDiagnosticoDefinitivo != null
+                ? Model.Diagnoses.FirstOrDefault(d => d.DiagnosisId == ultimoDiagnosticoDefinitivo.DiagnosisDiagnosisid)?.DiagnosisName ?? "N/A"
+                : "N/A";
+            }
+
+            @Html.Raw("Certifico que el sr(a) <strong>" +
+                     Model.DetailsPatient.PatientFirstsurname + " " +
+                     Model.DetailsPatient.PatientSecondlastname + " " +
+                     Model.DetailsPatient.PatientFirstname + " " +
+                     Model.DetailsPatient.PatientMiddlename + "</strong> con CI: " +
+                     Model.DetailsPatient.PatientDocumentnumber +
+                     " fue ingresado en este establecimiento, se recomienda reposo ABSOLUTO POR " +
+                     Model.Consultation.ConsultationDisablilitydays +
+                     " DIAS, conjuntamente con tratamiento prescrito, desde el día " +
+                     fechaInicialFormateada + " hasta el día " +
+                     fechaFinalFormateada + ", con un diagnóstico de <strong>" +
+                     nombreDiagnostico + "</strong>")
+                     <br />
+                     <br />
+            Esto es todo lo que puedo certificar en honor a la verdad.
+       
         </p>
-        <p>
-            {{consulta.FechaCreacion.HasValue
-            ? $"Se le ha indicado {consulta.DiasIncapacidad} días de incapacidad, por lo cual se recomienda que se abstenga de asistir a sus actividades desde {consulta.FechaCreacion.Value.ToString("dd/MM/yyyy")} hasta {consulta.FechaCreacion.Value.AddDays(consulta.DiasIncapacidad).ToString("dd/MM/yyyy")} durante dicho período."
-            : "La fecha de creación de la consulta no está disponible."}}
-        </p>
-        <p>
-            <strong>Su diagnóstico fue:</strong> {{string.Join(", ", consulta.Diagnosticos.Select(d => d.NombreDiagnostico)).ToString()}}
-        </p>
+    
+
     </div>
 
     <div class="signature">
-        <div class="left">Dr. {{consulta.NombresMedico}} {{consulta.ApellidosMedico}}</div>
-        <div class="right">Firma y sello</div>
-        <div class="clear"></div>
-    </div>
 
-    <div class="footer">
-        Emitido el {{DateTime.Now.ToString("dd/MM/yyyy")}}
-    </div>
-</body>
-</html>
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Receta Médica IESS</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
 
-        .wrapper {
-            width: 100%;
-            overflow: hidden; /* Limpia los floats */
-        }
+        <div class="left">
+            ATENTAMENTE,
+            <div style="padding-top: 100px">
 
-        .container {
-            width: 48%; /* Ancho de cada columna */
-            float: left; /* Coloca los contenedores uno al lado del otro */
-            padding: 10px;
-            border: 1px solid #000;
-            box-sizing: border-box; /* Incluye el padding y el borde en el ancho */
-        }
-
-            .container:last-child {
-                float: right; /* La segunda columna se alinea a la derecha */
-            }
-
-        h1 {
-            text-align: center;
-            font-size: 24px;
-            color: #2e6f94;
-            width: 100%;
-        }
-
-        .section {
-            margin-bottom: 20px;
-        }
-
-            .section p {
-                margin: 8px 0;
-                font-size: 14px;
-            }
-
-        .medication {
-            margin-top: 20px;
-        }
-
-            .medication p {
-                margin: 8px 0;
-                font-size: 14px;
-            }
-
-        .signature {
-            margin-top: 30px;
-            text-align: center;
-            font-size: 14px;
-        }
-
-        .footer {
-            text-align: center;
-            font-size: 12px;
-            color: #888;
-            margin-top: 20px;
-            clear: both; /* Limpia los floats para que el footer no se superponga */
-        }
-    </style>
-</head>
-<body>
-
-    <div class="wrapper">
-        <!-- Contenedor izquierdo: Información del paciente y médico -->
-        <div class="container">
-            <h1>Receta Médica</h1>
-            <div class="section">
-                <p><strong>Nombre del paciente:</strong> [Nombre del paciente]</p>
-                <p><strong>Identificación:</strong> [Cédula o Pasaporte]</p>
-                <p><strong>Fecha:</strong> @DateTime.Now.ToString("dd/MM/yyyy")</p>
             </div>
-            <div class="section">
-                <p><strong>Nombre del médico:</strong> [Nombre del médico]</p>
-                <p><strong>Cédula profesional:</strong> [Cédula del médico]</p>
-                <p><strong>Especialidad:</strong> [Especialidad del médico]</p>
-            </div>
+            <p>
+                Dr. @Model.Consultation.UsersNames @Model.Consultation.UsersSurcenames
+                <br />
+                @Model.Consultation.SpecialityName
+            </p>
         </div>
 
-        <!-- Contenedor derecho: Medicamentos recetados y firma -->
-        <div class="container">
-            <h2>Medicamentos Recetados</h2>
-            <div class="medication">
-                <p><strong>Medicamento 1:</strong> [Nombre del medicamento]</p>
-                <p><strong>Dosis:</strong> [Dosis recomendada]</p>
-                <p><strong>Frecuencia:</strong> [Frecuencia]</p>
-                <p><strong>Duración:</strong> [Duración del tratamiento]</p>
-            </div>
-            <div class="medication">
-                <p><strong>Medicamento 2:</strong> [Nombre del medicamento]</p>
-                <p><strong>Dosis:</strong> [Dosis recomendada]</p>
-                <p><strong>Frecuencia:</strong> [Frecuencia]</p>
-                <p><strong>Duración:</strong> [Duración del tratamiento]</p>
-            </div>
 
-            <div class="section">
-                <h2>Instrucciones</h2>
-                <p>[Instrucciones adicionales del médico sobre la medicación]</p>
-            </div>
-
-            <!-- Firma del médico -->
-            <div class="signature">
-                <p><strong>Firma del Médico</strong></p>
-                <p>_______________________________</p>
-                <p>[Nombre del médico]</p>
-                <p>[Número de cédula del médico]</p>
-                <p>[Especialidad]</p>
-            </div>
-        </div>
+       
     </div>
 
-    <!-- Pie de página -->
-    <div class="footer">
-        <p>Receta válida solo con sello y firma del médico. © 2025 IESS</p>
-    </div>
 
 </body>
 </html>

@@ -208,7 +208,7 @@
             myModal.show();
         }
 
-              function openReviewConsulta() {
+            function openReviewConsulta() {
             // Obtener el consultationId desde el input oculto
             var consultationId = document.getElementById('consultationId').value;
             if (!consultationId) {
@@ -235,11 +235,19 @@
         }
 
         // Descargar documento según la opción seleccionada
+             // Descargar documento según la opción seleccionada
         function downloadDocument() {
             const selectedValue = document.getElementById('documentType').value;
             const downloadButton = document.getElementById('downloadButton');
             const downloadText = document.getElementById('downloadText');
             const downloadSpinner = document.getElementById('downloadSpinner');
+
+            // Obtener el consultationId desde el input oculto
+            const consultationId = document.getElementById('consultationId').value;
+            if (!consultationId) {
+                alert("No se encontró un ID de consulta válido.");
+                return;
+            }
 
             if (!downloadButton || !downloadText || !downloadSpinner) {
                 console.error("Elementos del botón de descarga no encontrados.");
@@ -260,9 +268,10 @@
                 imagen: "/Documents/ImageDoc"
             };
 
-            // Abrir el documento si la opción es válida
+            // Si la opción es válida, agregar el consultationId como query parameter
             if (actions[selectedValue]) {
-                window.open(actions[selectedValue], '_blank');
+                const url = actions[selectedValue] + "?consultationId=" + encodeURIComponent(consultationId);
+                window.open(url, '_blank');
             } else {
                 alert("Opción no válida.");
             }
@@ -274,6 +283,7 @@
                 downloadButton.disabled = false;
             }, 2000);
         }
+
     </script>
 @* 
     @if (!string.IsNullOrEmpty(successMessage))

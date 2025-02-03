@@ -356,6 +356,13 @@ namespace ExpertMed.Services
                             consulta.ConsultationDisablilitydays = reader.IsDBNull(24) ? (int?)null : reader.GetInt32(24);
                             consulta.ConsultationType = reader.IsDBNull(25) ? (int?)null : reader.GetInt32(25);
                             consulta.ConsultationStatus = reader.IsDBNull(26) ? (int?)null : reader.GetInt32(26);
+                            consulta.UsersNames = reader.IsDBNull(27) ? null : reader.GetString(27);
+                            consulta.UsersSurcenames = reader.IsDBNull(28) ? null : reader.GetString(28);
+                            consulta.UsersEmail = reader.IsDBNull(29) ? null : reader.GetString(29);
+                            consulta.UsersPhone = reader.IsDBNull(30) ? null : reader.GetString(30);
+                            consulta.UsersEstablishmentName = reader.IsDBNull(31) ? null : reader.GetString(31);
+                            consulta.UsersEstablishmentAddress = reader.IsDBNull(32) ? null : reader.GetString(32);
+                            consulta.SpecialityName = reader.IsDBNull(33) ? null : reader.GetString(33);
                         }
 
                         // Leer los diagnósticos
@@ -557,17 +564,49 @@ namespace ExpertMed.Services
                             }
                             catch (Exception ex)
                             {
-                                Console.WriteLine($"Error al mapear FamiliaryBackground: {ex.Message}");
+                                Console.WriteLine($"Error al mapear OrgansSystems: {ex.Message}");
                             }
                         }
                         // Leer el examen físico
                         reader.NextResult();
                         if (reader.Read())
                         {
-                            consulta.PhysicalExamination = new PhysicalExamination
+
+                            try
                             {
-                                // Mapea las propiedades de PhysicalExamination
-                            };
+                                // Imprimir valores crudos desde la base de datos para depuración
+                                for (int i = 0; i < reader.FieldCount; i++)
+                                {
+                                    Console.WriteLine($"Columna {i} ({reader.GetName(i)}): {reader.GetValue(i)}");
+                                }
+                                consulta.PhysicalExamination = new PhysicalExamination
+                                {
+                                    // Mapea las propiedades de PhysicalExamination
+                                    PhysicalexaminationHead = reader.IsDBNull(0) ? false : Convert.ToBoolean(reader.GetValue(0)),
+                                    PhysicalexaminationHeadObs = reader.IsDBNull(1) ? null : reader.GetString(1),
+
+                                    PhysicalexaminationNeck = reader.IsDBNull(2) ? false : Convert.ToBoolean(reader.GetValue(2)),
+                                    PhysicalexaminationNeckObs = reader.IsDBNull(3) ? null : reader.GetString(3),
+
+                                    PhysicalexaminationChest = reader.IsDBNull(4) ? false : Convert.ToBoolean(reader.GetValue(4)),
+                                    PhysicalexaminationChestObs = reader.IsDBNull(5) ? null : reader.GetString(5),
+
+                                    PhysicalexaminationAbdomen = reader.IsDBNull(6) ? false : Convert.ToBoolean(reader.GetValue(6)),
+                                    PhysicalexaminationAbdomenObs = reader.IsDBNull(7) ? null : reader.GetString(7),
+
+                                    PhysicalexaminationPelvis = reader.IsDBNull(8) ? false : Convert.ToBoolean(reader.GetValue(8)),
+                                    PhysicalexaminationPelvisObs = reader.IsDBNull(9) ? null : reader.GetString(9),
+
+                                    PhysicalexaminationLimbs = reader.IsDBNull(10) ? false : Convert.ToBoolean(reader.GetValue(10)),
+                                    PhysicalexaminationLimbsObs = reader.IsDBNull(11) ? null : reader.GetString(11),
+                                };
+
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine($"Error al mapear Physical: {ex.Message}");
+                            }
+
                         }
                     }
                 }

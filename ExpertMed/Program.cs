@@ -1,6 +1,7 @@
 using ExpertMed.Models;
 using ExpertMed.Services;
 using Microsoft.EntityFrameworkCore;
+using Rotativa.Core;
 
 namespace ExpertMed
 {
@@ -44,6 +45,8 @@ namespace ExpertMed
             {
                 options.JsonSerializerOptions.Converters.Add(new JsonTimeOnlyConverter());
             });
+
+            QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
 
             var app = builder.Build();
 

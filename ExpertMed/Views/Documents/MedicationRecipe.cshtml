@@ -1,136 +1,232 @@
 ﻿@{
     Layout = null;
 }
+@model NewPatientViewModel
 
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Receta Médica</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        .table-container {
-            width: 100%;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse; /* Elimina los bordes duplicados entre celdas */
-        }
-
-        th, td {
-            padding: 6px; /* Espaciado reducido entre filas */
-            text-align: left;
-            font-size: 12px; /* Tamaño de fuente reducido */
-            border: none; /* Eliminar bordes */
-        }
-
-        th {
-            background-color: #f2f2f2;
-            font-weight: bold;
-        }
-
-        .footer {
-            margin-top: 20px;
-            text-align: center;
-            font-size: 10px; /* Tamaño de fuente para el pie de página */
-            color: #888;
-            display: flex;
-            justify-content: space-around;
-        }
-
-        .signature {
-            width: 45%; /* Ajusta el ancho de cada firma */
-            text-align: center;
-            font-size: 12px; /* Tamaño de fuente para firmas */
-        }
-
-            .signature p {
-                margin: 5px 0;
-            }
-    </style>
+    <title>Receta</title>
+    <link href="~/assets/css/Documentos.css" rel="stylesheet" />
 </head>
-
 <body>
-    <table class="table-container">
-        <!-- Datos del médico en columnas A y B -->
-        <tr>
-            <td colspan="2" style="border-right:1px">
-                <p><strong>Nombre:</strong> Dr. Carlos Gómez</p>
-                <p><strong>Especialidad:</strong> Cardiología</p>
-                <p><strong>Email:</strong> cgomez@hospital.com</p>
-                <p><strong>Teléfono:</strong> +593 999 888 777</p>
-            </td>
-            <!-- Datos del médico en la columna B (redundante para simular como Excel) -->
-            <td colspan="2">
-                <p><strong>Nombre:</strong> Dr. Carlos Gómez</p>
-                <p><strong>Especialidad:</strong> Cardiología</p>
-                <p><strong>Email:</strong> cgomez@hospital.com</p>
-                <p><strong>Teléfono:</strong> +593 999 888 777</p>
-            </td>
-        </tr>
-
-        <!-- Datos del paciente en columnas C y D -->
-        <tr>
-            <td colspan="2">
-                <p><strong>Nombre:</strong> Juan Pérez</p>
-                <p><strong>Identificación:</strong> 0987654321</p>
-                <p><strong>Fecha:</strong> 31/01/2025</p>
-                <p><strong>Edad:</strong> 45</p>
-                <p><strong>Alergias:</strong> Penicilina y Mariscos</p>
-                <p><strong>Diagnóstico:</strong> Hipertensión arterial</p>
-            </td>
-        </tr>
-
-        <!-- Título de la receta -->
-        <tr>
-            <th colspan="4" style="text-align: center">PRESCRIPCIÓN</th>
-        </tr>
-
-        <!-- Detalles de la prescripción -->
-        <tr>
-            <td colspan="4">
-                <h2>Recomendaciones no Farmacológicas</h2>
-                <p>Ejercicio moderado diario y reducción de consumo de sodio.</p>
-            </td>
-        </tr>
-
-        <!-- Título de las indicaciones -->
-        <tr>
-            <th colspan="4" style="text-align: center">INDICACIONES</th>
-        </tr>
-
-        <!-- Detalles de las indicaciones -->
-        <tr>
-            <td colspan="4">
-                <h2>Recomendaciones no Farmacológicas</h2>
-                <p>Ejercicio moderado diario y reducción de consumo de sodio.</p>
-            </td>
-        </tr>
-    </table>
-
-    <!-- Firmas del médico -->
-    <div class="footer">
-        <div class="signature">
-            <p><strong>Firma del Médico</strong></p>
-            <p>_______________________________</p>
-            <p>Dr. Carlos Gómez</p>
-            <p>Cardiología</p>
+    <header>
+        <div class="container">
+            <table class="table-content">
+                <tr>
+                    <td>Dr: @Model.Consultation.UsersNames @Model.Consultation.UsersSurcenames</td>
+                    <td>Dr: @Model.Consultation.UsersNames @Model.Consultation.UsersSurcenames</td>
+                </tr>
+                <tr>
+                    <td>Especialista en: @Model.Consultation.SpecialityName</td>
+                    <td>Especialista en: @Model.Consultation.SpecialityName</td>
+                </tr>
+                <tr>
+                    <td>E-mail: @Model.Consultation.UsersEmail</td>
+                    <td>E-mail: @Model.Consultation.UsersEmail</td>
+                </tr>
+                <tr>
+                    <td>Teléfono: @Model.Consultation.UsersPhone</td>
+                    <td>Teléfono: @Model.Consultation.UsersPhone</td>
+                </tr>
+            </table>
+            <div class="vl"></div>
         </div>
-        <div class="signature">
-            <p><strong>Firma del Médico</strong></p>
-            <p>_______________________________</p>
-            <p>Dr. Carlos Gómez</p>
-            <p>Cardiología</p>
-        </div>
+        <!-- Línea divisoria horizontal -->
+        <div class="divider-horizontal"></div>
+    </header>
+
+    <div class="container">
+        <table class="table-content">
+            <tr>
+                <td><strong>Fecha:</strong> @Model.Consultation.ConsultationCreationdate</td>
+                <td><strong>Recetas:</strong></td>
+                <td><strong>Fecha:</strong> @Model.Consultation.ConsultationCreationdate</td>
+                <td><strong>Recetas:</strong></td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>Apellidos:</strong> @Model.DetailsPatient.PatientFirstsurname @Model.DetailsPatient.PatientSecondlastname
+                </td>
+                <td><strong>CC:</strong> @Model.DetailsPatient.PatientDocumentnumber</td>
+                <td>
+                    <strong>Apellidos:</strong> @Model.DetailsPatient.PatientFirstsurname @Model.DetailsPatient.PatientSecondlastname
+                </td>
+                <td><strong>CC:</strong> @Model.DetailsPatient.PatientDocumentnumber</td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>Edad:</strong> @Model.DetailsPatient.PatientAge
+                </td>
+                <td><strong></strong></td>
+                <td>
+                    <strong>Edad:</strong> @Model.DetailsPatient.PatientAge
+                </td>
+                <td><strong></strong></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <strong>Alergias:</strong>
+                    @{
+                        var allergyNames = Model.Consultation.AllergiesConsultations?
+                        .Select(alle => Model.AllergiesTypes
+                        .FirstOrDefault(d => d.CatalogId == alle.AllergiesCatalogid)?.CatalogName ?? "N/A")
+                        .ToList() ?? new List<string>();
+                    }
+                    @string.Join(", ", allergyNames)
+                </td>
+                <td colspan="2">
+                    <strong>Alergias:</strong>
+                    @string.Join(", ", allergyNames)
+                </td>
+            </tr>
+            <tr class="section-spacing">
+                <td colspan="2">
+                    <strong>Diagnostico:</strong>
+                    @{
+                        var ultimoDiagnosticoDefinitivo = Model.Consultation.DiagnosisConsultations?
+                        .Where(d => d.DiagnosisDefinitive == true)
+                        .OrderByDescending(d => d.DiagnosisDiagnosisid)
+                        .FirstOrDefault();
+
+                        var nombreDiagnostico = ultimoDiagnosticoDefinitivo != null
+                        ? Model.Diagnoses.FirstOrDefault(d => d.DiagnosisId == ultimoDiagnosticoDefinitivo.DiagnosisDiagnosisid)?.DiagnosisName ?? "N/A"
+                        : "N/A";
+                    }
+                    @nombreDiagnostico
+                </td>
+                <td colspan="2">
+                    <strong>Diagnostico:</strong> @nombreDiagnostico
+                </td>
+            </tr>
+        </table>
     </div>
+
+
+    <div class="container" style="padding-top:100px">
+        <table class="table-content">
+            <tr>
+                <td><strong>PRESCRIPCIÓN</strong></td>
+                <td><strong>INDICACIONES</strong></td>
+            </tr>
+            <tr>
+                <td>
+                    @{
+                        var medications = Model.Consultation.MedicationsConsultations?
+                        .Select(med =>
+                        {
+                            var medication = Model.Medications.FirstOrDefault(d => d.MedicationsId == med.MedicationsMedicationsid);
+                            return $"({medication?.MedicationsCie10 ?? "N/A"}) {medication?.MedicationsDescription ?? "N/A"} - X: {med.MedicationsAmount}";
+                        }) ?? new List<string>();
+                    }
+                    @Html.Raw(string.Join("<br/>", medications))
+                </td>
+                <td>
+                    @{
+                        var indications = Model.Consultation.MedicationsConsultations?
+                        .Select(med =>
+                        {
+                            var medication = Model.Medications.FirstOrDefault(d => d.MedicationsId == med.MedicationsMedicationsid);
+                            return $"({medication?.MedicationsCie10 ?? "N/A"}) {medication?.MedicationsName ?? "N/A"} - Observación: {med.MedicationsObservation}";
+                        }) ?? new List<string>();
+                    }
+                    @Html.Raw(string.Join("<br/>", indications))
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div style="padding-top:100px">
+
+        <table class="two-columns large-spacing">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>RECOMENDACIONES NO FARMACOLÓGICAS</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td>@Model.Consultation.ConsultationNonpharmacologycal</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+
+    <div class="container" style="padding-top:250px;">
+        <table>
+            <tr>
+                <td style="padding-left:400px">
+
+                    <table class="table-container" style="border:1px solid black; font-size:9px">
+                        <tr>
+                            <!-- Columna 2 visible -->
+                            <td>Dispensado</td>
+
+                        </tr>
+
+                        <tr>
+
+                            <!-- En ambas columnas se muestra el mismo contenido -->
+                            <td>Completamente ................... Parcialmente.................</td>
+                        </tr>
+                        <tr>
+
+                            <td>Prozima cita....................</td>
+
+                        </tr>
+
+                    </table>
+
+
+                </td>
+
+
+                <td style="padding-left:500px">
+                    <table class="table-container" style="border:1px solid black; font-size:9px">
+                        <tr>
+                            <!-- Columna 2 visible -->
+                            <td>Dispensado</td>
+
+                        </tr>
+
+                        <tr>
+
+                            <!-- En ambas columnas se muestra el mismo contenido -->
+                            <td>Completamente ................... Parcialmente.................</td>
+                        </tr>
+                        <tr>
+
+                            <td>Proxima cita ....................</td>
+
+                        </tr>
+
+                    </table>
+
+
+                </td>
+
+            </tr>
+
+        </table>
+    </div>
+    <div class="divider-horizontal"></div>
+
+    <footer>
+        <div class="container">
+            <table class="table-content" style="text-align:center">
+                <tr>
+                    <td>
+                        Dr: @Model.Consultation.UsersNames / @Model.Consultation.UsersEstablishmentName @Model.Consultation.UsersEstablishmentAddress
+                    </td>
+                    <td>
+                        Dr: @Model.Consultation.UsersNames / @Model.Consultation.UsersEstablishmentName @Model.Consultation.UsersEstablishmentAddress
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </footer>
 </body>
 </html>
