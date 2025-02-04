@@ -1,6 +1,7 @@
 ﻿using ExpertMed.Models;
 using ExpertMed.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
@@ -106,8 +107,9 @@ namespace ExpertMed.Controllers
                 var provinces = await _selectService.GetAllProvinceAsync();
 
                 var doctors = await _patientService.GetDoctorsByAssistantAsync(usuarioId ?? 0);
+                var diagnosis = await _selectService.GetAllDiagnosisAsync();
 
-           
+
 
                 // Crear un objeto de vista modelo para pasar los datos a la vista
                 var viewModel = new NewPatientViewModel
@@ -120,6 +122,8 @@ namespace ExpertMed.Controllers
                     SureHealthTypes = sureHealthTypes,
                     Countries = countries,
                     Provinces = provinces,
+                    Diagnoses = diagnosis,
+
                     Users = doctors // Agregamos los médicos al ViewModel
                 };
 
@@ -172,7 +176,10 @@ namespace ExpertMed.Controllers
                     SureHealthTypes = sureHealthTypes,
                     Countries = countries,
                     Provinces = provinces,
+
                     Users = doctors // Agregamos los médicos al ViewModel
+
+
                 };
 
                 return View(viewModel);

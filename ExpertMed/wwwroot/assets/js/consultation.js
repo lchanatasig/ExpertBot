@@ -250,6 +250,9 @@ function removeLaboratoriesRow(button) {
   row.remove();
 }
 
+
+
+
 //Speech
 var recognition;
 var recognizing = false;

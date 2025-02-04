@@ -103,7 +103,7 @@ namespace ExpertMed.Controllers
             };
         }
 
-        public async Task <IActionResult> MedicalForm(int consultationId)
+        public async Task<IActionResult> MedicalForm(int consultationId)
         {
             // Obtener los detalles de la consulta
             var consultation = _consultationService.GetConsultationDetails(consultationId);
@@ -261,48 +261,66 @@ namespace ExpertMed.Controllers
                             // Celda para Alergias
                             // Celda para Alergias
                             table.Cell().MinHeight(14).BorderLeft(2).BorderBottom(1).BorderRight(2).BorderColor("#808080")
-                                .Column(column =>
-                                {
-                                    if (consulta.Consultation.AllergiesConsultations != null && consulta.Consultation.AllergiesConsultations.Any())
-                                    {
-                                        // Unir los nombres de las alergias en una sola oración
-                                        var alergiasTexto = string.Join(", ", consulta.AllergiesTypes.Select(alergia => alergia.CatalogName));
-                                        column.Item().Text(text =>
-                                        {
-                                            // Usar Span para "Alergias:" en negrita
-                                            text.Span("Alergias:").Bold().FontSize(10);
-                                            // Usar Span para el texto de alergias sin negrita
-                                            text.Span($" {alergiasTexto}.").FontSize(8); // Asegúrate de que el tamaño de fuente esté correcto
-                                        });
-                                    }
-                                    else
-                                    {
-                                        column.Item().Text("Alergias: No se registraron alergias.").FontSize(10);
-                                    }
-                                });
+     .Column(column =>
+     {
+         if (consulta.Consultation.AllergiesConsultations != null && consulta.Consultation.AllergiesConsultations.Any())
+         {
+             // Obtener la lista de nombres de cirugías a partir de los IDs
+             var surgeriesName = consulta.Consultation.AllergiesConsultations
+                 .Select(surgery => consulta.AllergiesTypes
+                 .FirstOrDefault(type => type.CatalogId == surgery.AllergiesCatalogid)?.CatalogName ?? "N/A")
+                 .ToList();
+
+             // Unir los nombres de las cirugías en una sola cadena
+             var cirugiasTexto = string.Join(", ", surgeriesName);
+
+             column.Item().Text(text =>
+             {
+                 // "Cirugías:" en negrita
+                 text.Span("Alergias:").Bold().FontSize(10);
+                 // Nombres de cirugías sin negrita
+                 text.Span($" {cirugiasTexto}.").FontSize(8);
+             });
+         }
+         else
+         {
+             column.Item().Text("Alergias: No se registraron cirugías.").FontSize(10);
+         }
+     });
+
 
 
 
 
                             // Celda para Cirugías
                             table.Cell().MinHeight(14).BorderLeft(2).BorderBottom(1).BorderRight(2).BorderColor("#808080")
-                                .Column(column =>
-                                {
-                                    if (consulta.Consultation.SurgeriesConsultations != null && consulta.Consultation.SurgeriesConsultations.Any())
-                                    {
-                                        // Unir los nombres de las cirugías en una sola oración
-                                        var cirugiasTexto = string.Join(", ", consulta.SurgeriesTypes.Select(cirugia => cirugia.CatalogName));
-                                        column.Item().Text(text =>
-                                        {
-                                            text.Span("Cirugías:").Bold().FontSize(10); // "Cirugías:" en negrita
-                                            text.Span($" {cirugiasTexto}.").FontSize(8); // Resto del texto sin negrita
-                                        });
-                                    }
-                                    else
-                                    {
-                                        column.Item().Text("Cirugías: No se registraron cirugías.").FontSize(10);
-                                    }
-                                });
+      .Column(column =>
+      {
+          if (consulta.Consultation.SurgeriesConsultations != null && consulta.Consultation.SurgeriesConsultations.Any())
+          {
+              // Obtener la lista de nombres de cirugías a partir de los IDs
+              var surgeriesName = consulta.Consultation.SurgeriesConsultations
+                  .Select(surgery => consulta.SurgeriesTypes
+                  .FirstOrDefault(type => type.CatalogId == surgery.SurgeriesCatalogid)?.CatalogName ?? "N/A")
+                  .ToList();
+
+              // Unir los nombres de las cirugías en una sola cadena
+              var cirugiasTexto = string.Join(", ", surgeriesName);
+
+              column.Item().Text(text =>
+              {
+                  // "Cirugías:" en negrita
+                  text.Span("Cirugías:").Bold().FontSize(10);
+                  // Nombres de cirugías sin negrita
+                  text.Span($" {cirugiasTexto}.").FontSize(8);
+              });
+          }
+          else
+          {
+              column.Item().Text("Cirugías: No se registraron cirugías.").FontSize(10);
+          }
+      });
+
 
 
 
@@ -384,76 +402,70 @@ namespace ExpertMed.Controllers
                             // Crear las observaciones para cada patología con parentesco u observación
                             var observaciones = new List<string>();
 
-                            if (!string.IsNullOrEmpty(consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundRelatshcatalogHeartdisease) || !string.IsNullOrEmpty(consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundHeartdiseaseObservation))
-                            {
-                                observaciones.Add("Cardiopatía: " + consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundRelatshcatalogHeartdisease + " - " + consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundHeartdiseaseObservation);
-                            }
+                            var familyMembers = consulta.FamilyMember; // Lista de relaciones familiares
 
-                            if (!string.IsNullOrEmpty(consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundRelatshcatalogDiabetes) || !string.IsNullOrEmpty(consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundDiabetesObservation))
+                            if (consulta.Consultation.FamiliaryBackground != null)
                             {
-                                observaciones.Add("Diabetes: " + consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundRelatshcatalogDiabetes + " - " + consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundDiabetesObservation);
-                            }
+                                void AgregarObservacion(string titulo, int? relacionId, string observacion)
+                                {
+                                    if (relacionId.HasValue || !string.IsNullOrEmpty(observacion))
+                                    {
+                                        // Buscar el nombre de la relación en la lista de familiares
+                                        var relacionNombre = familyMembers?.FirstOrDefault(c => c.CatalogId == relacionId)?.CatalogName ?? "N/A";
 
-                            if (!string.IsNullOrEmpty(consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundRelatshcatalogDxcardiovascular) || !string.IsNullOrEmpty(consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundDxcardiovascularObservation))
-                            {
-                                observaciones.Add("Enf. Cardiovascular: " + consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundRelatshcatalogDxcardiovascular + " - " + consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundDxcardiovascularObservation);
-                            }
+                                        // Agregar a la lista de observaciones
+                                        observaciones.Add($"{titulo}: Relación - {relacionNombre}, Observación - {observacion}");
+                                    }
+                                }
 
-                            if (!string.IsNullOrEmpty(consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundRelatshcatalogHypertension) || !string.IsNullOrEmpty(consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundHypertensionObservation))
-                            {
-                                observaciones.Add("Hipertensión: " + consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundRelatshcatalogHypertension + " - " + consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundHypertensionObservation);
-                            }
-                            if (!string.IsNullOrEmpty(consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundRelatshcatalogCancer) || !string.IsNullOrEmpty(consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundCancerObservation))
-                            {
-                                observaciones.Add("Cancer: " + consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundRelatshcatalogCancer + " - " + consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundCancerObservation);
-                            }
+                                // Llamadas a la función para agregar cada patología
+                                AgregarObservacion("Cardiopatía", consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundRelatshcatalogHeartdisease,
+                                                   consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundHeartdiseaseObservation);
 
-                            if (!string.IsNullOrEmpty(consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundRelatshTuberculosis) || !string.IsNullOrEmpty(consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundTuberculosisObservation))
-                            {
-                                observaciones.Add("Tuberculosis: " + consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundRelatshTuberculosis + " - " + consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundTuberculosisObservation);
-                            }
+                                AgregarObservacion("Diabetes", consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundRelatshcatalogDiabetes,
+                                                   consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundDiabetesObservation);
 
+                                AgregarObservacion("Enf. Cardiovascular", consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundRelatshcatalogDxcardiovascular,
+                                                   consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundDxcardiovascularObservation);
 
-                            if (!string.IsNullOrEmpty(consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundRelatshcatalogDxmental) || !string.IsNullOrEmpty(consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundDxmentalObservation))
-                            {
-                                observaciones.Add("Enf. Mental: " + consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundRelatshcatalogDxmental + " - " + consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundDxmentalObservation);
-                            }
+                                AgregarObservacion("Hipertensión", consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundRelatshcatalogHypertension,
+                                                   consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundHypertensionObservation);
 
-                            if (!string.IsNullOrEmpty(consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundRelatshcatalogDxinfectious) || !string.IsNullOrEmpty(consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundDxinfectiousObservation))
-                            {
-                                observaciones.Add("Enf. Infecciosa: " + consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundRelatshcatalogDxinfectious + " - " + consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundDxinfectiousObservation);
-                            }
+                                AgregarObservacion("Cáncer", consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundRelatshcatalogCancer,
+                                                   consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundCancerObservation);
 
-                            if (!string.IsNullOrEmpty(consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundMalformation) || !string.IsNullOrEmpty(consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundMalformationObservation))
-                            {
-                                observaciones.Add("Mal Formación: " + consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundRelatshcatalogMalformation + " - " + consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundMalformationObservation);
+                                AgregarObservacion("Tuberculosis", consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundRelatshTuberculosis,
+                                                   consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundTuberculosisObservation);
+
+                                AgregarObservacion("Enf. Mental", consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundRelatshcatalogDxmental,
+                                                   consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundDxmentalObservation);
+
+                                AgregarObservacion("Enf. Infecciosa", consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundRelatshcatalogDxinfectious,
+                                                   consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundDxinfectiousObservation);
+
+                                AgregarObservacion("Mal Formación", consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundRelatshcatalogMalformation,
+                                                   consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundMalformationObservation);
+
+                                AgregarObservacion("Otro", consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundRelatshcatalogOther,
+                                                   consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundOtherObservation);
                             }
-                            if (!string.IsNullOrEmpty(consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundRelatshcatalogOther) || !string.IsNullOrEmpty(consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundOtherObservation))
-                            {
-                                observaciones.Add("Otro: " + consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundRelatshcatalogOther + " - " + consulta.Consultation.FamiliaryBackground.FamiliaryBackgroundOtherObservation);
-                            }
-                            // Agregar más condiciones para las demás patologías si es necesario...
 
                             // Renderizar observaciones en la tabla si hay alguna
                             if (observaciones.Any())
                             {
                                 foreach (var observacion in observaciones)
                                 {
-                                    // Convertir el texto en tipo oración
                                     var observacionFormateada = char.ToUpper(observacion[0]) + observacion.Substring(1).ToLower();
 
                                     table.Cell().BorderLeft(2).BorderBottom(1).BorderRight(2).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(12).MinWidth(3)
                                         .Text(observacionFormateada).FontSize(9).AlignStart();
                                 }
-
                             }
                             else
                             {
                                 table.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(12).MinWidth(3)
                                     .Text("").FontSize(9).AlignStart();
                             }
-
-
 
                             table.Cell().MinHeight(16).BorderLeft(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Text("").FontSize(10);
 
@@ -914,7 +926,7 @@ namespace ExpertMed.Controllers
                                     });
 
                                     if (!string.IsNullOrEmpty(consulta.Consultation.PhysicalExamination.PhysicalexaminationHeadObs))
-                                    {                                 
+                                    {
                                         nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(12).MinWidth(3)
                                             .Text(consulta.Consultation.PhysicalExamination.PhysicalexaminationNeckObs).FontSize(9).AlignStart();
                                     }
@@ -1996,12 +2008,12 @@ namespace ExpertMed.Controllers
        {
            text.Span("Alergias: ").FontSize(11).Bold();
 
-          
-               var allergyNames = consulta.Consultation.AllergiesConsultations?
-               .Select(alle => consulta.AllergiesTypes
-               .FirstOrDefault(d => d.CatalogId == alle.AllergiesCatalogid)?.CatalogName ?? "N/A")
-               .ToList() ?? new List<string>();
-           
+
+           var allergyNames = consulta.Consultation.AllergiesConsultations?
+           .Select(alle => consulta.AllergiesTypes
+           .FirstOrDefault(d => d.CatalogId == alle.AllergiesCatalogid)?.CatalogName ?? "N/A")
+           .ToList() ?? new List<string>();
+
 
            text.Span(string.Join(", ", allergyNames)).FontSize(11); // Mostrar las alergias en oración
        });
@@ -2107,10 +2119,10 @@ namespace ExpertMed.Controllers
                                 {
                                     text.Span("Diagnóstico: ").FontSize(11).Bold();
 
-                                     var ultimoDiagnosticoDefinitivo = consulta.Consultation.DiagnosisConsultations?
-                                                           .Where(d => d.DiagnosisDefinitive == true)
-                                                           .OrderByDescending(d => d.DiagnosisDiagnosisid)
-                                                           .FirstOrDefault();
+                                    var ultimoDiagnosticoDefinitivo = consulta.Consultation.DiagnosisConsultations?
+                                                          .Where(d => d.DiagnosisDefinitive == true)
+                                                          .OrderByDescending(d => d.DiagnosisDiagnosisid)
+                                                          .FirstOrDefault();
 
                                     var nombreDiagnostico = ultimoDiagnosticoDefinitivo != null
                                     ? consulta.Diagnoses.FirstOrDefault(d => d.DiagnosisId == ultimoDiagnosticoDefinitivo.DiagnosisDiagnosisid)?.DiagnosisName ?? "N/A"
@@ -2661,7 +2673,7 @@ namespace ExpertMed.Controllers
 
         }
 
-        public async Task <IActionResult> ImageDoc(int consultationId)
+        public async Task<IActionResult> ImageDoc(int consultationId)
         {
             // Obtener los detalles de la consulta
             var consultation = _consultationService.GetConsultationDetails(consultationId);
@@ -2726,7 +2738,7 @@ namespace ExpertMed.Controllers
             };
 
             // Informe de imagenología, tamaño A3 con orientación horizontal
-            var document= Document.Create(container =>
+            var document = Document.Create(container =>
             {
                 container.Page(page =>
                 {
@@ -2890,7 +2902,7 @@ namespace ExpertMed.Controllers
                                 }
                             });
 
-                            
+
 
                             row.AutoItem().PaddingHorizontal(10).LineVertical(1).LineColor(Colors.Grey.Lighten1);
 

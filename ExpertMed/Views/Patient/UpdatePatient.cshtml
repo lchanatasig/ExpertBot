@@ -381,6 +381,7 @@
                         <input type="number" class="form-control" value="@Model.Patient.PatientId" id="patientId" required>
                     </div>
 
+                    <input type="hidden" name="AppointmentStatus" id="appointmentStatus" value="1" />
 
                     <!-- Input de usuarioId y fecha -->
                     <div class="col-xxl-6">
@@ -513,11 +514,13 @@
                 console.log('Selected Date:', $('#selectedDate').val());
                 console.log('Patient ID:', $('#patientId').val());
                 console.log('Medico ID:', $('#doctorUserId').val());
+                console.log('Appointment  ID:', $('#appointmentStatus').val());
 
                 // Mostrar SweetAlert para confirmación
                 var selectedDate = $('#selectedDate').val(); // Obtener la fecha seleccionada
                 var patientId = $('#patientId').val();  // Obtener el ID del paciente
                 var doctorUserId = $('#doctorUserId').val(); // Obtener el ID del médico seleccionado
+                                var appointmentStatus = $('#appointmentStatus').val(); // Obtener el ID del médico seleccionado
 
                 Swal.fire({
                     title: 'Confirm Appointment',
@@ -540,6 +543,8 @@
                 AppointmentDate: selectedDate,  // Asegúrate de que sea en formato adecuado, por ejemplo: "2025-01-31"
                 AppointmentHour: selectedHour,
                   AppointmentPatientid: patientId, // Asegúrate de que selectedHour esté en formato adecuado, por ejemplo: "16:00"
+                             AppointmentStatus: appointmentStatus, // Asegúrate de que selectedHour esté en formato adecuado, por ejemplo: "16:00"
+
             }),
             success: function (response) {
                 if (response.success) {

@@ -7,12 +7,13 @@ namespace ExpertMed.Services
     {
 
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly ILogger<UserService> _logger;
+        private readonly ILogger<SelectsService> _logger;
         private readonly DbExpertmedContext _dbContext;
 
-        public SelectsService(IHttpContextAccessor httpContextAccessor, ILogger<UserService> logger, DbExpertmedContext dbContext)
+        public SelectsService(IHttpContextAccessor httpContextAccessor, ILogger<SelectsService> logger, DbExpertmedContext dbContext)
         {
             _dbContext = dbContext;
+            
             _httpContextAccessor = httpContextAccessor;
 
         }

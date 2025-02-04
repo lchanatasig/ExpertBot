@@ -473,8 +473,10 @@
                                     Next
                                 </button>
 
-                                <a class="btn btn-outline-info"><i class="ri-calendar-todo-fill"></i> Agendar Cita seguimiento</a>
 
+                                <a type="button" class="btn btn-soft-info" data-bs-toggle="modal" data-bs-target="#appointmentModalgrid">
+                                    <i class="ri-calendar-todo-fill"></i>Agendar Cita seguimiento
+                                </a>
                                 <a asp-action="ConsultationList" asp-controller="Consultation" class="btn btn-outline-danger"><i class="fa fa-close"></i> Salir</a>
 
                             </div>
@@ -1058,8 +1060,10 @@
                                         data-previous="steparrow-gen-info-tab">
                                     Back
                                 </button>
-                                <a class="btn btn-outline-info"><i class="fa fa-close"></i> Agendar Cita seguimiento</a>
 
+                                <a type="button" class="btn btn-soft-info" data-bs-toggle="modal" data-bs-target="#appointmentModalgrid">
+                                    <i class="ri-calendar-todo-fill"></i>Agendar Cita seguimiento
+                                </a>
                                 <button type="button" class="btn btn-success nexttab"
                                         data-nexttab="steparrow-vital-signs-tab">
                                     Next
@@ -1505,8 +1509,10 @@
                                     Back
                                 </button>
 
-                                <a class="btn btn-outline-info"><i class="fa fa-close"></i> Agendar Cita seguimiento</a>
 
+                                <a type="button" class="btn btn-soft-info" data-bs-toggle="modal" data-bs-target="#appointmentModalgrid">
+                                    <i class="ri-calendar-todo-fill"></i>Agendar Cita seguimiento
+                                </a>
                                 <button type="button" class="btn btn-success nexttab"
                                         data-nexttab="steparrow-diagnostic-tab">
                                     Next
@@ -1602,22 +1608,24 @@
                                     <div class="card-header" id="card-header-color">
                                         <h6 class="card-title mb-0">Diagnosis</h6>
                                     </div>
-
+                                    <select name="DiagnosisConsultation" id="DiagnosisConsultation"
+                                            class="form-control" data-choices data-choices-sorting-false>
+                                        <option value="">Search and select a Diagnosis</option>
+                                        @foreach (var diagnosis in Model.Diagnoses)
+                                        {
+                                            <option value="@diagnosis.DiagnosisId"
+                                                    data-name="@diagnosis.DiagnosisName"
+                                                    data-search="@diagnosis.DiagnosisName">
+                                                @diagnosis.DiagnosisName
+                                            </option>
+                                        }
+                                    </select>
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-lg-12">
                                                 <div class="mb-3">
-                                                    <select name="DiagnosisConsultation" id="DiagnosisConsultation"
-                                                            class="form-control" data-choices
-                                                            data-choices-sorting-false>
-                                                        <option value="">Search and select a Diagnosis</option>
-                                                        @foreach (var diagnosis in Model.Diagnoses)
-                                                        {
-                                                            <option value="@diagnosis.DiagnosisId" data-name="@diagnosis.DiagnosisName">
-                                                                @diagnosis.DiagnosisName
-                                                            </option>
-                                                        }
-                                                    </select>
+                                                   
+
                                                 </div>
                                             </div>
 
@@ -1723,21 +1731,21 @@
                                     <div class="card-header" id="card-header-color">
                                         <h6 class="card-title mb-0">Medications</h6>
                                     </div>
-
+                                    <select name="MedicationsConsultation" id="MedicationsConsultation"
+                                            class="form-control" data-choices data-choices-sorting-false>
+                                        <option value="">Search and select a Medications</option>
+                                        @foreach (var medication in Model.Medications)
+                                        {
+                                            <option value="@medication.MedicationsId" data-name="@medication.MedicationsDescription">
+                                                @medication.MedicationsDescription
+                                            </option>
+                                        }
+                                    </select>
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-lg-12">
                                                 <div class="mb-3">
-                                                    <select name="MedicationsConsultation" id="MedicationsConsultation"
-                                                            class="form-control" data-choices data-choices-sorting-false>
-                                                        <option value="">Search and select a Medications</option>
-                                                        @foreach (var medication in Model.Medications)
-                                                        {
-                                                            <option value="@medication.MedicationsId" data-name="@medication.MedicationsDescription">
-                                                                @medication.MedicationsDescription
-                                                            </option>
-                                                        }
-                                                    </select>
+                                                    
                                                 </div>
                                             </div>
 
@@ -1825,20 +1833,21 @@
                                     <div class="card-header" id="card-header-color">
                                         <h6 class="card-title mb-0">Images(Test)</h6>
                                     </div>
+                                    <select name="ImagesConsultation" id="ImagesConsultation"
+                                            class="form-control" data-choices data-choices-sorting-false>
+                                        <option value="">Search and select a Images</option>
+                                        @foreach (var image in Model.Images)
+                                        {
+                                            <option value="@image.ImagesId" data-name="@image.ImagesDescription">
+                                                @image.ImagesDescription
+                                            </option>
+                                        }
+                                    </select>
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-lg-12">
                                                 <div class="mb-3">
-                                                    <select name="ImagesConsultation" id="ImagesConsultation"
-                                                            class="form-control" data-choices data-choices-sorting-false>
-                                                        <option value="">Search and select a Images</option>
-                                                        @foreach (var image in Model.Images)
-                                                        {
-                                                            <option value="@image.ImagesId" data-name="@image.ImagesDescription">
-                                                                @image.ImagesDescription
-                                                            </option>
-                                                        }
-                                                    </select>
+                                                    
                                                 </div>
                                             </div>
                                             <div class="col-lg-2">
@@ -1887,20 +1896,21 @@
                                     <div class="card-header" id="card-header-color">
                                         <h6 class="card-title mb-0">Laboratories(Test)</h6>
                                     </div>
+                                    <select name="LaboratoriesConsultation" id="LaboratoriesConsultation"
+                                            class="form-control" data-choices data-choices-sorting-false>
+                                        <option value="">Search and select a Laboratories</option>
+                                        @foreach (var lab in Model.Laboratories)
+                                        {
+                                            <option value="@lab.LaboratoriesId" data-name="@lab.LaboratoriesDescription">
+                                                @lab.LaboratoriesDescription
+                                            </option>
+                                        }
+                                    </select>
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-lg-12">
                                                 <div class="mb-3">
-                                                    <select name="LaboratoriesConsultation" id="LaboratoriesConsultation"
-                                                            class="form-control" data-choices data-choices-sorting-false>
-                                                        <option value="">Search and select a Laboratories</option>
-                                                        @foreach (var lab in Model.Laboratories)
-                                                        {
-                                                            <option value="@lab.LaboratoriesId" data-name="@lab.LaboratoriesDescription">
-                                                                @lab.LaboratoriesDescription
-                                                            </option>
-                                                        }
-                                                    </select>
+                                                    
                                                 </div>
                                             </div>
                                             <div class="col-lg-2">
@@ -2016,7 +2026,9 @@
                             <a asp-action="ConsultationList" asp-controller="Consultation" class="btn btn-outline-danger"><i class="fa fa-close"></i> Salir</a>
 
 
-                            <a class="btn btn-outline-info"><i class="fa fa-close"></i> Agendar Cita seguimiento</a>
+                            <a type="button" class="btn btn-soft-info" data-bs-toggle="modal" data-bs-target="#appointmentModalgrid">
+                                <i class="ri-calendar-todo-fill"></i>Agendar Cita seguimiento
+                            </a>
 
                         </div>
                     </div>
@@ -2031,6 +2043,88 @@
         </div>
     </div>
 </div>
+
+<div class="modal flip" id="appointmentModalgrid" tabindex="-1" aria-labelledby="appointmentModalgridLabel">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="appointmentModalgridLabel">Agendar Cita</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form class="row g-3 needs-validation" novalidate name="formData">
+
+                    @if (perfilId == 3 || perfilId == 1)
+                    {
+                        <div class="col-xxl-6">
+                            <div class="mb-3">
+                                <label for="doctorsSelect" class="form-label">Seleccionar médico asignado</label>
+                                <select class="form-control" id="doctorUserId" name="doctorUserId" data-choices data-choices-sorting-false>
+                                    <option value="">Seleccione</option>
+                                    @foreach (var doctor in Model.Users)
+                                    {
+                                        <option value="@doctor.UsersId">@doctor.UsersNames @doctor.UsersSurcenames</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    }
+
+
+                    <div class="col-xxl-6" hidden>
+                        <label for="patientId" class="form-label">Patient Id</label>
+                        <input type="number" class="form-control" value="@Model.DetailsPatient.PatientId" id="patientId" required>
+                    </div>
+
+                    <input type="hidden" name="AppointmentStatus" id="appointmentStatus" value="3" />
+                    <!-- Input de usuarioId y fecha -->
+                    <div class="col-xxl-6">
+                        <label for="selectedDate" class="form-label">Select a date</label>
+                        <input type="date" class="form-control" id="selectedDate" required>
+                    </div>
+
+                    <div class="col-xxl-6">
+                        <label for="ui" class="form-label">Your appointment time is:</label>
+                        <input type="time" class="form-control" id="appointmentTime" required>
+                    </div>
+
+                </form>
+
+                <div class="col-xxl-6">
+                    <button type="button" class="btn btn-soft-info" id="viewHoursButton">
+                        <i class="ri-eye-fill"></i> View Hours Available
+                    </button>
+                </div>
+
+                <!-- Modal de las horas disponibles -->
+                <div class="modal flip" id="hoursModalgrid" tabindex="-1" aria-labelledby="hoursModalgridLabel">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="hoursModalgrid">Hours Available</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="d-flex flex-wrap gap-2 justify-content-center" id="availableHoursContainer">
+                                    <!-- Aquí se mostrarán las horas disponibles -->
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
 <!-- #endregion Formulario-->
 @section Scripts {
     <script>
@@ -2174,6 +2268,136 @@
             });
         });
 
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            // Al hacer clic en el botón para ver las horas disponibles
+            $('#viewHoursButton').click(function () {
+                var userId = @usuarioId;  // Este valor debe ser dinámico, por ejemplo, extraído de la sesión o del usuario autenticado
+                var selectedDate = $('#selectedDate').val();
+                var doctorUserId = $('#doctorUserId').val(); // Obtener el ID del médico seleccionado
+
+                console.log('User ID:', userId);
+                console.log('Selected Date:', selectedDate);
+                console.log('Doctor User ID:', doctorUserId); // Imprimir el ID del médico
+
+                if (!selectedDate) {
+                    alert('Please select a date.');
+                    return;
+                }
+
+                // Realizar la solicitud AJAX al backend
+                $.ajax({
+                    url: '@Url.Action("GetAvailableHours", "Appointment")',
+                    type: 'GET',
+                    data: {
+                        userId: userId,
+                        date: selectedDate,
+                        doctorUserId: doctorUserId // Pasar el ID del médico si es necesario
+                    },
+                    success: function (response) {
+                        $('#availableHoursContainer').empty();  // Limpiar el contenedor de horas disponibles
+
+                        if (response.length > 0) {
+                            // Mostrar las horas en el contenedor
+                            response.forEach(function (hour) {
+                                $('#availableHoursContainer').append(
+                                    '<button type="button" class="btn btn-outline-primary btn-sm" data-hour="' + hour + '">' + hour + '</button>'
+                                );
+                            });
+                        } else {
+                            // Si no hay horas disponibles
+                            $('#availableHoursContainer').append(
+                                '<p>No available hours for this date.</p>'
+                            );
+                        }
+
+                        $('#hoursModalgrid').modal('show');  // Mostrar el modal con las horas disponibles
+                    },
+                    error: function (xhr, status, error) {
+                        alert('An error occurred while fetching available hours: ' + error);
+                    }
+                });
+            });
+
+
+            // Al hacer clic en una de las horas disponibles
+            $('#availableHoursContainer').on('click', 'button', function () {
+                // Obtener la hora seleccionada desde el atributo 'data-hour' del botón
+                var selectedHour = $(this).data('hour');
+
+                // Establecer la hora seleccionada en el campo de entrada
+                $('#appointmentTime').val(selectedHour);
+
+                console.log('Selected Hour:', selectedHour);
+                console.log('Selected Date:', $('#selectedDate').val());
+                console.log('Patient ID:', $('#patientId').val());
+                console.log('Medico ID:', $('#doctorUserId').val());
+                console.log('Status ID:', $('#appointmentStatus').val());
+
+                // Mostrar SweetAlert para confirmación
+                var selectedDate = $('#selectedDate').val(); // Obtener la fecha seleccionada
+                var patientId = $('#patientId').val();  // Obtener el ID del paciente
+                var doctorUserId = $('#doctorUserId').val(); // Obtener el ID del médico seleccionado
+                var appointmentStatus = $('#appointmentStatus').val(); // Obtener el ID del médico seleccionado
+
+                Swal.fire({
+                    title: 'Confirm Appointment',
+                    text: 'You have selected ' + selectedHour + ' on ' + selectedDate + '. Do you want to confirm this appointment?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, confirm it!',
+                    cancelButtonText: 'No, choose again',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Si el usuario confirma, enviamos la cita al backend
+
+                       $.ajax({
+            url: '@Url.Action("CreateAppointment", "Appointment")?doctorUserId=' + parseInt(doctorUserId),  // Convertir doctorUserId a número
+            type: 'POST',
+            contentType: 'application/json', // Asegúrate de especificar el tipo de contenido
+            data: JSON.stringify({
+               // Asegúrate de que patientId es un número entero
+                AppointmentDate: selectedDate,  // Asegúrate de que sea en formato adecuado, por ejemplo: "2025-01-31"
+                AppointmentHour: selectedHour,
+                  AppointmentPatientid: patientId, // Asegúrate de que selectedHour esté en formato adecuado, por ejemplo: "16:00"
+                  AppointmentStatus: appointmentStatus, // Asegúrate de que selectedHour esté en formato adecuado, por ejemplo: "16:00"
+            }),
+            success: function (response) {
+                if (response.success) {
+                    // Mostrar mensaje de éxito
+                    Swal.fire('Appointment confirmed!', response.message, 'success').then(() => {
+                        window.location.href = '@Url.Action("AppointmentList", "Appointment")'; // Redirigir a la lista de citas
+                    });
+                } else {
+                    // Si algo salió mal
+                    Swal.fire('Error', response.message || 'There was an issue scheduling your appointment.', 'error');
+                }
+            },
+            error: function (xhr, status, error) {
+                // Manejo de errores si la solicitud falla
+                Swal.fire('Error', 'There was an issue scheduling your appointment. Please try again.', 'error');
+            }
+        });
+
+
+                        // Imprimir datos de la solicitud para depuración
+                        console.log('Sending data to backend:', JSON.stringify({
+                            AppointmentPatientid: patientId,
+                            AppointmentDate: selectedDate,
+                            AppointmentHour: selectedHour,
+                            DoctorUserId: doctorUserId  // Agregar el ID del médico aquí
+                        }));
+
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        // Si el usuario cancela, cerramos el modal
+                        $('#hoursModalgrid').modal('hide');
+                    }
+                });
+            });
+        });
     </script>
     <script src="~/assets/js/consultation.js"></script>
 

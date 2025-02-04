@@ -179,6 +179,10 @@ File: Main Js File
 			if (isChoicesVal["data-choices-text-disabled-true"]) {
 				choiceData.addItems = false;
 			}
+
+			// Agregar allowHTML para evitar la advertencia
+			choiceData.allowHTML = true;
+
 			isChoicesVal["data-choices-text-disabled-true"] ? new Choices(item, choiceData).disable() : new Choices(item, choiceData);
 		});
 

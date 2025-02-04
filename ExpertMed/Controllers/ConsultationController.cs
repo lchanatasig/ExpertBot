@@ -310,6 +310,77 @@ namespace ExpertMed.Controllers
             // Retornar la vista con el modelo
             return View(viewModel);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> ConsultationFollowUp(int consultationId)
+        {
+            // Obtener los detalles de la consulta
+            var consultation = _consultationService.GetConsultationDetails(consultationId);
+
+            // Verificar si la consulta existe
+            if (consultation == null)
+            {
+                TempData["ErrorMessage"] = "Consulta no encontrada.";
+                return RedirectToAction("Index", "Home");
+            }
+
+            // Obtener el patientId de la consulta
+            var patientId = consultation.ConsultationPatient;
+
+            // Obtener los detalles del paciente
+            var patient = await _patientService.GetPatientFullByIdAsync(patientId);
+
+            // Si el paciente no existe, devolver una respuesta de "No encontrado"
+            if (patient == null)
+            {
+                TempData["ErrorMessage"] = "Paciente no encontrado.";
+                return RedirectToAction("Index", "Home");
+            }
+
+            // Obtener datos adicionales para la vista
+            var genderTypes = await _selectService.GetGenderTypeAsync();
+            var bloodTypes = await _selectService.GetBloodTypeAsync();
+            var documentTypes = await _selectService.GetDocumentTypeAsync();
+            var civilTypes = await _selectService.GetCivilTypeAsync();
+            var professionalTrainingTypes = await _selectService.GetProfessionaltrainingTypeAsync();
+            var sureHealthTypes = await _selectService.GetSureHealtTypeAsync();
+            var countries = await _selectService.GetAllCountriesAsync();
+            var provinces = await _selectService.GetAllProvinceAsync();
+            var parents = await _selectService.GetRelationshipTypeAsync();
+            var allergies = await _selectService.GetAllergiesTypeAsync();
+            var surgeries = await _selectService.GetSurgeriesTypeAsync();
+            var familyMember = await _selectService.GetFamiliarTypeAsync();
+            var diagnosis = await _selectService.GetAllDiagnosisAsync();
+            var medications = await _selectService.GetAllMedicationsAsync();
+            var images = await _selectService.GetAllImagesAsync();
+            var laboratories = await _selectService.GetAllLaboratoriesAsync();
+
+            // Crear el ViewModel
+            var viewModel = new NewPatientViewModel
+            {
+                DetailsPatient = patient,
+                GenderTypes = genderTypes,
+                BloodTypes = bloodTypes,
+                DocumentTypes = documentTypes,
+                CivilTypes = civilTypes,
+                ProfessionalTrainingTypes = professionalTrainingTypes,
+                SureHealthTypes = sureHealthTypes,
+                Countries = countries,
+                Provinces = provinces,
+                Parents = parents,
+                AllergiesTypes = allergies,
+                SurgeriesTypes = surgeries,
+                FamilyMember = familyMember,
+                Diagnoses = diagnosis,
+                Medications = medications,
+                Images = images,
+                Laboratories = laboratories,
+                Consultation = consultation // Agregar los detalles de la consulta al ViewModel
+            };
+
+            // Retornar la vista con el modelo
+            return View(viewModel);
+        }
     }
 
 }

@@ -127,7 +127,7 @@ namespace ExpertMed.Controllers
                     AppointmentDate = request.AppointmentDate,
                     AppointmentHour = appointmentHour,  // Asignar la hora convertida
                     AppointmentPatientid = request.AppointmentPatientid,
-                    AppointmentStatus = 1
+                    AppointmentStatus = request.AppointmentStatus,
                 };
 
                 // Llamar al servicio para crear la cita
